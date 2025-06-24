@@ -1,0 +1,92 @@
+<!-- Custom Header Block -->
+<style>
+  .custom-header {
+    background-color: #100f0d;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .custom-logo img {
+    height: 60px;
+    max-height: 150px;
+  }
+
+  .custom-nav {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .custom-nav li {
+    position: relative;
+  }
+
+  .custom-nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    transition: color 0.3s;
+  }
+
+  .custom-nav a:hover {
+    color: #c2c2ff;
+    text-decoration: underline;
+  }
+
+  .custom-nav .dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #100f0d;
+    border-radius: 4px;
+    padding: 10px 0;
+    min-width: 160px;
+    z-index: 1000;
+  }
+
+  .custom-nav li:hover .dropdown {
+    display: block;
+  }
+
+  .custom-nav .dropdown a {
+    display: block;
+    padding: 6px 20px;
+    font-size: 14px;
+  }
+
+  .custom-nav .dropdown a:hover {
+    background-color: #1a1918;
+    color: #c2c2ff;
+  }
+</style>
+
+<div class="custom-header">
+  <div class="custom-logo">
+    <img src="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/images/logo_white.png" alt="Keegan Ryan Realty">
+  </div>
+  <ul class="custom-nav">
+    <li><a href="/index.php?showagency=1&amp;rtype=map">Search</a></li>
+    <li><a href="/seller/valuation/">Sell</a></li>
+    <li>
+      <a href="#">Other</a>
+      <ul class="dropdown">
+        <li><a href="/agents.php">Agent Profile</a></li>
+        <li><a href="/index.php?showagency=1#rslt">Our Listings</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#">Resources</a>
+      <ul class="dropdown">
+        <li><a href="/resources.php">Our Resources</a></li>
+        <li><a href="/contact.php">Contact</a></li>
+      </ul>
+    </li>
+  </ul>
+</div>
