@@ -210,3 +210,24 @@ body {
   line-height: 1.6;
 }
 
+.hero-button {
+  display: inline-block;
+  padding: 12px 24px;
+  border: 2px solid white;
+  border-radius: 30px;
+  color: white;
+  text-decoration: none;
+  font-family: 'BodyFont', sans-serif;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.hero-button:hover {
+  background: white;
+  color: #100f0d;
+}
+
+#animated-headline {
+  transition: opacity 0.3s ease;
+}
+
+
