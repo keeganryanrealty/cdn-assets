@@ -129,3 +129,27 @@ body {
     margin-bottom: 10px !important;
   }
 }
+
+/* === FONT IMPORTS === */
+@font-face {
+  font-family: 'HeadlineFont';
+  src: url('https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets/fonts/Canela-Light-Trial.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'BodyFont';
+  src: url('https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets/fonts/NeueHaasUnicaPro-Thin.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* === FONT CLASSES === */
+.headline-font {
+  font-family: 'HeadlineFont', serif;
+}
+
+.body-font {
+  font-family: 'BodyFont', sans-serif;
+}
