@@ -1,0 +1,92 @@
+/* ===============================
+   HEADER BACKGROUND + CONTAINER
+=============================== */
+body .custom-header {
+  background-color: #100f0d !important;
+  width: 100% !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* ===============================
+   HEADER INNER LAYOUT
+=============================== */
+body .custom-header .custom-header-inner {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 16px 32px !important;
+  max-width: 1400px !important;
+  margin: 0 auto !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* ===============================
+   LOGO STYLING
+=============================== */
+body .custom-header .logo-container {
+  flex-shrink: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+}
+
+body .custom-header .logo-container img {
+  height: 64px !important;
+  width: auto !important;
+  display: block !important;
+  object-fit: contain !important;
+  margin: 0 !important;
+}
+
+/* ===============================
+   NAVIGATION STYLING
+=============================== */
+body .custom-header .nav-primary {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 28px !important;
+  margin-left: auto !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  background: transparent !important;
+  padding: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+  transition: none !important;
+}
+
+body .custom-header .nav-primary a {
+  color: #ffffff !important;
+  font-family: 'Poppins', sans-serif !important;
+  font-weight: 600 !important;
+  text-decoration: none !important;
+  font-size: 16px !important;
+}
+
+/* ===============================
+   HIDE HAMBURGER ON DESKTOP
+=============================== */
+@media (min-width: 768px) {
+  body .custom-header .hamburger {
+    display: none !important;
+  }
+}
+
+/* ===============================
+   MOBILE RESPONSIVENESS
+=============================== */
+@media (max-width: 480px) {
+  body .custom-header .logo-container img {
+    max-width: 90vw !important;
+    height: auto !important;
+  }
+
+  body .custom-header .nav-primary {
+    flex-direction: column !important;
+    background: #100f0d !important;
+    padding: 12px 0 !important;
+  }
+}
