@@ -14,7 +14,9 @@
 </section>
 
 <script>
-setTimeout(function () {
+document.addEventListener("DOMContentLoaded", function () {
+  console.log("animation script loaded");
+
   const headlines = [
     "Your Future, Elevated.",
     "Sell with Confidence.",
@@ -22,17 +24,29 @@ setTimeout(function () {
     "Upsize Stress‑Free.",
     "Guidance You Can Trust."
   ];
+
   let index = 0;
   const headlineEl = document.getElementById("animated-headline");
+
   if (!headlineEl) return;
+
+  // Initial state
+  headlineEl.textContent = headlines[index];
+  headlineEl.classList.add("fade-slide-in");
+
   setInterval(() => {
-    headlineEl.style.opacity = 0;
+    // Fade + slide out
+    headlineEl.classList.remove("fade-slide-in");
+    headlineEl.classList.add("fade-slide-out");
+
     setTimeout(() => {
+      // Switch text and fade+slide in
       index = (index + 1) % headlines.length;
       headlineEl.textContent = headlines[index];
-      headlineEl.style.opacity = 1;
-    }, 300);
-  }, 4000);
-}, 300); // Wait just a little for DOM to be fully parsed/rendered
-</script>
 
+      headlineEl.classList.remove("fade-slide-out");
+      headlineEl.classList.add("fade-slide-in");
+    }, 500); // Match the CSS transition duration
+  }, 4000);
+});
+</script>
