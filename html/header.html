@@ -1,51 +1,74 @@
 <div class="custom-header">
-  <button class="hamburger">☰</button>
-  <div class="logo-container">
-    <a href="/">
-      <img src="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/images/logo_white.png" alt="Keegan Ryan Realty Logo" />
-    </a>
+  <div class="custom-header-top">
+    <button class="hamburger">☰</button>
+    <div class="logo-container">
+      <a href="/">
+        <img src="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/images/logo_white.png" alt="Keegan Ryan Realty Logo" />
+      </a>
+    </div>
   </div>
+  <ul class="nav-primary">
+    <li><a href="/index.php?showagency=1&amp;rtype=map">Search</a></li>
+    <li><a href="/seller/valuation/">Sell</a></li>
+    <li><a href="/agents.php">Other</a></li>
+    <li><a href="/resources.php">Resources</a></li>
+  </ul>
 </div>
-
-<ul class="nav-primary" id="dropdown-nav">
-  <li><a href="/index.php?showagency=1&amp;rtype=map">Search</a></li>
-  <li><a href="/seller/valuation/">Sell</a></li>
-  <li><a href="/agents.php">Other</a></li>
-  <li><a href="/resources.php">Resources</a></li>
-</ul>
 
 <style>
 .custom-header {
   background-color: #100f0d;
-  padding: 10px 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+.custom-header-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.logo-container img {
-  max-height: 50px;
-  height: auto;
-  margin: 0 auto;
+  padding: 10px 15px;
+  width: 100%;
 }
 
 .hamburger {
-  font-size: 28px;
+  font-size: 30px;
   color: white;
   background: none;
   border: none;
-  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  z-index: 10;
 }
 
+.logo-container {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-header img {
+  max-height: 45px;
+  height: auto;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Navigation menu (hidden by default) */
 .nav-primary {
   display: none;
   flex-direction: column;
-  background-color: #100f0d;
-  padding: 10px;
-  gap: 15px;
+  gap: 20px;
+  width: 100%;
+  margin-top: 10px;
+  padding-bottom: 15px;
   text-align: center;
-  margin: 0;
-  list-style: none;
+}
+
+.nav-primary.show {
+  display: flex;
 }
 
 .nav-primary a {
@@ -54,11 +77,8 @@
   font-family: 'Poppins', sans-serif;
   text-decoration: none;
 }
-
-.nav-primary.show {
-  display: flex;
-}
 </style>
+
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
