@@ -15,3 +15,18 @@
     <li><a href="/resources.php">Resources</a></li>
   </ul>
 </div>
+
+<script>
+  // Wait until header is fully added to DOM
+  document.addEventListener("DOMContentLoaded", () => {
+    const hamburger = document.querySelector(".hamburger");
+    const navList = document.querySelector(".nav-primary");
+
+    if (hamburger && navList) {
+      hamburger.addEventListener("click", function () {
+        navList.classList.toggle("active");
+        hamburger.blur();
+      });
+    }
+  });
+</script>
