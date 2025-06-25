@@ -202,19 +202,15 @@ body {
   transition: opacity 0.5s ease-in-out;
 }
 
-.hero-text {
-  color: white;
-  max-width: 600px;
-}
-
-.hero-text h1 {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-}
-
 .hero-text p {
   font-size: 1.25rem;
   line-height: 1.6;
+  font-family: 'BodyFont', sans-serif;
+}
+
+.hero-text {
+  color: white;
+  max-width: 600px;
 }
 
 .hero-button {
