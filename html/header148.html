@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/css/header147.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/css/header148.css">
 
 <div class="custom-header">
   <div class="custom-header-inner">
@@ -25,23 +25,26 @@
 
 <script>
   fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/header14.html")
-    .then(r => r.text())
+    .then(res => res.text())
     .then(html => {
       document.getElementById("custom-header-placeholder").innerHTML = html;
 
-      // Now that HTML is in place, attach the click handler
-      const hamburger = document.querySelector(".custom-header .hamburger");
-      const navList   = document.querySelector(".custom-header .nav-primary");
+      // Wait for the DOM to update with the new HTML
+      const hamburger = document.querySelector(".hamburger");
+      const navList = document.querySelector(".nav-primary");
+
       if (hamburger && navList) {
-        hamburger.addEventListener("click", () => {
+        hamburger.addEventListener("click", function () {
           navList.classList.toggle("active");
           hamburger.blur();
         });
       }
     });
 
+  // Prevent pinch zoom
   const meta = document.createElement("meta");
   meta.name = "viewport";
-  meta.content = "width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no";
+  meta.content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no";
   document.head.appendChild(meta);
 </script>
+
