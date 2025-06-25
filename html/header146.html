@@ -17,22 +17,26 @@
 </div>
 
 <script>
-  // Inject GitHub-hosted HTML into placeholder
   fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/header14.html")
     .then(res => res.text())
     .then(html => {
+      // Inject header HTML
       document.getElementById("custom-header-placeholder").innerHTML = html;
 
-      // ✅ Attach hamburger click handler AFTER header loads
-      const hamburger = document.querySelector(".hamburger");
-      const navList = document.querySelector(".nav-primary");
+      // ⚠️ Wait for DOM to reflect the new content
+      setTimeout(() => {
+        const hamburger = document.querySelector(".hamburger");
+        const navList = document.querySelector(".nav-primary");
 
-      if (hamburger && navList) {
-        hamburger.addEventListener("click", function () {
-          navList.classList.toggle("active");
-          hamburger.blur(); // Prevent highlight
-        });
-      }
+        if (hamburger && navList) {
+          hamburger.addEventListener("click", function () {
+            navList.classList.toggle("active");
+            hamburger.blur(); // Remove focus outline
+          });
+        } else {
+          console.warn("Hamburger or nav not found after injection");
+        }
+      }, 0); // Just to make sure the DOM updates first
     });
 
   // Prevent pinch zoom
@@ -41,5 +45,3 @@
   meta.content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no";
   document.head.appendChild(meta);
 </script>
-
-
