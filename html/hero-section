@@ -1,0 +1,13 @@
+<section class="hero-section">
+  <video autoplay muted loop playsinline class="hero-video">
+    <source src="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets/video/house-basic-test.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="hero-overlay">
+    <div class="hero-text headline-font">
+      <h1>Your Future, Elevated.</h1>
+      <p class="body-font">Helping Minnesotans upsize with clarity, confidence, and class.</p>
+    </div>
+  </div>
+</section>
