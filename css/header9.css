@@ -17,14 +17,17 @@ body > header {
   position: relative !important;
   z-index: 1000 !important;
   flex-wrap: nowrap !important;
+  flex-direction: row !important;
 }
 
-body > header .logo {
+/* LOGO */
+body > header .logo img {
   height: 36px !important;
   width: auto !important;
-  margin-right: 30px !important;
+  max-width: 100% !important;
 }
 
+/* NAVIGATION */
 body > header nav {
   flex-grow: 1 !important;
   display: flex !important;
@@ -33,8 +36,9 @@ body > header nav {
 }
 
 body > header nav ul {
-  list-style: none !important;
+  list-style-type: none !important;
   display: flex !important;
+  flex-direction: row !important;
   gap: 40px !important;
   margin: 0 !important;
   padding: 0 !important;
@@ -42,17 +46,23 @@ body > header nav ul {
 }
 
 body > header nav ul li {
-  display: inline-block !important;
+  list-style: none !important;
+}
+
+body > header nav ul li a {
   color: white !important;
   font-weight: 600 !important;
   font-size: 1rem !important;
-  cursor: pointer !important;
+  text-decoration: none !important;
   position: relative !important;
   transition: all 0.3s ease !important;
-  text-decoration: none !important;
 }
 
-body > header nav ul li:hover::after {
+body > header nav ul li a:hover {
+  color: #ccc !important;
+}
+
+body > header nav ul li a:hover::after {
   content: "" !important;
   display: block !important;
   width: 100% !important;
@@ -63,28 +73,24 @@ body > header nav ul li:hover::after {
   left: 0 !important;
 }
 
-body > header nav ul li:hover {
-  color: #ccc !important;
-}
-
-/* Hamburger icon styling */
+/* HAMBURGER ICON */
 body > header .hamburger {
   display: none !important;
   flex-direction: column !important;
   justify-content: center !important;
   gap: 5px !important;
   cursor: pointer !important;
-  height: 24px !important;
-  margin-left: auto !important;
+  margin-left: 20px !important;
 }
 
 body > header .hamburger span {
   width: 26px !important;
   height: 3px !important;
   background-color: white !important;
+  display: block !important;
 }
 
-/* Responsive nav toggle */
+/* MOBILE RESPONSIVENESS */
 @media (max-width: 768px) {
   body > header {
     flex-wrap: wrap !important;
@@ -93,6 +99,7 @@ body > header .hamburger span {
   body > header nav ul {
     display: none !important;
     flex-direction: column !important;
+    align-items: flex-start !important;
     width: 100% !important;
     background-color: #100f0d !important;
     position: absolute !important;
@@ -109,7 +116,7 @@ body > header .hamburger span {
     display: flex !important;
   }
 
-  body > header .logo {
+  body > header .logo img {
     height: 32px !important;
     margin-bottom: 10px !important;
   }
