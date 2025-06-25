@@ -1,0 +1,96 @@
+/* ===============================
+   CUSTOM HEADER STYLES - HIGH SPECIFICITY + !important
+=============================== */
+
+body {
+  background: #fff !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body > header {
+  background-color: #000 !important;
+  padding: 20px 40px !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  position: relative !important;
+  z-index: 1000 !important;
+}
+
+body > header nav ul {
+  list-style: none !important;
+  display: flex !important;
+  gap: 30px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body > header nav ul li {
+  display: inline-block !important;
+  color: white !important;
+  font-weight: 600 !important;
+  font-size: 1rem !important;
+  cursor: pointer !important;
+  position: relative !important;
+  transition: color 0.3s ease !important;
+}
+
+body > header nav ul li:hover::after {
+  content: "" !important;
+  display: block !important;
+  width: 100% !important;
+  height: 2px !important;
+  background-color: white !important;
+  position: absolute !important;
+  bottom: -6px !important;
+  left: 0 !important;
+}
+
+body > header nav ul li:hover {
+  color: #999 !important;
+}
+
+body > header .logo {
+  max-height: 40px !important;
+  width: auto !important;
+}
+
+/* Hamburger icon styling */
+body > header .hamburger {
+  display: none !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  cursor: pointer !important;
+  height: 20px !important;
+}
+
+body > header .hamburger span {
+  width: 25px !important;
+  height: 2px !important;
+  background-color: white !important;
+}
+
+/* Responsive nav toggle */
+@media (max-width: 768px) {
+  body > header nav ul {
+    display: none !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    background-color: #000 !important;
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    padding: 20px !important;
+  }
+
+  body > header nav ul.active {
+    display: flex !important;
+  }
+
+  body > header .hamburger {
+    display: flex !important;
+  }
+}
