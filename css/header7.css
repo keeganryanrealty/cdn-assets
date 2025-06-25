@@ -19,6 +19,12 @@ body > header {
   flex-wrap: nowrap !important;
 }
 
+body > header .logo {
+  height: 36px !important;
+  width: auto !important;
+  margin-right: 30px !important;
+}
+
 body > header nav {
   flex-grow: 1 !important;
   display: flex !important;
@@ -29,7 +35,7 @@ body > header nav {
 body > header nav ul {
   list-style: none !important;
   display: flex !important;
-  gap: 32px !important;
+  gap: 40px !important;
   margin: 0 !important;
   padding: 0 !important;
   align-items: center !important;
@@ -42,7 +48,8 @@ body > header nav ul li {
   font-size: 1rem !important;
   cursor: pointer !important;
   position: relative !important;
-  transition: color 0.3s ease !important;
+  transition: all 0.3s ease !important;
+  text-decoration: none !important;
 }
 
 body > header nav ul li:hover::after {
@@ -60,12 +67,6 @@ body > header nav ul li:hover {
   color: #ccc !important;
 }
 
-body > header .logo {
-  max-height: 32px !important;
-  width: auto !important;
-  margin-right: 30px !important;
-}
-
 /* Hamburger icon styling */
 body > header .hamburger {
   display: none !important;
@@ -74,6 +75,7 @@ body > header .hamburger {
   gap: 5px !important;
   cursor: pointer !important;
   height: 24px !important;
+  margin-left: auto !important;
 }
 
 body > header .hamburger span {
@@ -84,6 +86,10 @@ body > header .hamburger span {
 
 /* Responsive nav toggle */
 @media (max-width: 768px) {
+  body > header {
+    flex-wrap: wrap !important;
+  }
+
   body > header nav ul {
     display: none !important;
     flex-direction: column !important;
@@ -101,5 +107,10 @@ body > header .hamburger span {
 
   body > header .hamburger {
     display: flex !important;
+  }
+
+  body > header .logo {
+    height: 32px !important;
+    margin-bottom: 10px !important;
   }
 }
