@@ -30,14 +30,14 @@ body {
 
 /* LOGO */
 .logo-container img {
-  height: 42px !important; /* Slightly bigger */
+  height: 48px !important; /* Slightly larger */
   width: auto !important;
   max-width: 100% !important;
 }
 
 @media (max-width: 768px) {
   .logo-container img {
-    height: 36px !important; /* More proportional on mobile */
+    height: 38px !important; /* Also slightly larger on mobile */
     margin-bottom: 10px !important;
   }
 }
