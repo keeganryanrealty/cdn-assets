@@ -16,54 +16,70 @@
 </div>
 
 <style>
+* {
+  box-sizing: border-box;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  max-width: 100%;
+  touch-action: pan-y;
+}
+
+/* Header Container */
 .custom-header {
   background-color: #100f0d;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   width: 100%;
+  overflow-x: hidden;
 }
 
+/* Top Row (Hamburger + Logo) */
 .custom-header-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 15px;
+  padding: 10px 16px;
   width: 100%;
 }
 
+/* Hamburger */
 .hamburger {
   font-size: 30px;
   color: white;
   background: none;
   border: none;
-  margin: 0;
   padding: 0;
   z-index: 10;
 }
 
+/* Logo */
 .logo-container {
   flex-grow: 1;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-left: 10px;
 }
 
 .custom-header img {
   max-height: 45px;
-  height: auto;
   width: auto;
+  height: auto;
   object-fit: contain;
 }
 
-/* Navigation menu (hidden by default) */
+/* Dropdown Nav */
 .nav-primary {
   display: none;
   flex-direction: column;
-  gap: 20px;
-  width: 100%;
+  gap: 18px;
   margin-top: 10px;
-  padding-bottom: 15px;
+  padding: 10px 0 20px;
   text-align: center;
 }
 
@@ -78,7 +94,6 @@
   text-decoration: none;
 }
 </style>
-
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
