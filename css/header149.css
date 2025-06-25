@@ -118,8 +118,14 @@ body {
 
   .nav-primary.active {
     display: flex !important;
+  }
 
   .hamburger {
     display: flex !important;
+  }
+
+  .logo-container img {
+    height: 38px !important;
+    margin-bottom: 10px !important;
   }
 }
