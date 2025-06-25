@@ -35,9 +35,11 @@ document.addEventListener("DOMContentLoaded", function () {
   headlineEl.classList.add("fade-slide-in");
 
   setInterval(() => {
-    // Fade + slide out
-    headlineEl.classList.remove("fade-slide-in");
-    headlineEl.classList.add("fade-slide-out");
+  console.log("Switching headline...");
+
+  headlineEl.textContent = headlines[(++index) % headlines.length];
+}, 2000);
+
 
     setTimeout(() => {
       // Switch text and fade+slide in
