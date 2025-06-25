@@ -195,6 +195,13 @@ body {
   background: rgba(0, 0, 0, 0.3); /* optional darkening overlay */
 }
 
+.hero-overlay h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  font-family: 'HeadlineFont', serif;
+  transition: opacity 0.5s ease-in-out;
+}
+
 .hero-text {
   color: white;
   max-width: 600px;
