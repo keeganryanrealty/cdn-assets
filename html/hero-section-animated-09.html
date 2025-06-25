@@ -14,7 +14,7 @@
 </section>
 
 <script>
-(function() {
+setTimeout(function () {
   const headlines = [
     "Your Future, Elevated.",
     "Sell with Confidence.",
@@ -33,5 +33,6 @@
       headlineEl.style.opacity = 1;
     }, 300);
   }, 4000);
-})();
+}, 300); // Wait just a little for DOM to be fully parsed/rendered
 </script>
+
