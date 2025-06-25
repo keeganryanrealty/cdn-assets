@@ -1,0 +1,45 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/css/header14.css">
+
+<div class="custom-header">
+  <div class="custom-header-inner">
+    <button class="hamburger">☰</button>
+    <a href="/" class="logo-container">
+      <img src="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/images/logo_white.png" alt="Keegan Ryan Realty Logo" />
+    </a>
+  </div>
+
+  <ul id="dropdown-nav" class="nav-primary">
+    <li><a href="/index.php?showagency=1&amp;rtype=map">Search</a></li>
+    <li><a href="/seller/valuation/">Sell</a></li>
+    <li><a href="/agents.php">Other</a></li>
+    <li><a href="/resources.php">Resources</a></li>
+  </ul>
+</div>
+
+<script>
+  // Inject GitHub-hosted HTML into placeholder
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/header14.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("custom-header-placeholder").innerHTML = html;
+
+      // ✅ Attach hamburger click handler AFTER header loads
+      const hamburger = document.querySelector(".hamburger");
+      const navList = document.querySelector(".nav-primary");
+
+      if (hamburger && navList) {
+        hamburger.addEventListener("click", function () {
+          navList.classList.toggle("active");
+          hamburger.blur(); // Prevent highlight
+        });
+      }
+    });
+
+  // Prevent pinch zoom
+  const meta = document.createElement('meta');
+  meta.name = "viewport";
+  meta.content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no";
+  document.head.appendChild(meta);
+</script>
+
+
