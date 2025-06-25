@@ -1,33 +1,29 @@
-/* ===============================
-   BASE STYLES
-=============================== */
-
+/* ========== DESKTOP HEADER FIX ========== */
 .custom-header {
   background-color: #100f0d;
   width: 100%;
-  overflow: hidden;
+  padding: 12px 24px;
 }
 
 .custom-header-inner {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 12px 16px;
-  box-sizing: border-box;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .logo-container {
-  max-height: 60px;
+  flex: 0 0 auto;
 }
 
 .logo-container img {
-  height: 50px;
+  height: 60px; /* increase size */
   width: auto;
-  object-fit: contain;
   display: block;
 }
 
-/* Desktop nav */
+/* Inline nav on desktop */
 .nav-primary {
   display: flex;
   gap: 32px;
@@ -42,6 +38,7 @@
   font-family: 'Poppins', sans-serif;
   font-weight: 600;
   text-decoration: none;
+  font-size: 16px;
 }
 
 /* Hide hamburger on desktop */
