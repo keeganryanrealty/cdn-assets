@@ -4,6 +4,16 @@
   overflow: hidden;
 }
 
+.custom-header a img {
+  max-height: 100% !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important;
+  display: block !important;
+  margin: 0 auto !important;
+  max-width: 90vw !important;
+}
+
 .custom-header-inner {
   display: flex;
   align-items: center;
