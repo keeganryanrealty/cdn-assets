@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/css/header8.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/css/header9.css">
 
 <div class="custom-header">
   <div class="custom-header-inner">
@@ -17,20 +17,13 @@
 </div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const toggle = document.querySelector(".hamburger");
-    const nav = document.getElementById("dropdown-nav");
-    if (toggle && nav) {
-      toggle.addEventListener("click", () => {
-        if (nav.classList.contains("show")) {
-          nav.classList.remove("show");
-          nav.style.display = "none";
-          nav.style.maxHeight = "0";
-        } else {
-          nav.classList.add("show");
-          nav.style.display = "flex";
-          nav.style.maxHeight = "400px";
-        }
+  document.addEventListener("DOMContentLoaded", function () {
+    const hamburger = document.querySelector("body > header .hamburger");
+    const navList = document.querySelector("body > header nav ul");
+
+    if (hamburger && navList) {
+      hamburger.addEventListener("click", function () {
+        navList.classList.toggle("active");
       });
     }
   });
