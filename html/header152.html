@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/css/header149.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/css/header152.css">
 
 <div class="custom-header">
   <div class="custom-header-inner">
@@ -24,22 +24,35 @@
 <div id="custom-header-placeholder"></div>
 
 <script>
-  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/header151.html")
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/header152.html")
     .then(res => res.text())
     .then(html => {
       document.getElementById("custom-header-placeholder").innerHTML = html;
 
-      // 💡 Delay query until DOM is updated
-      const hamburger = document.querySelector(".hamburger");
-      const navList = document.querySelector(".nav-primary");
+      // WAIT a moment to ensure the HTML is rendered into the DOM
+      requestAnimationFrame(() => {
+        const hamburger = document.querySelector(".hamburger");
+        const navList = document.querySelector(".nav-primary");
 
-      if (hamburger && navList) {
-        hamburger.addEventListener("click", function () {
-          navList.classList.toggle("active");
-          hamburger.blur();
-        });
-      }
+        if (hamburger && navList) {
+          hamburger.addEventListener("click", function () {
+            console.log("Hamburger clicked"); // remove later if desired
+            navList.classList.toggle("active");
+            hamburger.blur();
+          });
+        } else {
+          console.warn("Hamburger or navList not found");
+        }
+      });
     });
+
+  // Prevent pinch zoom
+  const meta = document.createElement("meta");
+  meta.name = "viewport";
+  meta.content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no";
+  document.head.appendChild(meta);
+</script>
+
 
   // Prevent pinch zoom
   const meta = document.createElement("meta");
