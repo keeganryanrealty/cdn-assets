@@ -72,6 +72,35 @@ html, body {
   display: block;
 }
 
+/* Adjust header inner container for better alignment */
+.custom-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  height: 64px;
+  overflow: hidden;
+}
+
+/* Ensure logo fits and centers properly */
+.logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+  padding: 0;
+  height: 100%;
+  overflow: visible;
+}
+
+.logo-container img {
+  max-height: 40px;
+  height: auto;
+  width: auto;
+  object-fit: contain;
+  margin: 0 auto;
+}
+
 /* NAV MENU */
 .nav-primary {
   display: none;
