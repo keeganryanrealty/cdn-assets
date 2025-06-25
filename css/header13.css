@@ -6,9 +6,12 @@ body {
   background: #fff !important;
   margin: 0 !important;
   padding: 0 !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
 }
 
-body > header {
+/* MAIN HEADER CONTAINER */
+.custom-header {
   background-color: #100f0d !important;
   padding: 20px 40px !important;
   display: flex !important;
@@ -17,45 +20,43 @@ body > header {
   position: relative !important;
   z-index: 1000 !important;
   flex-wrap: nowrap !important;
-  flex-direction: row !important;
+}
+
+.custom-header-inner {
+  display: flex !important;
+  align-items: center !important;
+  flex-grow: 1 !important;
 }
 
 /* LOGO */
-body > header .logo img {
-  height: 48px !important;
+.logo-container img {
+  height: 42px !important; /* Slightly bigger */
   width: auto !important;
   max-width: 100% !important;
 }
 
 @media (max-width: 768px) {
-  body > header .logo img {
-    height: 40px !important;
+  .logo-container img {
+    height: 36px !important; /* More proportional on mobile */
+    margin-bottom: 10px !important;
   }
 }
 
 /* NAVIGATION */
-body > header nav {
-  flex-grow: 1 !important;
-  display: flex !important;
-  justify-content: flex-end !important;
-  align-items: center !important;
-}
-
-body > header nav ul {
+.nav-primary {
   list-style-type: none !important;
   display: flex !important;
-  flex-direction: row !important;
   gap: 40px !important;
   margin: 0 !important;
   padding: 0 !important;
   align-items: center !important;
 }
 
-body > header nav ul li {
+.nav-primary li {
   list-style: none !important;
 }
 
-body > header nav ul li a {
+.nav-primary li a {
   color: white !important;
   font-weight: 600 !important;
   font-size: 1rem !important;
@@ -64,11 +65,11 @@ body > header nav ul li a {
   transition: all 0.3s ease !important;
 }
 
-body > header nav ul li a:hover {
+.nav-primary li a:hover {
   color: #ccc !important;
 }
 
-body > header nav ul li a:hover::after {
+.nav-primary li a:hover::after {
   content: "" !important;
   display: block !important;
   width: 100% !important;
@@ -80,39 +81,30 @@ body > header nav ul li a:hover::after {
 }
 
 /* HAMBURGER ICON */
-body > header .hamburger {
+.hamburger {
   display: none !important;
   flex-direction: column !important;
   justify-content: center !important;
   gap: 5px !important;
   cursor: pointer !important;
   margin-left: 20px !important;
+  background: none !important;
   border: none !important;
-  background: transparent !important;
-  padding: 0 !important;
-}
-
-body > header .hamburger:focus,
-body > header .hamburger:active {
+  font-size: 24px !important;
+  color: white !important;
   outline: none !important;
-  box-shadow: none !important;
-  background: transparent !important;
 }
 
-body > header .hamburger span {
-  width: 26px !important;
-  height: 3px !important;
-  background-color: white !important;
-  display: block !important;
+.hamburger:focus,
+.hamburger:active {
+  outline: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
 /* MOBILE RESPONSIVENESS */
 @media (max-width: 768px) {
-  body > header {
-    flex-wrap: wrap !important;
-  }
-
-  body > header nav ul {
+  .nav-primary {
     display: none !important;
     flex-direction: column !important;
     align-items: flex-start !important;
@@ -124,11 +116,11 @@ body > header .hamburger span {
     padding: 20px !important;
   }
 
-  body > header nav ul.active {
+  .nav-primary.active {
     display: flex !important;
   }
 
-  body > header .hamburger {
+  .hamburger {
     display: flex !important;
   }
 }
