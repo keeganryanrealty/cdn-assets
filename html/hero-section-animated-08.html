@@ -14,20 +14,17 @@
 </section>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+(function() {
   const headlines = [
     "Your Future, Elevated.",
     "Sell with Confidence.",
     "Buy Smarter.",
-    "Upsize Stress-Free.",
+    "Upsize Stress‑Free.",
     "Guidance You Can Trust."
   ];
-
+  let index = 0;
   const headlineEl = document.getElementById("animated-headline");
   if (!headlineEl) return;
-
-  let index = 0;
-
   setInterval(() => {
     headlineEl.style.opacity = 0;
     setTimeout(() => {
@@ -36,6 +33,5 @@ document.addEventListener("DOMContentLoaded", function () {
       headlineEl.style.opacity = 1;
     }, 300);
   }, 4000);
-});
+})();
 </script>
-
