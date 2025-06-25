@@ -1,89 +1,73 @@
-<style>
-  /* Mobile Header Styles */
-  .custom-header {
-    background-color: #100f0d;
-    padding: 20px 40px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  .nav-primary {
-    display: flex;
-    list-style: none;
-    gap: 40px;
-    margin: 0;
-    padding: 0;
-  }
-
-  .nav-primary li a {
-    color: white;
-    font-weight: 600;
-    font-family: 'Poppins', sans-serif;
-    text-decoration: none;
-  }
-
-  .menu-toggle {
-    display: none;
-    flex-direction: column;
-    cursor: pointer;
-  }
-
-  .menu-toggle span {
-    background: white;
-    height: 3px;
-    margin: 4px 0;
-    width: 25px;
-    display: block;
-  }
-
-  .nav-wrapper {
-    display: flex;
-    gap: 40px;
-  }
-
-  @media (max-width: 768px) {
-    .menu-toggle {
-      display: flex;
-    }
-
-    .nav-wrapper {
-      display: none;
-      flex-direction: column;
-      width: 100%;
-    }
-
-    .nav-wrapper.open {
-      display: flex;
-      background-color: #100f0d;
-      margin-top: 20px;
-    }
-
-    .nav-primary {
-      flex-direction: column;
-      gap: 20px;
-    }
-  }
-</style>
-
 <div class="custom-header">
-  <a href="/" style="display: flex; align-items: center;">
-    <img src="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/images/logo_white.png" alt="Keegan Ryan Realty Logo" style="max-height: 70px; height: auto;" />
-  </a>
-
-  <div class="menu-toggle" onclick="document.querySelector('.nav-wrapper').classList.toggle('open')">
-    <span></span>
-    <span></span>
-    <span></span>
-  </div>
-
-  <div class="nav-wrapper">
-    <ul class="nav-primary">
-      <li><a href="/index.php?showagency=1&amp;rtype=map">Search</a></li>
-      <li><a href="/seller/valuation/">Sell</a></li>
-      <li><a href="/agents.php">Other</a></li>
-      <li><a href="/resources.php">Resources</a></li>
-    </ul>
+  <button class="hamburger">☰</button>
+  <div class="logo-container">
+    <a href="/">
+      <img src="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/images/logo_white.png" alt="Keegan Ryan Realty Logo" />
+    </a>
   </div>
 </div>
+
+<ul class="nav-primary" id="dropdown-nav">
+  <li><a href="/index.php?showagency=1&amp;rtype=map">Search</a></li>
+  <li><a href="/seller/valuation/">Sell</a></li>
+  <li><a href="/agents.php">Other</a></li>
+  <li><a href="/resources.php">Resources</a></li>
+</ul>
+
+<style>
+.custom-header {
+  background-color: #100f0d;
+  padding: 10px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo-container img {
+  max-height: 50px;
+  height: auto;
+  margin: 0 auto;
+}
+
+.hamburger {
+  font-size: 28px;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.nav-primary {
+  display: none;
+  flex-direction: column;
+  background-color: #100f0d;
+  padding: 10px;
+  gap: 15px;
+  text-align: center;
+  margin: 0;
+  list-style: none;
+}
+
+.nav-primary a {
+  color: white;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  text-decoration: none;
+}
+
+.nav-primary.show {
+  display: flex;
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const toggle = document.querySelector(".hamburger");
+  const nav = document.getElementById("dropdown-nav");
+  if (toggle && nav) {
+    toggle.addEventListener("click", () => {
+      nav.classList.toggle("show");
+    });
+  }
+});
+</script>
