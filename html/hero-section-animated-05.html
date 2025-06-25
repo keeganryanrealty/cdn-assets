@@ -6,7 +6,7 @@
 
   <div class="hero-overlay">
     <div class="hero-text">
-      <h1 id="animated-headline">Your Future, Elevated.</h1>
+      <h1 id="animated-headline" class="headline-font">Your Future, Elevated.</h1>
       <p>Helping Minnesotans upsize with clarity, confidence, and class.</p>
       <a class="hero-button" href="https://keeganryan.exprealty.com/pages/get-started">Get Started</a>
     </div>
@@ -14,23 +14,27 @@
 </section>
 
 <script>
-const headlines = [
-  "Your Future, Elevated.",
-  "Sell with Confidence.",
-  "Buy Smarter.",
-  "Upsize Stress-Free.",
-  "Guidance You Can Trust."
-];
+document.addEventListener("DOMContentLoaded", () => {
+  const headlines = [
+    "Your Future, Elevated.",
+    "Sell with Confidence.",
+    "Buy Smarter.",
+    "Upsize Stress-Free.",
+    "Guidance You Can Trust."
+  ];
 
-let index = 0;
-const headlineEl = document.getElementById("animated-headline");
+  let index = 0;
+  const headlineEl = document.getElementById("animated-headline");
 
-setInterval(() => {
-  headlineEl.style.opacity = 0;
-  setTimeout(() => {
-    index = (index + 1) % headlines.length;
-    headlineEl.textContent = headlines[index];
-    headlineEl.style.opacity = 1;
-  }, 300);
-}, 4000);
+  if (!headlineEl) return; // Safety check
+
+  setInterval(() => {
+    headlineEl.style.opacity = 0;
+    setTimeout(() => {
+      index = (index + 1) % headlines.length;
+      headlineEl.textContent = headlines[index];
+      headlineEl.style.opacity = 1;
+    }, 300);
+  }, 4000);
+});
 </script>
