@@ -1,92 +1,89 @@
-<!-- Custom Header Block -->
 <style>
+  /* Mobile Header Styles */
   .custom-header {
     background-color: #100f0d;
+    padding: 20px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 40px;
-    font-family: 'Poppins', sans-serif;
+    flex-wrap: wrap;
   }
 
-  .custom-logo img {
-    height: 60px;
-    max-height: 150px;
-  }
-
-  .custom-nav {
+  .nav-primary {
     display: flex;
-    gap: 40px;
     list-style: none;
+    gap: 40px;
     margin: 0;
     padding: 0;
   }
 
-  .custom-nav li {
-    position: relative;
-  }
-
-  .custom-nav a {
+  .nav-primary li a {
     color: white;
-    text-decoration: none;
-    font-size: 16px;
     font-weight: 600;
-    transition: color 0.3s;
+    font-family: 'Poppins', sans-serif;
+    text-decoration: none;
   }
 
-  .custom-nav a:hover {
-    color: #c2c2ff;
-    text-decoration: underline;
-  }
-
-  .custom-nav .dropdown {
+  .menu-toggle {
     display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    background: #100f0d;
-    border-radius: 4px;
-    padding: 10px 0;
-    min-width: 160px;
-    z-index: 1000;
+    flex-direction: column;
+    cursor: pointer;
   }
 
-  .custom-nav li:hover .dropdown {
+  .menu-toggle span {
+    background: white;
+    height: 3px;
+    margin: 4px 0;
+    width: 25px;
     display: block;
   }
 
-  .custom-nav .dropdown a {
-    display: block;
-    padding: 6px 20px;
-    font-size: 14px;
+  .nav-wrapper {
+    display: flex;
+    gap: 40px;
   }
 
-  .custom-nav .dropdown a:hover {
-    background-color: #1a1918;
-    color: #c2c2ff;
+  @media (max-width: 768px) {
+    .menu-toggle {
+      display: flex;
+    }
+
+    .nav-wrapper {
+      display: none;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .nav-wrapper.open {
+      display: flex;
+      background-color: #100f0d;
+      margin-top: 20px;
+    }
+
+    .nav-primary {
+      flex-direction: column;
+      gap: 20px;
+    }
   }
 </style>
 
 <div class="custom-header">
-  <div class="custom-logo">
-    <img src="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/images/logo_white.png" alt="Keegan Ryan Realty">
+  <a href="/" style="display: flex; align-items: center;">
+    <img src="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/images/logo_white.png" alt="Keegan Ryan Realty Logo" style="max-height: 70px; height: auto;" />
+  </a>
+
+  <div class="menu-toggle" onclick="document.querySelector('.nav-wrapper').classList.toggle('open')">
+    <span></span>
+    <span></span>
+    <span></span>
   </div>
-  <ul class="custom-nav">
-    <li><a href="/index.php?showagency=1&amp;rtype=map">Search</a></li>
-    <li><a href="/seller/valuation/">Sell</a></li>
-    <li>
-      <a href="#">Other</a>
-      <ul class="dropdown">
-        <li><a href="/agents.php">Agent Profile</a></li>
-        <li><a href="/index.php?showagency=1#rslt">Our Listings</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#">Resources</a>
-      <ul class="dropdown">
-        <li><a href="/resources.php">Our Resources</a></li>
-        <li><a href="/contact.php">Contact</a></li>
-      </ul>
-    </li>
-  </ul>
+
+  <div class="nav-wrapper">
+    <ul class="nav-primary">
+      <li><a href="/index.php?showagency=1&amp;rtype=map">Search</a></li>
+      <li><a href="/seller/valuation/">Sell</a></li>
+      <li><a href="/agents.php">Other</a></li>
+      <li><a href="/resources.php">Resources</a></li>
+    </ul>
+  </div>
 </div>
