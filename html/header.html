@@ -53,21 +53,21 @@ html, body {
 }
 
 .logo-container {
-  flex-grow: 1;
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0;
-  height: 100%;
-  overflow: visible;
+  padding: 0 16px; /* adds buffer from edges */
+  overflow: hidden;
 }
 
 .logo-container img {
   width: 100%;
-  max-width: 240px;
+  max-width: 220px;
   height: auto;
   object-fit: contain;
 }
+
 
 /* NAV MENU */
 .nav-primary {
