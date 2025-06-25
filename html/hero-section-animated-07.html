@@ -14,7 +14,7 @@
 </section>
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", function () {
   const headlines = [
     "Your Future, Elevated.",
     "Sell with Confidence.",
@@ -23,10 +23,10 @@ document.addEventListener("DOMContentLoaded", () => {
     "Guidance You Can Trust."
   ];
 
-  let index = 0;
   const headlineEl = document.getElementById("animated-headline");
+  if (!headlineEl) return;
 
-  if (!headlineEl) return; // Safety check
+  let index = 0;
 
   setInterval(() => {
     headlineEl.style.opacity = 0;
@@ -38,3 +38,4 @@ document.addEventListener("DOMContentLoaded", () => {
   }, 4000);
 });
 </script>
+
