@@ -67,13 +67,13 @@ html, body {
 }
 
 .logo-container img {
-  max-height: 40px;
+  max-width: 220px;     /* Limit it globally */
+  width: 100%;
   height: auto;
-  width: auto;
-  max-width: 100%;
   object-fit: contain;
   display: block;
 }
+
 
 
 /* NAV MENU */
@@ -103,9 +103,9 @@ html, body {
   text-decoration: none;
 }
 
-  @media (max-width: 480px) {
+@media (max-width: 480px) {
   .logo-container img {
-    max-width: 80%;
+    max-width: 160px;
   }
 }
 </style>
