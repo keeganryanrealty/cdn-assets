@@ -118,7 +118,8 @@ body {
 
   .nav-primary.active {
     display: flex !important;
-  }
+    flex-direction: column !important;
+    /* ... */
 
   .hamburger {
     display: flex !important;
