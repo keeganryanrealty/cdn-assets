@@ -132,15 +132,3 @@ body > header .hamburger span {
     display: flex !important;
   }
 }
-
-/* Ensure the navigation script toggles visibility */
-document.addEventListener("DOMContentLoaded", function () {
-  const hamburger = document.querySelector(".hamburger");
-  const navList = document.querySelector("body > header nav ul");
-
-  if (hamburger && navList) {
-    hamburger.addEventListener("click", function () {
-      navList.classList.toggle("active");
-    });
-  }
-});
