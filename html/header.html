@@ -52,22 +52,21 @@ html, body {
   flex-shrink: 0;
 }
 
-/* LOGO CONTAINER */
 .logo-container {
-  flex: 1 1 auto;
+  flex-grow: 1;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 0;
   height: 100%;
+  overflow: visible;
 }
 
-/* LOGO IMAGE */
 .logo-container img {
-  max-height: 40px;
-  width: auto;
+  width: 100%;
+  max-width: 240px;
   height: auto;
   object-fit: contain;
-  display: block;
 }
 
 /* NAV MENU */
