@@ -13,16 +13,18 @@
   </div>
 </section>
 
-/* cache v=3 */
-
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", function () {
     const el = document.getElementById("animated-headline");
     console.log("Element present:", el);
+
     if (el) {
       setTimeout(() => {
-        el.textContent = "🛠 Test Headline";
+        el.textContent = "🛠 Test Headline Updated";
+        console.log("Headline changed!");
       }, 2000);
+    } else {
+      console.log("⚠️ Headline element not found.");
     }
   });
 </script>
