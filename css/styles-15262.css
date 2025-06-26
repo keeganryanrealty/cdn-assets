@@ -231,9 +231,9 @@ body {
 
 #animated-headline {
   position: relative;
-  display: block;
+  display: inline-block;
   overflow: hidden;
-  height: 3.5rem; /* Matches line height */
+  height: 3.5rem;
 }
 
 #animated-headline .headline {
@@ -241,28 +241,32 @@ body {
   width: 100%;
   left: 0;
   top: 0;
-  opacity: 0;
-  transform: translateY(100%);
   transition: transform 0.7s ease, opacity 0.7s ease;
+  will-change: transform, opacity;
   font-family: 'HeadlineFont', serif;
+  text-align: left;
+  white-space: nowrap;
   color: white;
 }
 
-/* Show current headline */
-#animated-headline .current {
-  opacity: 1;
-  transform: translateY(0%);
-  z-index: 2;
-}
-
-/* Entering headline animation */
-#animated-headline .next.enter {
-  opacity: 0;
+/* Incoming headline */
+.headline.enter {
   transform: translateY(100%);
-  z-index: 1;
+  opacity: 0;
 }
 
-#animated-headline .next.enter-active {
-  opacity: 1;
+.headline.enter-active {
   transform: translateY(0%);
+  opacity: 1;
+}
+
+/* Outgoing headline */
+.headline.exit {
+  transform: translateY(0%);
+  opacity: 1;
+}
+
+.headline.exit-active {
+  transform: translateY(-100%);
+  opacity: 0;
 }
