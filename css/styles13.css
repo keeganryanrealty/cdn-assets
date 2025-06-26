@@ -238,17 +238,15 @@ body {
   white-space: nowrap;
   opacity: 1;
   transform: translateY(0);
-  transition: transform 0.7s ease, opacity 0.7s ease;
-  will-change: transform, opacity;
+  transition: transform 0.6s ease, opacity 0.6s ease;
 }
 
-.fade-slide-out {
+.fade-out {
   opacity: 0;
-  transform: translateY(-30px);
+  transform: translateY(-20px);
 }
 
-.fade-slide-in {
+.fade-in {
   opacity: 1;
-  transform: translateY(30px);
+  transform: translateY(20px);
 }
-
