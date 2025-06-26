@@ -1,7 +1,10 @@
 document.addEventListener("DOMContentLoaded", function () {
   const container = document.getElementById("animated-headline");
+  if (!container) return; // prevent crash if not found
+
   const currentEl = container.querySelector(".current");
   const nextEl = container.querySelector(".next");
+  if (!currentEl || !nextEl) return; // also prevent crash if spans not present
 
   const headlines = [
     "Your Future, Elevated.",
@@ -14,19 +17,13 @@ document.addEventListener("DOMContentLoaded", function () {
   let index = 0;
 
   function switchHeadline() {
-    // Set next text
     index = (index + 1) % headlines.length;
     nextEl.textContent = headlines[index];
 
-    // Animate next in
     nextEl.classList.add("enter");
-
-    // Force reflow
     void nextEl.offsetWidth;
-
     nextEl.classList.add("enter-active");
 
-    // After transition, swap roles
     setTimeout(() => {
       currentEl.textContent = nextEl.textContent;
       nextEl.className = "headline next";
