@@ -230,26 +230,37 @@ body {
 }
 
 #animated-headline {
+  position: relative;
   display: inline-block;
-  white-space: nowrap;
+  overflow: hidden;
+  height: 3rem; /* adjust to match line-height of your text */
 }
 
-/* This gets applied right after new text is inserted */
-.animate-in {
-  opacity: 0;
-  transform: translateY(30%);
-}
-
-/* This triggers the animation INTO view */
-.animate-in-active {
-  opacity: 1;
+.headline {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  text-align: left;
   transform: translateY(0);
-  transition: transform 0.6s ease, opacity 0.6s ease;
+  opacity: 1;
+  transition: transform 0.7s ease, opacity 0.7s ease;
+  will-change: transform, opacity;
 }
 
-/* This handles the slide/fade OUT */
-.animate-out {
+/* Slide out and fade */
+.headline.exit {
+  transform: translateY(-100%);
   opacity: 0;
-  transform: translateY(-30%);
-  transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+/* Slide in from below and fade in */
+.headline.enter {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.headline.enter-active {
+  transform: translateY(0);
+  opacity: 1;
 }
