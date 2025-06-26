@@ -234,6 +234,7 @@ body {
   position: relative;
   display: inline-block;
   overflow: hidden;
+  color: white;
   height: 3.5rem; /* or match your font size */
 }
 
