@@ -10,29 +10,29 @@ document.addEventListener("DOMContentLoaded", function () {
   let index = 0;
 
   function updateHeadline() {
-    // Animate out
+    // Fade + slide out
+    el.classList.remove("animate-in-active");
     el.classList.add("animate-out");
 
     setTimeout(() => {
-      // Update text
+      // Set new text
       index = (index + 1) % headlines.length;
       el.textContent = headlines[index];
 
-      // Reset position to animate-in starting point
+      // Prep for slide-in
       el.classList.remove("animate-out");
       el.classList.add("animate-in");
 
-      // Allow reflow before transitioning in
+      // Allow DOM to apply .animate-in, then trigger visible animation
       requestAnimationFrame(() => {
-        el.style.opacity = "1";
-        el.style.transform = "translateY(0)";
+        el.classList.add("animate-in-active");
       });
 
-      // Clean up the 'animate-in' class after transition
+      // Cleanup
       setTimeout(() => {
         el.classList.remove("animate-in");
       }, 600);
-    }, 600); // Match the out-transition duration
+    }, 600); // Match your CSS transition timing
   }
 
   setInterval(updateHeadline, 4500);
