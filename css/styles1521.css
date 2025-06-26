@@ -229,38 +229,38 @@ body {
   color: #100f0d;
 }
 
+/* Base headline styling */
 #animated-headline {
   position: relative;
   display: inline-block;
   overflow: hidden;
-  height: 3rem; /* adjust to match line-height of your text */
+  height: 3.5rem; /* Adjust as needed to prevent jitter */
 }
 
-.headline {
+#animated-headline .headline {
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
-  text-align: left;
-  transform: translateY(0);
-  opacity: 1;
   transition: transform 0.7s ease, opacity 0.7s ease;
   will-change: transform, opacity;
+  font-family: 'HeadlineFont', serif;
 }
 
-/* Slide out and fade */
-.headline.exit {
+/* Animate current text out */
+#animated-headline .headline.exit {
+  opacity: 0;
   transform: translateY(-100%);
-  opacity: 0;
 }
 
-/* Slide in from below and fade in */
-.headline.enter {
+/* Prepare incoming headline */
+#animated-headline .headline.enter {
+  opacity: 0;
   transform: translateY(100%);
-  opacity: 0;
 }
 
-.headline.enter-active {
-  transform: translateY(0);
+/* Animate incoming headline in */
+#animated-headline .headline.enter-active {
   opacity: 1;
+  transform: translateY(0%);
 }
