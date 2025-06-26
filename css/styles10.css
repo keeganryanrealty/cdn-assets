@@ -233,26 +233,21 @@ body {
   transition: opacity 0.3s ease;
 }
 
-/* Container stays fixed height to avoid layout shift */
 #animated-headline {
-  position: relative;
-  height: 3rem; /* Adjust this to match font size */
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-/* Slide + fade classes */
-.fade-slide-out {
-  opacity: 0;
-  transform: translateY(-20px);
-  transition: all 0.5s ease;
-}
-
-.fade-slide-in {
   opacity: 1;
+  transition: transform 0.7s ease, opacity 0.7s ease;
   transform: translateY(0);
-  transition: all 0.5s ease;
+  will-change: transform, opacity;
+  display: inline-block;
+  white-space: nowrap;
 }
 
+.slide-out {
+  opacity: 0;
+  transform: translateY(-30px);
+}
+
+.slide-in {
+  opacity: 0;
+  transform: translateY(30px);
+}
