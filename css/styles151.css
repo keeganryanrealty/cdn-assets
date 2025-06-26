@@ -232,23 +232,24 @@ body {
 #animated-headline {
   display: inline-block;
   white-space: nowrap;
-  opacity: 1;
-  transform: translateY(0);
-  transition: transform 0.6s ease, opacity 0.6s ease;
 }
 
-.animate-out {
-  opacity: 0;
-  transform: translateY(-30%);
-}
-
+/* This gets applied right after new text is inserted */
 .animate-in {
   opacity: 0;
   transform: translateY(30%);
 }
 
-/* Final visible state after .animate-in is applied */
-#animated-headline.animate-in-active {
+/* This triggers the animation INTO view */
+.animate-in-active {
   opacity: 1;
   transform: translateY(0);
+  transition: transform 0.6s ease, opacity 0.6s ease;
+}
+
+/* This handles the slide/fade OUT */
+.animate-out {
+  opacity: 0;
+  transform: translateY(-30%);
+  transition: transform 0.6s ease, opacity 0.6s ease;
 }
