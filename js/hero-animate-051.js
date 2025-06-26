@@ -10,29 +10,29 @@ document.addEventListener("DOMContentLoaded", function () {
   let index = 0;
 
   function updateHeadline() {
-    // Fade + slide out
-    el.classList.remove("animate-in-active");
+    // Slide and fade out
+    el.classList.remove("animate-in", "animate-in-active");
     el.classList.add("animate-out");
 
     setTimeout(() => {
-      // Set new text
+      // Update text
       index = (index + 1) % headlines.length;
       el.textContent = headlines[index];
 
-      // Prep for slide-in
+      // Prepare slide-in
       el.classList.remove("animate-out");
       el.classList.add("animate-in");
 
-      // Allow DOM to apply .animate-in, then trigger visible animation
-      requestAnimationFrame(() => {
+      // Small delay to let animate-in apply, then activate visible state
+      setTimeout(() => {
         el.classList.add("animate-in-active");
-      });
+      }, 50); // short enough to work smoothly
 
       // Cleanup
       setTimeout(() => {
-        el.classList.remove("animate-in");
-      }, 600);
-    }, 600); // Match your CSS transition timing
+        el.classList.remove("animate-in", "animate-in-active");
+      }, 600); // match transition time
+    }, 600); // match slide-out duration
   }
 
   setInterval(updateHeadline, 4500);
