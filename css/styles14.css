@@ -230,10 +230,6 @@ body {
 }
 
 #animated-headline {
-  transition: opacity 0.3s ease;
-}
-
-#animated-headline {
   display: inline-block;
   white-space: nowrap;
   opacity: 1;
@@ -241,12 +237,12 @@ body {
   transition: transform 0.6s ease, opacity 0.6s ease;
 }
 
-.fade-out {
+.animate-out {
   opacity: 0;
-  transform: translateY(-20px);
+  transform: translateY(-30%);
 }
 
-.fade-in {
-  opacity: 1;
-  transform: translateY(20px);
+.animate-in {
+  opacity: 0;
+  transform: translateY(30%);
 }
