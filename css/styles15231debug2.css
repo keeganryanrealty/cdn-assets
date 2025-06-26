@@ -229,58 +229,25 @@ body {
   color: #100f0d;
 }
 
-/* Container */
 #animated-headline {
-  position: relative;
-  display: inline-block;
-  overflow: hidden;
-  color: white;
-  height: 3.5rem; /* or match your font size */
-}
-
-/* Shared headline styles */
-#animated-headline .headline {
-  opacity: 0;
-  transform: translateY(100%);
-  transition: transform 0.7s ease, opacity 0.7s ease;
-  will-change: transform, opacity;
-  font-family: 'HeadlineFont', serif;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-}
-
-/* Show the current headline on load */
-#animated-headline .headline.current {
-  opacity: 1;
-  transform: translateY(0%);
-  position: absolute;
-  width: 100%;
-  left: 0;
-  top: 0;
-}
-
-/* Slide out old text */
-#animated-headline .headline.exit {
-  opacity: 0;
-  transform: translateY(-100%);
-}
-
-/* Prepare new text off-screen */
-#animated-headline .headline.enter {
-  opacity: 0;
-  transform: translateY(100%);
-}
-
-/* Bring new text into view */
-#animated-headline .headline.enter-active {
-  opacity: 1;
-  transform: translateY(0%);
+  color: red !important;
+  background: yellow !important;
+  font-size: 3rem !important;
+  height: auto !important;
+  overflow: visible !important;
+  display: block !important;
+  position: relative !important;
+  z-index: 9999 !important;
 }
 
 #animated-headline .headline {
-  background: rgba(255,0,0,0.2); /* Light red background to see it */
-  border: 1px solid red;
+  font-size: 3rem !important;
+  font-family: sans-serif !important;
+  color: red !important;
+  opacity: 1 !important;
+  transform: none !important;
+  position: relative !important;
+  background: rgba(0, 0, 255, 0.2) !important;
+  z-index: 99999 !important;
+  display: inline !important;
 }
-
