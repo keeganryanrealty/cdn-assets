@@ -246,3 +246,9 @@ body {
   opacity: 0;
   transform: translateY(30%);
 }
+
+/* Final visible state after .animate-in is applied */
+#animated-headline.animate-in-active {
+  opacity: 1;
+  transform: translateY(0);
+}
