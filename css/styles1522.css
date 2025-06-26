@@ -229,37 +229,44 @@ body {
   color: #100f0d;
 }
 
-/* Base headline styling */
+/* Container */
 #animated-headline {
   position: relative;
   display: inline-block;
   overflow: hidden;
-  height: 3.5rem; /* Adjust as needed to prevent jitter */
+  height: 3.5rem; /* or match your font size */
 }
 
+/* Shared headline styles */
 #animated-headline .headline {
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
+  font-family: 'HeadlineFont', serif;
   transition: transform 0.7s ease, opacity 0.7s ease;
   will-change: transform, opacity;
-  font-family: 'HeadlineFont', serif;
 }
 
-/* Animate current text out */
+/* Show the current headline on load */
+#animated-headline .headline.current {
+  opacity: 1;
+  transform: translateY(0%);
+}
+
+/* Slide out old text */
 #animated-headline .headline.exit {
   opacity: 0;
   transform: translateY(-100%);
 }
 
-/* Prepare incoming headline */
+/* Prepare new text off-screen */
 #animated-headline .headline.enter {
   opacity: 0;
   transform: translateY(100%);
 }
 
-/* Animate incoming headline in */
+/* Bring new text into view */
 #animated-headline .headline.enter-active {
   opacity: 1;
   transform: translateY(0%);
