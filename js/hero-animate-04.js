@@ -1,4 +1,5 @@
-document.addEventListener("DOMContentLoaded", function () {
+<script>
+document.addEventListener("DOMContentLoaded", () => {
   const el = document.getElementById("animated-headline");
   const headlines = [
     "Your Future, Elevated.",
@@ -8,24 +9,24 @@ document.addEventListener("DOMContentLoaded", function () {
     "Guidance You Can Trust."
   ];
 
-  if (!el) return;
-
   let index = 0;
 
   function switchHeadline() {
-    // Fade + slide out
-    el.classList.remove("fade-slide-in");
-    el.classList.add("fade-slide-out");
+    el.classList.remove("fade-in");
+    el.classList.add("fade-out");
 
     setTimeout(() => {
       index = (index + 1) % headlines.length;
       el.textContent = headlines[index];
 
-      // Immediately switch to slide in
-      el.classList.remove("fade-slide-out");
-      el.classList.add("fade-slide-in");
-    }, 700); // Match transition duration
+      // Force reflow to restart the transition
+      void el.offsetWidth;
+
+      el.classList.remove("fade-out");
+      el.classList.add("fade-in");
+    }, 600); // Match transition duration
   }
 
   setInterval(switchHeadline, 4500);
 });
+</script>
