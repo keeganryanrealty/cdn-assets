@@ -33,13 +33,14 @@ function initStickyScroll() {
 
   if (!header || !hero) return false;
 
- function handleScroll() {
-  const heroBottom = hero.getBoundingClientRect().bottom;
+function handleScroll() {
+  const scrollY = window.scrollY || window.pageYOffset;
+  const heroHeight = hero.offsetHeight;
   const headerHeight = header.offsetHeight;
 
-  console.log("heroBottom:", heroBottom, "headerHeight:", headerHeight);
+  console.log("scrollY:", scrollY, "heroHeight:", heroHeight, "headerHeight:", headerHeight);
 
-  if (heroBottom <= headerHeight) {
+  if (scrollY >= heroHeight - headerHeight) {
     header.classList.remove("transparent");
     header.classList.add("sticky-solid");
     console.log("Added sticky-solid");
