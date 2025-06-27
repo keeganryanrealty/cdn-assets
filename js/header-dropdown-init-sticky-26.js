@@ -1,4 +1,21 @@
+// 👇 At the top of your script
 console.log("🔥 Sticky header script loaded!");
+
+const waitForHeader = setInterval(() => {
+  const header = document.querySelector(".custom-header");
+  const hero = document.querySelector(".hero-section");
+
+  console.log("⏳ Waiting for header/hero...", { headerExists: !!header, heroExists: !!hero });
+
+  if (header && hero) {
+    clearInterval(waitForHeader);
+    console.log("✅ Header & Hero found, running init...");
+
+    initDropdown();
+    initStickyHeader();
+  }
+}, 100);
+
 function initDropdown() {
   const hamburger = document.querySelector(".hamburger");
   const navList = document.querySelector(".nav-primary");
