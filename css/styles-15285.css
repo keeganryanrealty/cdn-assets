@@ -224,6 +224,24 @@ body {
   max-width: 600px;
 }
 
+/* Mobile override */
+@media (max-width: 768px) {
+  .hero-overlay {
+    height: auto !important; /* Allow content to expand */
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    padding: 60px 20px 40px !important; /* Top and bottom spacing */
+  }
+
+  .hero-overlay h1 {
+    font-size: 2rem !important;
+  }
+
+  .hero-text p {
+    font-size: 1rem !important;
+  }
+}
 .hero-button {
   display: inline-block;
   padding: 12px 24px;
