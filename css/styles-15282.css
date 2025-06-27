@@ -24,14 +24,23 @@ body {
   /* DO NOT set position here */
 }
 
-.custom-header.transparent {
+/* Transparent at top (before scroll) */
+.custom-header.transparent:not(.sticky-solid) {
   background-color: transparent !important;
-  position: absolute !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
 }
 
+/* Solid after scrolling past hero */
 .custom-header.sticky-solid {
   background-color: #100f0d !important;
   position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .custom-header-inner {
