@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function handleScroll() {
     const heroBottom = hero.getBoundingClientRect().bottom;
+    console.log('heroBottom:', heroBottom);  // add this
 
     if (heroBottom <= 0) {
       header.classList.remove("transparent");
