@@ -1,6 +1,3 @@
-// 👇 At the top of your script
-console.log("🔥 Sticky header script loaded!");
-
 const waitForHeader = setInterval(() => {
   const header = document.querySelector(".custom-header");
   const hero = document.querySelector(".hero-section");
@@ -46,44 +43,32 @@ if (document.getElementById("custom-header-placeholder").children.length) {
 }
 
 function initStickyHeader() {
-  console.log("✅ Header & hero found, running sticky header init...");
   const header = document.querySelector(".custom-header");
   const hero = document.querySelector(".hero-section");
 
   if (!header || !hero) return;
 
-  const headerHeight = header.offsetHeight;
+  console.log("✅ Setting up IntersectionObserver");
 
-  function handleScroll() {
-    const scrollY = window.scrollY;
-    const heroHeight = hero.offsetHeight; // <- Moved inside here!
-
-    console.log("scrollY:", scrollY, "heroHeight:", heroHeight, "headerHeight:", headerHeight);
-    console.log("hero.offsetHeight:", hero.offsetHeight);
-console.log("header.offsetHeight:", header.offsetHeight);
-console.log("window.scrollY:", window.scrollY);
-
-    if (scrollY >= heroHeight - headerHeight) {
-      if (!header.classList.contains("sticky-solid")) {
-        header.classList.remove("transparent");
-        header.classList.add("sticky-solid");
-        console.log("→ Switched to sticky-solid");
-      }
-    } else {
-      if (!header.classList.contains("transparent")) {
-        header.classList.remove("sticky-solid");
-        header.classList.add("transparent");
-        console.log("→ Switched to transparent");
-      }
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) {
+          header.classList.remove("transparent");
+          header.classList.add("sticky-solid");
+          console.log("⬇️ Hero out of view → Sticky header ON");
+        } else {
+          header.classList.remove("sticky-solid");
+          header.classList.add("transparent");
+          console.log("⬆️ Hero in view → Transparent header ON");
+        }
+      });
+    },
+    {
+      root: null, // viewport
+      threshold: 0, // trigger as soon as any part is out of view
     }
-  }
+  );
 
-  window.addEventListener("scroll", handleScroll);
-  handleScroll(); // Run on load
+  observer.observe(hero);
 }
-
-// Fallback: Force scroll event once everything has loaded
-window.addEventListener("load", () => {
-  console.log("📦 Window fully loaded — forcing scroll check");
-  window.dispatchEvent(new Event("scroll"));
-});
