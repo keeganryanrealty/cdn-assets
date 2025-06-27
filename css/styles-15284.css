@@ -25,7 +25,7 @@ body {
 }
 
 /* Transparent at top (before scroll) */
-.custom-header.transparent:not(.sticky-solid) {
+.custom-header.transparent {
   background-color: transparent !important;
   position: fixed !important;
   top: 0 !important;
