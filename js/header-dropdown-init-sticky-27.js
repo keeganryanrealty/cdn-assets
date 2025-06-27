@@ -81,3 +81,9 @@ console.log("window.scrollY:", window.scrollY);
   window.addEventListener("scroll", handleScroll);
   handleScroll(); // Run on load
 }
+
+// Fallback: Force scroll event once everything has loaded
+window.addEventListener("load", () => {
+  console.log("📦 Window fully loaded — forcing scroll check");
+  window.dispatchEvent(new Event("scroll"));
+});
