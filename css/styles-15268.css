@@ -231,31 +231,23 @@ body {
 
 #animated-headline {
   position: relative;
-  display: inline-block;
-  overflow: hidden;
   height: 3.5rem;
+  overflow: hidden;
   color: white;
 }
 
 #animated-headline .headline {
   position: absolute;
-  width: 100%;
   left: 0;
-  top: 0;
-  font-family: 'HeadlineFont', serif;
+  width: 100%;
+  transition: all 0.6s ease;
   opacity: 0;
   transform: translateY(30%);
-  transition: transform 0.8s ease, opacity 0.8s ease;
 }
 
 #animated-headline .current {
   opacity: 1;
   transform: translateY(0);
-  z-index: 2;
-}
-
-#animated-headline .next {
-  z-index: 1;
 }
 
 #animated-headline .exit {
@@ -264,11 +256,6 @@ body {
 }
 
 #animated-headline .enter {
-  opacity: 0;
-  transform: translateY(30%);
-}
-
-#animated-headline .enter-active {
   opacity: 1;
   transform: translateY(0);
 }
