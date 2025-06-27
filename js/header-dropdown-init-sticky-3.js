@@ -27,16 +27,12 @@ if (document.getElementById("custom-header-placeholder").children.length) {
   }, 100);
 }
 
- document.addEventListener("DOMContentLoaded", function initStickyHeader() {
+document.addEventListener("DOMContentLoaded", function () {
   const header = document.querySelector(".custom-header");
   const hero = document.querySelector(".hero-section");
 
-  if (!header || !hero) {
-    return setTimeout(initStickyHeader, 100); // Wait for DOM elements to be ready
-  }
-
   function handleScroll() {
-    const heroBottom = hero.getBoundingClientRect().bottom;
+    const heroBottom = hero?.getBoundingClientRect().bottom || 1;
 
     if (heroBottom <= 0) {
       header.classList.remove("transparent");
@@ -47,9 +43,10 @@ if (document.getElementById("custom-header-placeholder").children.length) {
     }
   }
 
-  // Apply once and on scroll
   window.addEventListener("scroll", handleScroll);
-  handleScroll();
+  handleScroll(); // Run once on load
+});
+
 }
 
 // Try after DOM is loaded
