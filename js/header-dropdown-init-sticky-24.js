@@ -40,6 +40,9 @@ function initStickyHeader() {
     const heroHeight = hero.offsetHeight; // <- Moved inside here!
 
     console.log("scrollY:", scrollY, "heroHeight:", heroHeight, "headerHeight:", headerHeight);
+    console.log("hero.offsetHeight:", hero.offsetHeight);
+console.log("header.offsetHeight:", header.offsetHeight);
+console.log("window.scrollY:", window.scrollY);
 
     if (scrollY >= heroHeight - headerHeight) {
       if (!header.classList.contains("sticky-solid")) {
