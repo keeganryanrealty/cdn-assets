@@ -1,4 +1,3 @@
-<script>
 document.addEventListener("DOMContentLoaded", function () {
   const container = document.getElementById("animated-headline");
   if (!container) return;
@@ -41,4 +40,3 @@ document.addEventListener("DOMContentLoaded", function () {
 
   setInterval(switchHeadline, 4500);
 });
-</script>
