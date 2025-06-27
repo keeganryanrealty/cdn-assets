@@ -31,9 +31,16 @@ document.addEventListener("DOMContentLoaded", function () {
   const header = document.querySelector(".custom-header");
   const hero = document.querySelector(".hero-section");
 
+  console.log("Hero found?", hero); // Confirm if hero is selected
+
+  if (!header || !hero) {
+    console.warn("Header or Hero not found.");
+    return;
+  }
+
   function handleScroll() {
     const heroBottom = hero.getBoundingClientRect().bottom;
-    console.log('heroBottom:', heroBottom);  // add this
+    console.log("heroBottom:", heroBottom);
 
     if (heroBottom <= 0) {
       header.classList.remove("transparent");
@@ -45,6 +52,5 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   window.addEventListener("scroll", handleScroll);
-  window.addEventListener("resize", handleScroll);
   handleScroll();
 });
