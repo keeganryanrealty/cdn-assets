@@ -240,7 +240,8 @@ body {
   position: absolute;
   left: 0;
   width: 100%;
-   transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.8s ease;  
+transition: all 0s ease;
+  opacity: 0;
   transform: translateY(30%);
 }
 
