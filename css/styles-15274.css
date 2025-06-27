@@ -20,6 +20,7 @@ body {
   position: relative !important;
   z-index: 1000 !important;
   flex-wrap: nowrap !important;
+   transition: background-color 0.3s ease-in-out !important;
 }
 
 .custom-header-inner {
@@ -41,7 +42,10 @@ body {
 .custom-header.sticky-solid {
   position: fixed !important;
   top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
   background-color: #100f0d !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease-in-out !important;
 }
 
