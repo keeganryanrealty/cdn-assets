@@ -33,20 +33,23 @@ function initStickyScroll() {
 
   if (!header || !hero) return false;
 
-  function handleScroll() {
-    const heroBottom = hero.getBoundingClientRect().bottom;
-    console.log("heroBottom:", heroBottom);
+ function handleScroll() {
+  const heroBottom = hero.getBoundingClientRect().bottom;
+  const headerHeight = header.offsetHeight;
 
-    if (heroBottom <= 0) {
-      header.classList.remove("transparent");
-      header.classList.add("sticky-solid");
-      console.log("Added sticky-solid");
-    } else {
-      header.classList.remove("sticky-solid");
-      header.classList.add("transparent");
-      console.log("Added transparent");
-    }
+  console.log("heroBottom:", heroBottom, "headerHeight:", headerHeight);
+
+  if (heroBottom <= headerHeight) {
+    header.classList.remove("transparent");
+    header.classList.add("sticky-solid");
+    console.log("Added sticky-solid");
+  } else {
+    header.classList.remove("sticky-solid");
+    header.classList.add("transparent");
+    console.log("Added transparent");
   }
+}
+
 
   window.addEventListener("scroll", handleScroll);
   handleScroll(); // run on load
