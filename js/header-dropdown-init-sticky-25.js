@@ -1,3 +1,4 @@
+console.log("🔥 Sticky header script loaded!");
 function initDropdown() {
   const hamburger = document.querySelector(".hamburger");
   const navList = document.querySelector(".nav-primary");
@@ -28,6 +29,7 @@ if (document.getElementById("custom-header-placeholder").children.length) {
 }
 
 function initStickyHeader() {
+  console.log("✅ Header & hero found, running sticky header init...");
   const header = document.querySelector(".custom-header");
   const hero = document.querySelector(".hero-section");
 
