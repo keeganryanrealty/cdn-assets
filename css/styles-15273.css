@@ -38,6 +38,13 @@ body {
   z-index: 1000 !important;
 }
 
+.custom-header.sticky-solid {
+  position: fixed !important;
+  top: 0 !important;
+  background-color: #100f0d !important;
+  transition: background-color 0.3s ease-in-out !important;
+}
+
 /* LOGO */
 .logo-container img {
   height: 48px !important; /* Slightly larger */
