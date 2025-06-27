@@ -40,15 +40,15 @@ function handleScroll() {
 
   console.log("scrollY:", scrollY, "heroHeight:", heroHeight, "headerHeight:", headerHeight);
 
-  if (scrollY >= heroHeight - headerHeight) {
-    header.classList.remove("transparent");
-    header.classList.add("sticky-solid");
-    console.log("Added sticky-solid");
-  } else {
-    header.classList.remove("sticky-solid");
-    header.classList.add("transparent");
-    console.log("Added transparent");
-  }
+if (scrollY >= heroHeight - headerHeight) {
+  header.classList.remove("transparent");
+  header.classList.add("sticky-solid");
+  console.log("Added sticky-solid");
+} else {
+  header.classList.remove("sticky-solid");
+  header.classList.add("transparent");
+  console.log("Added transparent");
+}
 }
 
 
