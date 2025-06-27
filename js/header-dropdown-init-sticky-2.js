@@ -27,23 +27,30 @@ if (document.getElementById("custom-header-placeholder").children.length) {
   }, 100);
 }
 
- document.addEventListener("DOMContentLoaded", function () {
-    const header = document.querySelector(".custom-header");
-    const hero = document.querySelector(".hero-section");
+ document.addEventListener("DOMContentLoaded", function initStickyHeader() {
+  const header = document.querySelector(".custom-header");
+  const hero = document.querySelector(".hero-section");
 
-    function handleScroll() {
-      const heroBottom = hero.getBoundingClientRect().bottom;
+  if (!header || !hero) {
+    return setTimeout(initStickyHeader, 100); // Wait for DOM elements to be ready
+  }
 
-      if (heroBottom <= 0) {
-        header.classList.remove("transparent");
-        header.classList.add("sticky-solid");
-      } else {
-        header.classList.remove("sticky-solid");
-        header.classList.add("transparent");
-      }
+  function handleScroll() {
+    const heroBottom = hero.getBoundingClientRect().bottom;
+
+    if (heroBottom <= 0) {
+      header.classList.remove("transparent");
+      header.classList.add("sticky-solid");
+    } else {
+      header.classList.remove("sticky-solid");
+      header.classList.add("transparent");
     }
+  }
 
-    // Initial check and on scroll
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
-  });
+  // Apply once and on scroll
+  window.addEventListener("scroll", handleScroll);
+  handleScroll();
+}
+
+// Try after DOM is loaded
+document.addEventListener("DOMContentLoaded", initStickyHeader);
