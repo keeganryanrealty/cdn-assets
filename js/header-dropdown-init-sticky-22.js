@@ -36,20 +36,21 @@ function initStickyHeader() {
   const headerHeight = header.offsetHeight;
   const heroHeight = hero.offsetHeight;
 
-  function handleScroll() {
-    const scrollY = window.scrollY;
-    console.log("scrolly:", scrollY, "heroHeight:", heroHeight, "headerHeight:", headerHeight);
+function handleScroll() {
+  const scrollY = window.scrollY;
+  console.log("scrolly:", scrollY, "heroHeight:", heroHeight, "headerHeight:", headerHeight);
 
-    if (scrollY >= heroHeight - headerHeight) {
-      header.classList.remove("transparent");
-      header.classList.add("sticky-solid");
-      console.log("→ Switched to sticky-solid");
-    } else {
-      header.classList.remove("sticky-solid");
-      header.classList.add("transparent");
-      console.log("→ Switched to transparent");
-    }
+  if (scrollY >= heroHeight - headerHeight) {
+    header.classList.remove("transparent");
+    header.classList.add("sticky-solid");
+    console.log("→ Switched to sticky-solid");
+  } else {
+    header.classList.remove("sticky-solid");
+    header.classList.add("transparent");
+    console.log("→ Switched to transparent");
   }
+}
+
 
   window.addEventListener("scroll", handleScroll);
   handleScroll(); // run on load
