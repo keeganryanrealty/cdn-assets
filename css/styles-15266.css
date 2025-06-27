@@ -249,26 +249,30 @@ body {
   font-family: 'HeadlineFont', serif;
 }
 
-/* animate current headline out */
-#animated-headline .exit {
+#animated-headline .exit,
+#animated-headline .exit-active {
   opacity: 0;
   transform: translateY(-30%);
+  z-index: 1;
 }
 
-/* incoming headline (starting state) */
 #animated-headline .enter {
   opacity: 0;
   transform: translateY(30%);
+  z-index: 2;
 }
 
-/* incoming headline (final state) */
 #animated-headline .enter-active {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* static displayed headline */
 #animated-headline .current {
   opacity: 1;
   transform: translateY(0);
+  z-index: 2;
+}
+
+#animated-headline .next {
+  z-index: 1;
 }
