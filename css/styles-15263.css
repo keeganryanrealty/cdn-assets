@@ -234,6 +234,7 @@ body {
   display: inline-block;
   overflow: hidden;
   height: 3.5rem;
+  color: white;
 }
 
 #animated-headline .headline {
@@ -242,26 +243,28 @@ body {
   left: 0;
   top: 0;
   transition: transform 0.7s ease, opacity 0.7s ease;
-  will-change: transform, opacity;
   font-family: 'HeadlineFont', serif;
-  text-align: left;
   white-space: nowrap;
-  color: white;
 }
 
-/* Incoming headline */
+/* Outgoing text */
+.headline.exit {
+  transform: translateY(0%);
+  opacity: 1;
+}
+
+.headline.exit-active {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+/* Incoming text */
 .headline.enter {
   transform: translateY(100%);
   opacity: 0;
 }
 
 .headline.enter-active {
-  transform: translateY(0%);
-  opacity: 1;
-}
-
-/* Outgoing headline */
-.headline.exit {
   transform: translateY(0%);
   opacity: 1;
 }
