@@ -27,27 +27,20 @@ if (document.getElementById("custom-header-placeholder").children.length) {
   }, 100);
 }
 
-const waitForHero = setInterval(() => {
-  const header = document.querySelector(".custom-header");
-  const hero = document.querySelector(".hero-section");
+function handleScroll() {
+  const heroBottom = hero.getBoundingClientRect().bottom;
+  const hasSticky = header.classList.contains("sticky-solid");
 
-  if (header && hero) {
-    clearInterval(waitForHero);
+  console.log("heroBottom:", heroBottom);
+  console.log("Sticky class present before:", hasSticky);
 
-    function handleScroll() {
-      const heroBottom = hero.getBoundingClientRect().bottom;
-      console.log("heroBottom:", heroBottom);
-
-      if (heroBottom <= 0) {
-        header.classList.remove("transparent");
-        header.classList.add("sticky-solid");
-      } else {
-        header.classList.remove("sticky-solid");
-        header.classList.add("transparent");
-      }
-    }
-
-    window.addEventListener("scroll", handleScroll);
-    handleScroll();
+  if (heroBottom <= 0) {
+    header.classList.remove("transparent");
+    header.classList.add("sticky-solid");
+    console.log("Added sticky-solid");
+  } else {
+    header.classList.remove("sticky-solid");
+    header.classList.add("transparent");
+    console.log("Added transparent");
   }
-}, 100);
+}
