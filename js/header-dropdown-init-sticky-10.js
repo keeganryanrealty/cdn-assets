@@ -27,24 +27,26 @@ if (document.getElementById("custom-header-placeholder").children.length) {
   }, 100);
 }
 
-  document.addEventListener("DOMContentLoaded", function () {
-    const header = document.querySelector(".custom-header");
-    const hero = document.querySelector(".hero-section");
+ document.addEventListener("DOMContentLoaded", function () {
+  const header = document.querySelector(".custom-header");
+  const hero = document.querySelector(".hero-section");
 
-    if (!header || !hero) return;
+  if (!header || !hero) return;
 
-    function handleScroll() {
-      const heroBottom = hero.getBoundingClientRect().bottom;
+  function handleScroll() {
+    const scrollPosition = window.scrollY;
+    const heroHeight = hero.offsetHeight;
 
-      if (heroBottom <= 0) {
-        header.classList.remove("transparent");
-        header.classList.add("sticky-solid");
-      } else {
-        header.classList.remove("sticky-solid");
-        header.classList.add("transparent");
-      }
+    if (scrollPosition > heroHeight - 50) {
+      header.classList.remove("transparent");
+      header.classList.add("sticky-solid");
+    } else {
+      header.classList.remove("sticky-solid");
+      header.classList.add("transparent");
     }
+  }
 
-    window.addEventListener("scroll", handleScroll);
-    handleScroll(); // Run once on load
-  });
+  window.addEventListener("scroll", handleScroll);
+  window.addEventListener("resize", handleScroll); // handles viewport resizes
+  handleScroll(); // run once on load
+});
