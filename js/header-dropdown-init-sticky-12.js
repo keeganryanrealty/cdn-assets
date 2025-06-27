@@ -31,15 +31,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const header = document.querySelector(".custom-header");
   const hero = document.querySelector(".hero-section");
 
-  if (!header || !hero) return;
-
   function handleScroll() {
-    const scrollPosition = window.scrollY;
-    const heroHeight = hero.offsetHeight;
+    const heroBottom = hero.getBoundingClientRect().bottom;
 
-    if (scrollPosition > heroHeight - 50) {
-      header.classList.add("sticky-solid");
+    if (heroBottom <= 0) {
       header.classList.remove("transparent");
+      header.classList.add("sticky-solid");
     } else {
       header.classList.remove("sticky-solid");
       header.classList.add("transparent");
