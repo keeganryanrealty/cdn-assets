@@ -227,11 +227,11 @@ body {
 /* Mobile override */
 @media (max-width: 768px) {
   .hero-overlay {
-    /* KEEP full height — remove height: auto */
+    height: auto !important; /* Allow content to expand */
     flex-direction: column !important;
     align-items: flex-start !important;
     justify-content: center !important;
-    padding: 0 20px !important; /* Only adjust left/right spacing */
+    padding: 60px 20px 40px !important; /* Top and bottom spacing */
   }
 
   .hero-overlay h1 {
