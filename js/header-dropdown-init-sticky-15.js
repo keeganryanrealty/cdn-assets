@@ -27,30 +27,27 @@ if (document.getElementById("custom-header-placeholder").children.length) {
   }, 100);
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+const waitForHero = setInterval(() => {
   const header = document.querySelector(".custom-header");
   const hero = document.querySelector(".hero-section");
 
-  console.log("Hero found?", hero); // Confirm if hero is selected
+  if (header && hero) {
+    clearInterval(waitForHero);
 
-  if (!header || !hero) {
-    console.warn("Header or Hero not found.");
-    return;
-  }
+    function handleScroll() {
+      const heroBottom = hero.getBoundingClientRect().bottom;
+      console.log("heroBottom:", heroBottom);
 
-  function handleScroll() {
-    const heroBottom = hero.getBoundingClientRect().bottom;
-    console.log("heroBottom:", heroBottom);
-
-    if (heroBottom <= 0) {
-      header.classList.remove("transparent");
-      header.classList.add("sticky-solid");
-    } else {
-      header.classList.remove("sticky-solid");
-      header.classList.add("transparent");
+      if (heroBottom <= 0) {
+        header.classList.remove("transparent");
+        header.classList.add("sticky-solid");
+      } else {
+        header.classList.remove("sticky-solid");
+        header.classList.add("transparent");
+      }
     }
-  }
 
-  window.addEventListener("scroll", handleScroll);
-  handleScroll();
-});
+    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+  }
+}, 100);
