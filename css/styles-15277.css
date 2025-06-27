@@ -19,7 +19,10 @@ body {
   align-items: center !important;
   z-index: 1000 !important;
   flex-wrap: nowrap !important;
-   transition: background-color 0.3s ease-in-out !important;
+  transition: background-color 0.3s ease-in-out !important;
+
+  /* REMOVE this if it exists here */
+  /* position: relative !important; */
 }
 
 .custom-header-inner {
