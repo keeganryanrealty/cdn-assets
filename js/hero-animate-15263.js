@@ -1,3 +1,4 @@
+<script>
 document.addEventListener("DOMContentLoaded", function () {
   const container = document.getElementById("animated-headline");
   if (!container) return;
@@ -16,32 +17,28 @@ document.addEventListener("DOMContentLoaded", function () {
   let index = 0;
 
   function switchHeadline() {
-    // Set the new headline
     index = (index + 1) % headlines.length;
     nextEl.textContent = headlines[index];
 
-    // Trigger exit for current
+    // Prepare for transition
     currentEl.classList.remove("current");
     currentEl.classList.add("exit");
+    nextEl.classList.add("enter");
 
     requestAnimationFrame(() => {
       currentEl.classList.add("exit-active");
-      nextEl.classList.add("enter");
-
-      requestAnimationFrame(() => {
-        nextEl.classList.add("enter-active");
-      });
+      nextEl.classList.add("enter-active");
     });
 
-    // After transition completes
     setTimeout(() => {
-      currentEl.className = "headline next"; // Reset to next
-      nextEl.className = "headline current"; // Becomes current
+      currentEl.className = "headline next";
+      nextEl.className = "headline current";
 
-      // Swap references
+      // Swap roles
       [currentEl, nextEl] = [nextEl, currentEl];
     }, 700);
   }
 
   setInterval(switchHeadline, 4500);
 });
+</script>
