@@ -33,7 +33,6 @@ body {
   width: 100% !important;
 }
 
-/* Solid after scrolling past hero */
 .custom-header.sticky-solid {
   background-color: #100f0d !important;
   position: fixed !important;
@@ -41,6 +40,7 @@ body {
   left: 0 !important;
   width: 100% !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1001 !important; /* ensure it's above .transparent */
 }
 
 .custom-header-inner {
