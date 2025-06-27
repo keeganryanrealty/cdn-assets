@@ -47,4 +47,4 @@ if (document.getElementById("custom-header-placeholder").children.length) {
 
     window.addEventListener("scroll", handleScroll);
     handleScroll(); // Run once on load
-  });addEventListener("DOMContentLoaded", initStickyHeader);}
+  });addEventListener("DOMContentLoaded", initStickyHeader);
