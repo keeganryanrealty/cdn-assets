@@ -5,7 +5,7 @@ fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/header0
 
     // Load dropdown + sticky script
     const script = document.createElement("script");
-    script.src = "https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/js/header-dropdown-init-sticky-26.js";
+    script.src = "https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/js/header-dropdown-init-sticky-27.js";
     document.body.appendChild(script);
   });
 
