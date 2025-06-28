@@ -216,7 +216,7 @@ body {
 .hero-text p {
   font-size: 1.25rem;
   line-height: 1.6;
-  font-family: 'BodyFont', sans-serif;
+  font-family: 'BodyFont', sans-serif !important;
 }
 
 .hero-text {
@@ -313,13 +313,21 @@ transition: all 0s ease;
 .about-me-text h2 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
-  font-family: 'HeadlineFont', serif !important;
 }
 
 .about-me-text p {
   font-size: 1.1rem;
   line-height: 1.6;
+}
+
+.about-me-section * {
   font-family: 'BodyFont', sans-serif !important;
+}
+
+.about-me-section h1,
+.about-me-section h2,
+.about-me-section h3 {
+  font-family: 'HeadlineFont', serif !important;
 }
 
 .about-me-photo {
