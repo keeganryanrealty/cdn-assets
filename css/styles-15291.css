@@ -313,13 +313,13 @@ transition: all 0s ease;
 .about-me-text h2 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
-  font-family: 'HeadlineFont', serif;
+  font-family: 'HeadlineFont', serif !important;;
 }
 
 .about-me-text p {
   font-size: 1.1rem;
   line-height: 1.6;
-  font-family: 'BodyFont', sans-serif;
+  font-family: 'BodyFont', sans-serif !important;;
 }
 
 .about-me-photo {
