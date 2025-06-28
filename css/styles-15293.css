@@ -310,23 +310,16 @@ transition: all 0s ease;
   max-width: 600px;
 }
 
-.about-me-section .about-me-text p,
-.about-me-section .about-me-text h2 {
-  font-family: 'BodyFont', sans-serif !important;
-}
-
-.about-me-section .about-me-text h2 {
-  font-family: 'HeadlineFont', serif !important;
-}
-
 .about-me-text h2 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
+  font-family: 'HeadlineFont', serif !important;
 }
 
 .about-me-text p {
   font-size: 1.1rem;
   line-height: 1.6;
+  font-family: 'BodyFont', sans-serif !important;
 }
 
 .about-me-photo {
