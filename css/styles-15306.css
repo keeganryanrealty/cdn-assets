@@ -348,7 +348,7 @@ transition: all 0s ease;
   height: auto;
 }
 
-.about-me-section .about-me-text .about-button {
+.about-me-section .about-me-text a.about-button {
   display: inline-block;
   padding: 12px 24px;
   border: 2px solid black;
