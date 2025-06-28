@@ -355,7 +355,7 @@ transition: all 0s ease;
   border-radius: 30px;
   color: #100f0d;
   text-decoration: none;
-  font-family: 'BodyFont', sans-serif;
+  font-family: 'BodyFont', sans-serif !important;
   transition: background 0.3s ease, color 0.3s ease;
 }
 
