@@ -361,7 +361,7 @@ transition: all 0s ease;
 
 .about-button:hover {
   background: black;
-  color: #ffffff;
+  color: white;
 }
 
 @media (max-width: 768px) {
