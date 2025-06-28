@@ -213,12 +213,11 @@ body {
   transition: opacity 0.5s ease-in-out;
 }
 
-.hero-text p {
+.hero-section .hero-text p {
   font-size: 1.25rem;
   line-height: 1.6;
   font-family: 'BodyFont', sans-serif !important;
 }
-
 .hero-text {
   color: white;
   max-width: 600px;
@@ -324,9 +323,9 @@ transition: all 0s ease;
   font-family: 'BodyFont', sans-serif !important;
 }
 
-.about-me-section h1,
-.about-me-section h2,
-.about-me-section h3 {
+.about-me-section .about-me-text h1,
+.about-me-section .about-me-text h2,
+.about-me-section .about-me-text h3 {
   font-family: 'HeadlineFont', serif !important;
 }
 
@@ -356,5 +355,13 @@ transition: all 0s ease;
     text-align: center;
     margin-top: 30px;
   }
+}
+
+/* Overrule KVCORE Fonts Sitewide */
+.headline-font {
+  font-family: 'HeadlineFont', serif !important;
+}
+.body-font {
+  font-family: 'BodyFont', sans-serif !important;
 }
 
