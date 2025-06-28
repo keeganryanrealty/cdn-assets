@@ -319,7 +319,7 @@ transition: all 0s ease;
   line-height: 1.6;
 }
 
-.about-me-section * {
+.about-me-section .about-me-text p {
   font-family: 'BodyFont', sans-serif !important;
 }
 
