@@ -1,5 +1,5 @@
 
-  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/about-me-5.html")
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/about-me-6.html")
     .then(res => res.text())
     .then(html => {
       document.getElementById("about-me-placeholder").innerHTML = html;
