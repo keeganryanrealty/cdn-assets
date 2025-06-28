@@ -323,9 +323,9 @@ transition: all 0s ease;
   font-family: 'BodyFont', sans-serif !important;
 }
 
-.about-me-section .about-me-text h1,
-.about-me-section .about-me-text h2,
-.about-me-section .about-me-text h3 {
+.about-me-section .about-me-text h1.headline-font,
+.about-me-section .about-me-text h2.headline-font,
+.about-me-section .about-me-text h3.headline-font {
   font-family: 'HeadlineFont', serif !important;
 }
 
