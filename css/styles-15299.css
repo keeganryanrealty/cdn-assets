@@ -333,13 +333,17 @@ transition: all 0s ease;
 .about-me-photo {
   flex: 1 1 45%;
   text-align: right;
+  overflow: hidden; /* This crops anything outside */
+  height: 625px; /* Adjust this height to your visible crop size */
+  max-width: 500px;
+  border-radius: 12px;
 }
 
 .about-me-photo img {
   width: 100%;
-  max-width: 500px;
   height: auto;
-  border-radius: 12px;
+  transform: translateY(-16.6%); /* Crop ~1000px off the top of a 6016px image */
+  display: block;
 }
 
 @media (max-width: 768px) {
