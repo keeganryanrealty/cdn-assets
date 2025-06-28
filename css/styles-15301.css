@@ -336,16 +336,18 @@ transition: all 0s ease;
   overflow: hidden;
   height: 625px;
   max-width: 500px;
-  border-radius: 12px; /* Apply radius here only */
+  border-radius: 12px;
+  position: relative;
 }
 
 .about-me-photo img {
+  position: absolute;
+  top: -16.6%; /* Moves the image up by 16.6% of its own height */
+  left: 0;
   width: 100%;
   height: auto;
-  transform: translateY(-16.6%);
-  display: block;
-  border-radius: 0; /* Remove radius from image */
 }
+
 
 
 @media (max-width: 768px) {
