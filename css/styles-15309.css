@@ -377,6 +377,16 @@ transition: all 0s ease;
   .about-me-photo {
     text-align: center;
     margin-top: 30px;
+    height: auto; /* Reset height on mobile */
+    overflow: visible; /* Let image resize naturally */
+    position: relative;
+  }
+
+  .about-me-photo img {
+    position: static; /* Disable absolute positioning on mobile */
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
   }
 }
 
