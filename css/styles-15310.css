@@ -398,3 +398,14 @@ transition: all 0s ease;
   font-family: 'BodyFont', sans-serif !important;
 }
 
+ /* Hide on all pages by default */
+  .custom-hero-placeholder,
+  .about-me-placeholder {
+    display: none !important;
+  }
+
+  /* Show Homepage Sections only on homepage */
+  body[data-page-url="/"] .custom-hero-placeholder,
+  body[data-page-url="/"] .about-me-placeholder {
+    display: block !important;
+  }
