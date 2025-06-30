@@ -1,7 +1,7 @@
 (function () {
-  if (window.location.pathname === "/pages/about") {
+  if (window.location.pathname === "/pages/terms-and-conditions") {
     document.addEventListener("DOMContentLoaded", function () {
-      fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/about-me-007.html")
+      fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/terms.html")
         .then(response => response.text())
         .then(html => {
           const wrapper = document.createElement("div");
