@@ -420,6 +420,8 @@ transition: all 0s ease;
 
 /* Top Section: Logo + Socials */
 .footer-top {
+  padding: 40px 20px;
+  box-sizing: border-box;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -428,19 +430,22 @@ transition: all 0s ease;
   margin: 0 auto 40px;
   padding-bottom: 40px;
   border-bottom: 1px solid #333;
+  background: transparent !important; /* Force remove the gray */
 }
 
 .footer-branding {
   display: flex;
   align-items: center;
   gap: 24px;
-  background: transparent !important;
+  background: transparent !important; /* Also strip any background here */
 }
 
 .footer-logo {
   height: 50px;
   width: auto;
   object-fit: contain;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 
 .footer-socials {
@@ -506,6 +511,7 @@ transition: all 0s ease;
 .footer-legal img.legal-badge {
   height: 30px;
   margin-bottom: 12px;
+  filter: brightness(0) invert(1) !important; /* makes black SVGs white */
 }
 
 .footer-legal img.exp-logo {
