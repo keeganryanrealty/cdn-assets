@@ -426,7 +426,6 @@ transition: all 0s ease;
 
 .footer-branding {
   display: flex;
-  justify-content: left;
   align-items: center;
   gap: 24px;
   max-width: 1200px;
@@ -438,6 +437,7 @@ transition: all 0s ease;
 .footer-logo {
   height: 50px;
   width: auto;
+  justify-content: left;
   object-fit: contain;
   background: transparent !important;
   box-shadow: none !important;
@@ -445,6 +445,7 @@ transition: all 0s ease;
 
 .footer-socials {
   display: flex;
+  justify-content: right;
   gap: 16px;
   filter: brightness(0) invert(1) !important; /* makes black SVGs white */
 }
