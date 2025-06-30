@@ -401,6 +401,7 @@ transition: all 0s ease;
 
 
 /* FOOTER */
+/* CUSTOM FOOTER STYLES */
 #custom-footer {
   background-color: #111;
   color: #fff;
@@ -408,9 +409,13 @@ transition: all 0s ease;
   padding: 60px 20px;
 }
 
-.footer-top, .footer-grid, .footer-bottom {
-  max-width: 1200px;
-  margin: auto;
+#custom-footer a {
+  color: #ccc;
+  text-decoration: none;
+}
+
+#custom-footer a:hover {
+  color: #fff;
 }
 
 .footer-top {
@@ -418,14 +423,24 @@ transition: all 0s ease;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto 40px;
   padding-bottom: 40px;
   border-bottom: 1px solid #333;
+}
+
+.footer-brand img {
+  height: 50px;
+}
+
+.footer-socials {
+  display: flex;
+  gap: 16px;
 }
 
 .footer-socials img {
   width: 24px;
   height: 24px;
-  margin-left: 20px;
   opacity: 0.8;
   transition: opacity 0.2s ease;
 }
@@ -438,6 +453,8 @@ transition: all 0s ease;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 40px 0;
 }
 
@@ -450,6 +467,7 @@ transition: all 0s ease;
   font-weight: 600;
   margin-bottom: 12px;
   font-size: 1.1rem;
+  text-transform: uppercase;
 }
 
 .footer-column ul {
@@ -462,20 +480,14 @@ transition: all 0s ease;
   margin-bottom: 8px;
 }
 
-.footer-column ul li a {
-  color: #ccc;
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.footer-column ul li a:hover {
-  color: #fff;
-}
-
 .footer-bottom {
   text-align: center;
   font-size: 0.85rem;
   color: #aaa;
+  max-width: 900px;
+  margin: 0 auto;
+  padding-top: 30px;
+  border-top: 1px solid #333;
 }
 
 .footer-legal img.legal-badge {
