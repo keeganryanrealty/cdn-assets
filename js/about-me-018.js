@@ -1,7 +1,7 @@
 (function () {
   if (window.location.pathname === "/pages/about") {
     document.addEventListener("DOMContentLoaded", function () {
-      fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/about-me-003.html")
+      fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/about-me-004.html")
         .then(response => response.text())
         .then(html => {
           const wrapper = document.createElement("div");
@@ -24,7 +24,7 @@
       // Inject your stylesheet
       const link = document.createElement("link");
       link.rel = "stylesheet";
-      link.href = "https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/css/about-style-04.css";
+      link.href = "https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/css/about-style-05.css";
       document.head.appendChild(link);
     });
   }
