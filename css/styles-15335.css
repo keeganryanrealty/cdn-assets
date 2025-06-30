@@ -421,7 +421,7 @@ transition: all 0s ease;
 /* Top Section: Logo + Socials */
 .footer-top {
   background: transparent !important;
-  padding: 40px 0;
+  padding: 0px 0;
 }
 
 .footer-branding {
@@ -442,6 +442,7 @@ transition: all 0s ease;
   width: 100%;
   border-bottom: 1px solid #333;
   padding-bottom: 40px;
+  min-height: 1px;
 }
 
 .footer-logo {
