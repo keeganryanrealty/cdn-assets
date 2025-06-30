@@ -434,16 +434,19 @@ transition: all 0s ease;
   padding: 0 0px;
 }
 
-.footer-divider {
-  border: none;
+.footer-branding::after {
+  content: "";
+  display: block;
   border-bottom: 1px solid #333;
   max-width: 900px;
-  margin: 0 auto 40px auto;
+  margin: 40px auto 0 auto;
 }
 
 .footer-logo {
   height: 50px;
   width: auto;
+  left: -25%;
+  overflow: hidden;
   align-items: left;
   object-fit: contain;
   background: transparent !important;
