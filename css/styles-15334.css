@@ -426,17 +426,16 @@ transition: all 0s ease;
 
 .footer-branding {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
   gap: 24px;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
-  border-bottom: 1px solid #333;
 }
 
 .footer-branding-inner {
   display: flex;
-  justify-content: left;
   align-items: center;
   gap: 24px;
   max-width: 900px;
@@ -456,7 +455,7 @@ transition: all 0s ease;
 
 .footer-socials {
   display: flex;
-  align-items: left;
+  align-items: right;
   gap: 16px;
   filter: brightness(0) invert(1) !important; /* makes black SVGs white */
 }
