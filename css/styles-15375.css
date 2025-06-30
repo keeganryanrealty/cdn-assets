@@ -435,7 +435,7 @@ transition: all 0s ease;
 }
 
 .footer-logo-wrapper {
-  flex: 0 42 275px; /* Don't shrink, don't grow, fixed width */
+  flex: 42px 0 275px; /* Don't shrink, don't grow, fixed width */
   overflow: hidden;
   position: relative;
 }
