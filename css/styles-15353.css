@@ -435,8 +435,8 @@ transition: all 0s ease;
 }
 
 .footer-logo-wrapper {
-  width: 400px;
-  height: 70px;
+  width: 457px;
+  height: 80px;
   overflow: hidden;
   position: relative;
 }
@@ -444,8 +444,8 @@ transition: all 0s ease;
 .footer-logo {
   position: absolute; /* Make image positionable inside wrapper */
   top: 0;
-  left: -30px; /* Crop from left — adjust as needed */
-  height: 60%; /* Fill height of wrapper */
+  left: -28.5px; /* Crop from left — adjust as needed */
+  height: 50%; /* Fill height of wrapper */
   width: auto;  /* Maintain aspect ratio */
   object-fit: cover; /* Optional: can help with fill & crop */
 }
