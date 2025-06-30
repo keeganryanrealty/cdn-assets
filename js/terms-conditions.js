@@ -20,4 +20,6 @@
         .catch(err => {
           console.error("Failed to load injected content:", err);
         });
-})()
+    });
+  }
+})();
