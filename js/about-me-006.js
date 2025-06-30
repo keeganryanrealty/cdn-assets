@@ -13,7 +13,3 @@
   }
 })();
 
-const link = document.createElement("link");
-link.rel = "stylesheet";
-link.href = "https://yourusername.github.io/kvcore-injections/about-style-01.css";
-document.head.appendChild(link);
