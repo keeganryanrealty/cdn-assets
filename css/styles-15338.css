@@ -431,18 +431,18 @@ transition: all 0s ease;
   align-items: center;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 0px;
 }
 
-.footer-branding-inner::before {
-  display: flex;
-  align-items: center;
-  gap: 24px;
+.footer-branding-inner: {
+  display: block;
   max-width: 900px;
   width: 100%;
+  margin: 0 auto;
   border-bottom: 1px solid #333;
-  padding-bottom: 40px;
-  padding: 20px 0 40px 0;
+  height: 1px;           /* give it actual height */
+  overflow: visible;     /* ensure it's not hidden */
+  position: relative;    /* ensure it renders even if nested in flex */
 }
 
 .footer-logo {
