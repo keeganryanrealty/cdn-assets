@@ -445,7 +445,7 @@ transition: all 0s ease;
   position: absolute; /* Make image positionable inside wrapper */
   top: 0;
   left: -10px; /* Crop from left — adjust as needed */
-  height: 55%; /* Fill height of wrapper */
+  height: 60%; /* Fill height of wrapper */
   width: auto;  /* Maintain aspect ratio */
   object-fit: cover; /* Optional: can help with fill & crop */
 }
