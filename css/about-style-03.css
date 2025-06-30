@@ -1,7 +1,7 @@
 /* ABOUT ME PAGE */
 .about-me-page {
-  background-color: #f3e6d4; /* Beige background */
-  padding: 80px 80px;
+  background-color: #f3e6d4;
+  padding: 120px 40px 80px; /* top right/left bottom */
 }
 
 .about-me-page-container {
@@ -29,7 +29,7 @@
   line-height: 1.6;
 }
 
-.about-me-page= .about-me-page-text p {
+.about-me-page .about-me-page-text p {
   font-family: 'BodyFont', sans-serif !important;
 }
 
@@ -41,21 +41,20 @@
 }
 
 .about-me-page-photo {
-  flex: 1 1 45%;
-  text-align: right;
-  overflow: hidden;
   height: 625px;
   max-width: 500px;
+  overflow: hidden;
   border-radius: 12px;
   position: relative;
 }
 
 .about-me-page-photo img {
-  position: absolute;
-  top: -16.6%; /* Moves the image up by 16.6% of its own height */
-  left: 0;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: cover; /* crop to fit container */
+  object-position: top center; /* adjust focus area */
+  border-radius: 12px; /* ensures rounding even without overflow clip */
+  position: relative; /* or remove this entirely */
 }
 
 .about-me-page .about-me-page-text a.contact-button {
