@@ -1,0 +1,101 @@
+/* ABOUT ME PAGE */
+.about-me-page {
+  background-color: #f3e6d4; /* Beige background */
+  padding: 80px 40px;
+}
+
+.about-me-page-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.about-me-page-text {
+  flex: 1 1 50%;
+  padding-right: 30px;
+  max-width: 600px;
+}
+
+.about-me-page-text h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.about-me-page-text p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.about-me-page= .about-me-page-text p {
+  font-family: 'BodyFont', sans-serif !important;
+}
+
+/* Give heading fonts only to headings inside headline-font containers */
+.headline-font h1,
+.headline-font h2,
+.headline-font h3 {
+  font-family: 'HeadlineFont', serif !important;
+}
+
+.about-me-page-photo {
+  flex: 1 1 45%;
+  text-align: right;
+  overflow: hidden;
+  height: 625px;
+  max-width: 500px;
+  border-radius: 12px;
+  position: relative;
+}
+
+.about-me-page-photo img {
+  position: absolute;
+  top: -16.6%; /* Moves the image up by 16.6% of its own height */
+  left: 0;
+  width: 100%;
+  height: auto;
+}
+
+.about-me-page .about-me-page-text a.contact-button {
+  display: inline-block;
+  padding: 12px 24px;
+  border: 2px solid black;
+  border-radius: 30px;
+  color: #100f0d;
+  text-decoration: none;
+  font-family: 'BodyFont', sans-serif !important;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.about-me-page .about-me-page-text a.contact-button:hover {
+  background: black;
+  color: white !important;
+}
+
+@media (max-width: 768px) {
+  .about-me-page-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .about-me-page-text {
+    padding: 0;
+  }
+
+  .about-me-page-photo {
+    text-align: center;
+    margin-top: 30px;
+    height: auto; /* Reset height on mobile */
+    overflow: visible; /* Let image resize naturally */
+    position: relative;
+  }
+
+  .about-me-page-photo img {
+    position: static; /* Disable absolute positioning on mobile */
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+  }
+}
