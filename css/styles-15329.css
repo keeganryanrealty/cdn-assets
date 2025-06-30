@@ -420,7 +420,6 @@ transition: all 0s ease;
 
 /* Top Section: Logo + Socials */
 .footer-top {
-  border-bottom: 1px solid #333;
   background: transparent !important;
   padding: 40px 0;
 }
@@ -428,11 +427,12 @@ transition: all 0s ease;
 .footer-branding {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: left;
   gap: 24px;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+  border-bottom: 1px solid #333;
 }
 
 .footer-logo {
