@@ -444,8 +444,8 @@ transition: all 0s ease;
 .footer-logo {
   position: absolute; /* Make image positionable inside wrapper */
   top: 0;
-  left: 25px; /* Crop from left — adjust as needed */
-  height: 50%; /* Fill height of wrapper */
+  left: 0px; /* Crop from left — adjust as needed */
+  height: 100%; /* Fill height of wrapper */
   width: auto;  /* Maintain aspect ratio */
   object-fit: cover; /* Optional: can help with fill & crop */
 }
