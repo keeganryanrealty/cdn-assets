@@ -422,15 +422,17 @@ transition: all 0s ease;
 .footer-top {
   border-bottom: 1px solid #333;
   background: transparent !important;
+  padding: 40px 0;
+}
+
+.footer-branding {
   display: flex;
-  justify-content: center; /* center as a unit */
+  justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
-  gap: 24px; /* adds spacing between logo and icons */
+  gap: 24px;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 0;
-  text-align: center;
+  padding: 0 20px;
 }
 
 .footer-logo {
