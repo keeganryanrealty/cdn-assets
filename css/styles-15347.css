@@ -446,21 +446,12 @@ transition: all 0s ease;
   left: -10px;            /* Crop from the left by shifting image */
   height: 100px;
   width: auto;
+     align-items: left;
   object-fit: contain;
   background: transparent !important;
   box-shadow: none !important;
 }
 
-.footer-logo {
-  height: 50px;
-  width: auto;
-  left: -50%;
-  overflow: hidden;
-  align-items: left;
-  object-fit: contain;
-  background: transparent !important;
-  box-shadow: none !important;
-}
 
 .footer-socials {
   display: flex;
