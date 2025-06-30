@@ -434,10 +434,27 @@ transition: all 0s ease;
   padding: 0 0px;
 }
 
+.footer-logo-wrapper {
+  width: 100px;           /* Adjust as needed */
+  height: 50px;           /* Match your logo height */
+  overflow: hidden;
+  position: relative;
+}
+
+.footer-logo {
+  position: relative;
+  left: -20px;            /* Crop from the left by shifting image */
+  height: 50px;
+  width: auto;
+  object-fit: contain;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
 .footer-logo {
   height: 50px;
   width: auto;
-  left: -25%;
+  left: -50%;
   overflow: hidden;
   align-items: left;
   object-fit: contain;
@@ -461,6 +478,17 @@ transition: all 0s ease;
 
 .footer-socials img:hover {
   opacity: 1;
+}
+
+.footer-divider {
+  width: 100%;
+  max-width: 900px;
+  height: 0;
+  margin: 40px auto;
+  border-bottom: 1px solid #333;
+  content: " ";
+  display: block;
+  visibility: visible;
 }
 
 /* Middle Grid Section */
