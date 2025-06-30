@@ -1,6 +1,6 @@
 (function () {
   if (window.location.pathname === "/pages/about") {
-    fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/js/about-me-001.html")
+    fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/about-me-001.html")
       .then(response => response.text())
       .then(html => {
         const wrapper = document.createElement("div");
