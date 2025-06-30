@@ -406,6 +406,7 @@ transition: all 0s ease;
   background-color: #100f0d;
   color: #fff;
   font-family: 'BodyFont', sans-serif;
+  padding: 60px 20px;
 }
 
 #custom-footer a {
@@ -419,27 +420,14 @@ transition: all 0s ease;
 
 /* Top Section: Logo + Socials */
 .footer-top {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 40px 20px;
   border-bottom: 1px solid #333;
   background: transparent !important;
-}
-
-.footer-branding-wrapper {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 24px;
-  width: 100%;
-}
-
-
-.footer-branding {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  background: transparent !important; /* Also strip any background here */
+  justify-content: space-between;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 0;
 }
 
 .footer-logo {
