@@ -423,18 +423,18 @@ transition: all 0s ease;
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   border-bottom: 1px solid #333;
+  background: transparent !important;
 }
 
 .footer-branding-wrapper {
-  width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  gap: 24px;
+  width: 100%;
 }
+
 
 .footer-branding {
   display: flex;
