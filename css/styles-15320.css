@@ -403,7 +403,7 @@ transition: all 0s ease;
 /* FOOTER */
 /* CUSTOM FOOTER STYLES */
 #custom-footer {
-  background-color: #111;
+  background-color: #100f0d;
   color: #fff;
   font-family: 'BodyFont', sans-serif;
   padding: 60px 20px;
@@ -441,6 +441,8 @@ transition: all 0s ease;
   max-width: 1200px;
   width: 100%;
   padding: 0 20px;
+  margin: 0 auto;
+  justify-content: space-between;
 }
 
 .footer-branding {
