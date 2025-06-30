@@ -418,6 +418,7 @@ transition: all 0s ease;
   color: #fff;
 }
 
+/* Top Section: Logo + Socials */
 .footer-top {
   display: flex;
   justify-content: space-between;
@@ -429,13 +430,23 @@ transition: all 0s ease;
   border-bottom: 1px solid #333;
 }
 
-.footer-brand img {
+.footer-branding {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: transparent !important;
+}
+
+.footer-logo {
   height: 50px;
+  width: auto;
+  object-fit: contain;
 }
 
 .footer-socials {
   display: flex;
   gap: 16px;
+  filter: brightness(0) invert(1) !important; /* makes black SVGs white */
 }
 
 .footer-socials img {
@@ -449,6 +460,7 @@ transition: all 0s ease;
   opacity: 1;
 }
 
+/* Middle Grid Section */
 .footer-grid {
   display: flex;
   justify-content: space-between;
@@ -480,6 +492,7 @@ transition: all 0s ease;
   margin-bottom: 8px;
 }
 
+/* Bottom Legal Section */
 .footer-bottom {
   text-align: center;
   font-size: 0.85rem;
