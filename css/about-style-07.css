@@ -161,6 +161,22 @@
   opacity: 1;
 }
 
+.about-me-page .about-me-page-text a.about-button {
+  display: inline-block;
+  padding: 12px 24px;
+  border: 2px solid black;
+  border-radius: 30px;
+  color: #100f0d;
+  text-decoration: none;
+  font-family: 'BodyFont', sans-serif !important;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.about-me-page .about-me-page-text a.about-button:hover {
+  background: black;
+  color: white !important;
+}
+
 @media (max-width: 768px) {
   .about-contact-row {
     flex-direction: column;
@@ -173,3 +189,4 @@
     flex-wrap: wrap;
   }
 }
+
