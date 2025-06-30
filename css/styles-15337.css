@@ -426,6 +426,7 @@ transition: all 0s ease;
 
 .footer-branding {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
   max-width: 1200px;
@@ -433,7 +434,7 @@ transition: all 0s ease;
   padding: 0 20px;
 }
 
-.footer-branding-inner {
+.footer-branding-inner::before {
   display: flex;
   align-items: center;
   gap: 24px;
