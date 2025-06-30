@@ -24,7 +24,7 @@
       // Inject your stylesheet
       const link = document.createElement("link");
       link.rel = "stylesheet";
-      link.href = "https://yourusername.github.io/css/about-style-01.css";
+      link.href = "https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/css/about-style-01.css";
       document.head.appendChild(link);
     });
   }
