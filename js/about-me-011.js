@@ -1,7 +1,7 @@
 (function () {
   if (window.location.pathname === "/pages/about") {
     document.addEventListener("DOMContentLoaded", function () {
-      fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/about-me-001.html")
+      fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/about-me-002.html")
         .then(response => response.text())
         .then(html => {
           const wrapper = document.createElement("div");
