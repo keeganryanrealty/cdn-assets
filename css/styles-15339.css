@@ -439,6 +439,7 @@ transition: all 0s ease;
   max-width: 900px;
   width: 100%;
   margin: 0 auto;
+  background-color: red;
   border-bottom: 1px solid #333;
   height: 1px;           /* give it actual height */
   overflow: visible;     /* ensure it's not hidden */
