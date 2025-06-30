@@ -426,10 +426,10 @@ transition: all 0s ease;
 
 .footer-branding {
   display: flex;
-  justify-content: center;
-  align-items: left;
+  justify-content: left;
+  align-items: center;
   gap: 24px;
-  max-width: 1200px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 0 20px;
   border-bottom: 1px solid #333;
