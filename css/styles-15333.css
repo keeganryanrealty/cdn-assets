@@ -426,7 +426,7 @@ transition: all 0s ease;
 
 .footer-branding {
   display: flex;
-  align-items: center;
+  justify-content: center;
   gap: 24px;
   max-width: 1200px;
   margin: 0 auto;
@@ -434,10 +434,21 @@ transition: all 0s ease;
   border-bottom: 1px solid #333;
 }
 
+.footer-branding-inner {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  gap: 24px;
+  max-width: 900px;
+  width: 100%;
+  border-bottom: 1px solid #333;
+  padding-bottom: 40px;
+}
+
 .footer-logo {
   height: 50px;
   width: auto;
-  justify-content: left;
+  align-items: left;
   object-fit: contain;
   background: transparent !important;
   box-shadow: none !important;
@@ -445,7 +456,7 @@ transition: all 0s ease;
 
 .footer-socials {
   display: flex;
-  justify-content: right;
+  align-items: left;
   gap: 16px;
   filter: brightness(0) invert(1) !important; /* makes black SVGs white */
 }
