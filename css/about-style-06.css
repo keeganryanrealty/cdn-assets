@@ -1,6 +1,6 @@
 /* ABOUT ME PAGE */
 .about-me-page {
-  background-color: #d7e8f3;
+  background-color: #f3e6d4;
   padding: 120px 40px 80px; /* top right/left bottom */
 }
 
@@ -145,7 +145,7 @@
 }
 
 .about-contact-socials {
-  margin-top: 40px;
+  margin-top: 80px;
   display: flex;
   gap: 20px;
 }
