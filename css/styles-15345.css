@@ -435,8 +435,8 @@ transition: all 0s ease;
 }
 
 .footer-logo-wrapper {
-  width: 100px;           /* Adjust as needed */
-  height: 50px;           /* Match your logo height */
+  width: 150px;           /* Adjust as needed */
+  height: 100px;           /* Match your logo height */
   overflow: hidden;
   position: relative;
 }
@@ -444,7 +444,7 @@ transition: all 0s ease;
 .footer-logo {
   position: relative;
   left: -20px;            /* Crop from the left by shifting image */
-  height: 50px;
+  height: 100px;
   width: auto;
   object-fit: contain;
   background: transparent !important;
