@@ -420,19 +420,20 @@ transition: all 0s ease;
 
 /* Top Section: Logo + Socials */
 .footer-top {
-    max-width: 1200px;
+  max-width: 1200px;
   margin: 0 auto;
-   padding: 40px 20px 40px 20px;
+  padding: 40px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   border-bottom: 1px solid #333;
-  background: transparent !important;
 }
 
 .footer-branding-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 24px;
   width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .footer-branding {
