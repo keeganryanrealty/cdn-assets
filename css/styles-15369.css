@@ -446,7 +446,7 @@ transition: all 0s ease;
   top: 0;
   left: 0px; /* Crop from left — adjust as needed */
   height: 50%; /* Fill height of wrapper */
-  width: 50%;  /* Maintain aspect ratio */
+  width: 60%;  /* Maintain aspect ratio */
   object-fit: cover; /* Optional: can help with fill & crop */
 }
 
