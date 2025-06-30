@@ -435,23 +435,20 @@ transition: all 0s ease;
 }
 
 .footer-logo-wrapper {
-  width: 150px;           /* Adjust as needed */
-  height: 100px;           /* Match your logo height */
+  width: 150px;
+  height: 100px;
   overflow: hidden;
   position: relative;
 }
 
 .footer-logo {
-  position: relative;
-  left: -10px;            /* Crop from the left by shifting image */
-  height: 100px;
-  width: auto;
-     align-items: left;
-  object-fit: contain;
-  background: transparent !important;
-  box-shadow: none !important;
+  position: absolute; /* Make image positionable inside wrapper */
+  top: 0;
+  left: -10px; /* Crop from left — adjust as needed */
+  height: 100%; /* Fill height of wrapper */
+  width: auto;  /* Maintain aspect ratio */
+  object-fit: cover; /* Optional: can help with fill & crop */
 }
-
 
 .footer-socials {
   display: flex;
