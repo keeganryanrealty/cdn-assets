@@ -423,7 +423,7 @@ transition: all 0s ease;
   padding: 40px 20px;
   box-sizing: border-box;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
   max-width: 1200px;
@@ -431,6 +431,16 @@ transition: all 0s ease;
   padding-bottom: 40px;
   border-bottom: 1px solid #333;
   background: transparent !important; /* Force remove the gray */
+}
+
+.footer-branding-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex: 1;
+  max-width: 1200px;
+  width: 100%;
+  padding: 0 20px;
 }
 
 .footer-branding {
