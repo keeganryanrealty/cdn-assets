@@ -434,16 +434,11 @@ transition: all 0s ease;
   padding: 0 0px;
 }
 
-.footer-branding-inner: {
-  display: block;
-  max-width: 900px;
-  width: 100%;
-  margin: 0 auto;
-  background-color: red;
+.footer-divider {
+  border: none;
   border-bottom: 1px solid #333;
-  height: 1px;           /* give it actual height */
-  overflow: visible;     /* ensure it's not hidden */
-  position: relative;    /* ensure it renders even if nested in flex */
+  max-width: 900px;
+  margin: 0 auto 40px auto;
 }
 
 .footer-logo {
