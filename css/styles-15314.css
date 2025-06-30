@@ -398,14 +398,3 @@ transition: all 0s ease;
   font-family: 'BodyFont', sans-serif !important;
 }
 
-/* Hide these sections by default */
-#custom-hero-placeholder,
-#about-me-placeholder {
-  display: none !important;
-}
-
-/* Show only on homepage (where data-page-url is missing) */
-body:not([data-page-url]) #custom-hero-placeholder,
-body:not([data-page-url]) #about-me-placeholder {
-  display: block !important;
-}
