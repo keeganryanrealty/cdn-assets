@@ -443,7 +443,7 @@ transition: all 0s ease;
 
 .footer-logo {
   position: relative;
-  left: -20px;            /* Crop from the left by shifting image */
+  left: -10px;            /* Crop from the left by shifting image */
   height: 100px;
   width: auto;
   object-fit: contain;
