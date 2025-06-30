@@ -472,7 +472,7 @@ transition: all 0s ease;
   width: 100%;
   max-width: 900px;
   height: 0;
-  margin: 40px auto;
+  margin: 20px auto;
   border-bottom: 1px solid #333;
   content: " ";
   display: block;
