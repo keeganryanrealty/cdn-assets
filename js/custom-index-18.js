@@ -85,6 +85,10 @@ function setupListingBoxInterception() {
 
     box.addEventListener('click', function (e) {
       e.preventDefault();
+      e.stopImmediatePropagation(); // 💥 stop other JS handlers
+      e.stopPropagation();          // backup
+      e.cancelBubble = true;        // legacy support
+      return false;                 // super safe
 
       const targetURL = box.dataset.link;
       if (!targetURL) return;
@@ -107,6 +111,7 @@ function setupListingBoxInterception() {
     });
   });
 }
+
 
 
 // 2. Show your lead form modal and handle submission
