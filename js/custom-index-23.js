@@ -210,7 +210,6 @@ onSubmit();
         const recheckInterval = setInterval(() => {
           setupViewDetailsInterception();
           setupMapPopupInterception();
-          setupListingBoxInterception();
                               }, 1000);
         setTimeout(() => clearInterval(recheckInterval), 30000); // Optional: stop after 30s
       })
