@@ -67,16 +67,29 @@ function showLeadForm(onSubmit) {
   });
 }
 
-(async function () {
-  const footerAlreadyLoaded = document.querySelector('#custom-footer');
-  if (footerAlreadyLoaded) return;
+(function () {
+  document.addEventListener("DOMContentLoaded", function () {
+    fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/view-details-form.html")
+      .then(response => response.text())
+      .then(html => {
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = html;
 
-  const res = await fetch('https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/view-details-form.html');
-  const html = await res.text();
-  const footer = document.createElement('div');
-  footer.innerHTML = html;
+        // Insert before footer if it exists, else append to end
+        const footer = document.getElementById("footer");
+        if (footer && footer.parentNode) {
+          footer.parentNode.insertBefore(wrapper, footer);
+        } else {
+          document.body.appendChild(wrapper);
+          console.warn("Footer not found — content injected at end of body.");
+        }
 
-  document.body.appendChild(footer);
+        console.log("✅ View Details form injected");
+      })
+      .catch(err => {
+        console.error("❌ Failed to load injected content:", err);
+      });
+  });
 })();
 // END OF VIEW DETAILS LEAD FORM LOGIC
 
