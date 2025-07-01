@@ -24,3 +24,13 @@ const hideHeader = () => {
   }
 };
 hideHeader();
+
+const removeSpacer = () => {
+  const spacer = document.getElementById('fixed-header-spacer');
+  if (spacer) {
+    spacer.remove();
+  } else {
+    setTimeout(removeSpacer, 200);
+  }
+};
+removeSpacer();
