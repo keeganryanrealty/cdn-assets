@@ -48,6 +48,36 @@ function setupViewDetailsInterception() {
     });
   });
 }
+// Intercept and handle Map Pop Up View Details click events
+function setupMapPopupInterception() {
+  document.querySelectorAll('.leaflet-popup a[href*="/property/"]').forEach(link => {
+    if (link.dataset.interceptAttached === "true") return;
+    link.dataset.interceptAttached = "true";
+
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+
+      const targetURL = link.href;
+
+      // Log property view
+      const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
+      if (!viewed.includes(targetURL)) {
+        viewed.push(targetURL);
+        sessionStorage.setItem('viewedProperties', JSON.stringify(viewed));
+      }
+
+      if (sessionStorage.getItem('leadCaptured')) {
+        window.location.href = targetURL;
+        return;
+      }
+
+      showLeadForm(() => {
+        sessionStorage.setItem('leadCaptured', 'true');
+        window.location.href = targetURL;
+      });
+    });
+  });
+}
 
 // 2. Show your lead form modal and handle submission
 function showLeadForm(onSubmit) {
@@ -105,7 +135,10 @@ function showLeadForm(onSubmit) {
         console.log("✅ Lead form modal injected");
 
         // Watch for View Details links and attach intercepts
-        const recheckInterval = setInterval(setupViewDetailsInterception, 1000);
+        const recheckInterval = setInterval(() => {
+          setupViewDetailsInterception();
+          setupMapPopupInterception();
+                              }, 1000);
         setTimeout(() => clearInterval(recheckInterval), 30000); // Optional: stop after 30s
       })
       .catch(err => {
