@@ -88,7 +88,7 @@ function showLeadForm(onSubmit) {
 // 3. Inject the form HTML from GitHub, then initialize watchers
 (function () {
   document.addEventListener("DOMContentLoaded", function () {
-    fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/view-details-form.html")
+    fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/view-details-form-1.html")
       .then(response => response.text())
       .then(html => {
         const wrapper = document.createElement("div");
