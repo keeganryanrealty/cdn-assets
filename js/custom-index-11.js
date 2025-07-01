@@ -106,7 +106,7 @@ form.addEventListener('submit', function (e) {
     email: form.email.value,
     firstName: form.name.value.split(" ")[0] || '',
     phone: form.phone.value || '',
-    tags: ['Buyer', 'Browsing Lead']
+    tags: ["Buyer", "Browsing Lead"]
   };
 
   console.log("✅ Captured lead:", leadData);
