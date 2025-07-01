@@ -78,6 +78,7 @@ function setupMapPopupInterception() {
   });
 }
 // Intercept Image click events
+// Intercept Image click events
 function setupListingBoxInterception() {
   document.querySelectorAll('div.listing-box[data-link]').forEach(box => {
     if (box.dataset.interceptAttached === "true") return;
@@ -88,7 +89,6 @@ function setupListingBoxInterception() {
       e.stopImmediatePropagation(); // 💥 stop other JS handlers
       e.stopPropagation();          // backup
       e.cancelBubble = true;        // legacy support
-      return false;                 // super safe
 
       const targetURL = box.dataset.link;
       if (!targetURL) return;
@@ -108,10 +108,11 @@ function setupListingBoxInterception() {
         sessionStorage.setItem('leadCaptured', 'true');
         window.location.href = targetURL;
       });
+
+      return false; // ✅ Only return after everything is done
     });
   });
 }
-
 
 
 // 2. Show your lead form modal and handle submission
