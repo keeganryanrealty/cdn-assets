@@ -16,7 +16,7 @@
 
 // === VIEW DETAILS LEAD FORM LOGIC ===
 
-// 1. Intercept and handle View Details and Images click events
+// 1. Intercept and handle View Details click events
 function setupViewDetailsInterception() {
   document.querySelectorAll('a[href*="/details.php"]').forEach(link => {
     if (link.dataset.interceptAttached === "true") return;
@@ -77,6 +77,37 @@ function setupMapPopupInterception() {
     });
   });
 }
+// Intercept Image click events
+function setupListingBoxInterception() {
+  document.querySelectorAll('div.listing-box[data-link]').forEach(box => {
+    if (box.dataset.interceptAttached === "true") return;
+    box.dataset.interceptAttached = "true";
+
+    box.addEventListener('click', function (e) {
+      e.preventDefault();
+
+      const targetURL = box.dataset.link;
+      if (!targetURL) return;
+
+      const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
+      if (!viewed.includes(targetURL)) {
+        viewed.push(targetURL);
+        sessionStorage.setItem('viewedProperties', JSON.stringify(viewed));
+      }
+
+      if (sessionStorage.getItem('leadCaptured')) {
+        window.location.href = targetURL;
+        return;
+      }
+
+      showLeadForm(() => {
+        sessionStorage.setItem('leadCaptured', 'true');
+        window.location.href = targetURL;
+      });
+    });
+  });
+}
+
 
 // 2. Show your lead form modal and handle submission
 function showLeadForm(onSubmit) {
@@ -159,6 +190,7 @@ function showLeadForm(onSubmit) {
         const recheckInterval = setInterval(() => {
           setupViewDetailsInterception();
           setupMapPopupInterception();
+          setupListingBoxInterception();
                               }, 1000);
         setTimeout(() => clearInterval(recheckInterval), 30000); // Optional: stop after 30s
       })
