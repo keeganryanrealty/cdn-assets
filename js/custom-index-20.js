@@ -78,41 +78,33 @@ function setupMapPopupInterception() {
   });
 }
 // Intercept Image click events
-// Intercept Image click events
-function setupListingBoxInterception() {
-  document.querySelectorAll('div.listing-box[data-link]').forEach(box => {
-    if (box.dataset.interceptAttached === "true") return;
-    box.dataset.interceptAttached = "true";
+document.addEventListener('click', function (e) {
+  const box = e.target.closest('div.listing-box[data-link]');
+  if (!box) return;
 
-    box.addEventListener('click', function (e) {
-      e.preventDefault();
-      e.stopImmediatePropagation(); // 💥 stop other JS handlers
-      e.stopPropagation();          // backup
-      e.cancelBubble = true;        // legacy support
+  e.preventDefault();
+  e.stopImmediatePropagation();
+  e.stopPropagation();
 
-      const targetURL = box.dataset.link;
-      if (!targetURL) return;
+  const targetURL = box.dataset.link;
+  if (!targetURL) return;
 
-      const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
-      if (!viewed.includes(targetURL)) {
-        viewed.push(targetURL);
-        sessionStorage.setItem('viewedProperties', JSON.stringify(viewed));
-      }
+  const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
+  if (!viewed.includes(targetURL)) {
+    viewed.push(targetURL);
+    sessionStorage.setItem('viewedProperties', JSON.stringify(viewed));
+  }
 
-      if (sessionStorage.getItem('leadCaptured')) {
-        window.location.href = targetURL;
-        return;
-      }
+  if (sessionStorage.getItem('leadCaptured')) {
+    window.location.href = targetURL;
+    return;
+  }
 
-      showLeadForm(() => {
-        sessionStorage.setItem('leadCaptured', 'true');
-        window.location.href = targetURL;
-      });
-
-      return false; // ✅ Only return after everything is done
-    });
+  showLeadForm(() => {
+    sessionStorage.setItem('leadCaptured', 'true');
+    window.location.href = targetURL;
   });
-}
+}, true); // Capture phase
 
 
 // 2. Show your lead form modal and handle submission
