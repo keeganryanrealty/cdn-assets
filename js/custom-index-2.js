@@ -27,12 +27,21 @@ const removeSpacer = () => {
 };
 removeSpacer();
 
-const hideSaveListing= () => {
-  const header = document.querySelector('.saveListing');
-  if (header) {
-    header.style.setProperty('display', 'none', 'important');
-  } else {
-    setTimeout(hideSaveListing, 200); // retry after 200ms
-  }
-};
-hideSaveListing();
+
+
+// Initial run in case elements are already on the page
+document.querySelectorAll('.saveListing').forEach(el => {
+  el.style.setProperty('display', 'none', 'important');
+});
+
+// Recheck every 1.5 seconds for dynamically loaded elements
+const intervalId = setInterval(() => {
+  document.querySelectorAll('.saveListing').forEach(el => {
+    el.style.setProperty('display', 'none', 'important');
+  });
+}, 1500);
+
+// Optional: Stop checking after 30 seconds
+setTimeout(() => clearInterval(intervalId), 30000);
+
+
