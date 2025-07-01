@@ -29,3 +29,14 @@
     });
   }
 })();
+
+
+const hideBeeRow= () => {
+  const header = document.querySelector('.bee-editor-container');
+  if (header) {
+    header.style.setProperty('display', 'none', 'important');
+  } else {
+    setTimeout(hideBeeRow, 200); // retry after 200ms
+  }
+};
+hideBeeRow();
