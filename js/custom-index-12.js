@@ -102,12 +102,15 @@ function showLeadForm(onSubmit) {
 form.addEventListener('submit', function (e) {
   e.preventDefault();
 
-  const leadData = {
-    email: form.email.value,
-    firstName: form.name.value.split(" ")[0] || '',
-    phone: form.phone.value || '',
-    tags: ["Buyer", "Browsing Lead"]
-  };
+const leadData = {
+  email_address: form.email.value,
+  status: "subscribed",
+  merge_fields: {
+    FNAME: form.name.value.split(" ")[0] || '',
+    PHONE: form.phone.value || ''
+  },
+  tags: ["Buyer", "Browsing Lead"]
+};
 
   console.log("✅ Captured lead:", leadData);
 
