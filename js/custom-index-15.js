@@ -101,10 +101,17 @@ function showLeadForm(onSubmit) {
     form.addEventListener('submit', function (e) {
       e.preventDefault();
 
+      // ✅ Split name into first and last
+      const fullName = form.name.value.trim();
+      const nameParts = fullName.split(" ");
+      const firstName = nameParts[0] || '';
+      const lastName = nameParts.slice(1).join(" ") || '';
+
       const leadData = {
         email: form.email.value,
         merge_fields: {
-          FNAME: form.name.value.split(" ")[0] || '',
+          FNAME: firstName,
+          LNAME: lastName,
           PHONE: form.phone.value || ''
         },
         tags: ["Buyer", "Browsing Lead"]
@@ -128,6 +135,7 @@ function showLeadForm(onSubmit) {
     });
   }
 }
+
 
 // 3. Inject the form HTML from GitHub, then initialize watchers
 (function () {
