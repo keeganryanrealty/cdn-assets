@@ -95,36 +95,37 @@ function showLeadForm(onSubmit) {
     return;
   }
 
-  // Prevent duplicate submission handlers
   if (form.dataset.handlerAttached !== "true") {
     form.dataset.handlerAttached = "true";
 
-form.addEventListener('submit', function (e) {
-  e.preventDefault();
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
 
-const leadData = {
-  email: form.email.value,
-  merge_fields: {
-    FNAME: form.name.value.split(" ")[0] || '',
-    PHONE: form.phone.value || ''
-  },
-  tags: ["Buyer", "Browsing Lead"]
-};
+      const leadData = {
+        email: form.email.value,
+        merge_fields: {
+          FNAME: form.name.value.split(" ")[0] || '',
+          PHONE: form.phone.value || ''
+        },
+        tags: ["Buyer", "Browsing Lead"]
+      };
 
-fetch('https://api-six-tau-53.vercel.app/api/mailchimp', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify(leadData)
-})
-.then(res => res.json())
-.then(result => {
-  console.log("✅ Lead sent to Mailchimp:", result);
-})
-.catch(error => {
-  console.error("❌ Mailchimp error:", error);
-});
+      fetch('https://api-six-tau-53.vercel.app/api/mailchimp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(leadData)
+      })
+      .then(res => res.json())
+      .then(result => {
+        console.log("✅ Lead sent to Mailchimp:", result);
+      })
+      .catch(error => {
+        console.error("❌ Mailchimp error:", error);
+      });
 
-
+      modal.style.display = 'none';
+      onSubmit();
+    });
   }
 }
 
