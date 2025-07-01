@@ -16,36 +16,35 @@
 
 // === VIEW DETAILS LEAD FORM LOGIC ===
 
-// 1. Intercept and handle View Details click events
+// 1. Intercept and handle View Details and Images click events
 function setupViewDetailsInterception() {
   document.querySelectorAll('a[href*="/details.php"]').forEach(link => {
     if (link.dataset.interceptAttached === "true") return;
     link.dataset.interceptAttached = "true";
 
+    // Attach listener to anchor *and* allow bubbling for nested image clicks
     link.addEventListener('click', function (e) {
       e.preventDefault();
 
       const targetURL = link.href;
 
-      // Track properties viewed this session
       const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
       if (!viewed.includes(targetURL)) {
         viewed.push(targetURL);
         sessionStorage.setItem('viewedProperties', JSON.stringify(viewed));
       }
 
-      // Skip form if already captured this session
       if (sessionStorage.getItem('leadCaptured')) {
         window.location.href = targetURL;
         return;
       }
 
-      // Show lead form modal, redirect after submit
+      // Show form modal, then redirect
       showLeadForm(() => {
         sessionStorage.setItem('leadCaptured', 'true');
         window.location.href = targetURL;
       });
-    });
+    }, true); // <-- Use capture mode to intercept bubbling clicks
   });
 }
 // Intercept and handle Map Pop Up View Details click events
