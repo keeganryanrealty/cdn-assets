@@ -9,3 +9,18 @@
     });
   }
 })();
+
+
+
+
+
+
+const hideHeader = () => {
+  const header = document.querySelector('.custom-header.sticky-solid');
+  if (header) {
+    header.style.setProperty('display', 'none', 'important');
+  } else {
+    setTimeout(hideHeader, 200); // retry after 200ms
+  }
+};
+hideHeader();
