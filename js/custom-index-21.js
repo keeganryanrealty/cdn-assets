@@ -144,7 +144,8 @@ function showLeadForm(onSubmit) {
         },
         tags: ["Buyer", "Browsing Lead"]
       };
-
+     
+      // ✅ Send to Mailchimp
       fetch('https://api-six-tau-53.vercel.app/api/mailchimp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -157,6 +158,23 @@ function showLeadForm(onSubmit) {
       .catch(error => {
         console.error("❌ Mailchimp error:", error);
       });
+
+      // ✅ Also send to Make.com webhook
+      fetch('https://hook.us2.make.com/ixladj9374dy27mpmdf8homieayeso2f', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: fullName,
+              email: form.email.value,
+              phone: form.phone.value,
+            tags: ["Buyer", "Browsing Lead"]
+          })
+        })
+  .then(() => console.log("✅ Lead sent to Make.com webhook"))
+  .catch(error => console.error("❌ Make.com webhook error:", error));
+
+modal.style.display = 'none';
+onSubmit();
 
       modal.style.display = 'none';
       onSubmit();
