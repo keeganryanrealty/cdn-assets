@@ -4,7 +4,7 @@
       // Inject your stylesheet
       const link = document.createElement("link");
       link.rel = "stylesheet";
-      link.href = "https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/css/index-custom-3.css";
+      link.href = "https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/css/index-custom-5.css";
       document.head.appendChild(link);
     });
   }
@@ -15,15 +15,6 @@
 
 
 
-const hideHeader = () => {
-  const header = document.querySelector('.custom-header.sticky-solid');
-  if (header) {
-    header.style.setProperty('display', 'none', 'important');
-  } else {
-    setTimeout(hideHeader, 200); // retry after 200ms
-  }
-};
-hideHeader();
 
 const removeSpacer = () => {
   const spacer = document.getElementById('fixed-header-spacer');
