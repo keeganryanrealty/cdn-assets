@@ -99,19 +99,36 @@ function showLeadForm(onSubmit) {
   if (form.dataset.handlerAttached !== "true") {
     form.dataset.handlerAttached = "true";
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
+form.addEventListener('submit', function (e) {
+  e.preventDefault();
 
-      const leadData = {
-        name: form.name.value,
-        email: form.email.value,
-        phone: form.phone.value
-      };
-      console.log("✅ Captured lead:", leadData);
+  const leadData = {
+    email: form.email.value,
+    firstName: form.name.value.split(" ")[0] || '',
+    phone: form.phone.value || '',
+    tags: ['Buyer', 'Browsing']
+  };
 
-      modal.style.display = 'none';
-      onSubmit();
-    });
+  console.log("✅ Captured lead:", leadData);
+
+  // ✅ Use your deployed Vercel proxy
+  fetch('https://api-six-tau-53.vercel.app/api/mailchimp', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(leadData)
+  })
+  .then(res => res.json())
+  .then(result => {
+    console.log("✅ Lead sent to Mailchimp:", result);
+  })
+  .catch(error => {
+    console.error("❌ Mailchimp error:", error);
+  });
+
+  modal.style.display = 'none';
+  onSubmit();
+});
+
   }
 }
 
