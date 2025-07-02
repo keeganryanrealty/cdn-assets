@@ -156,7 +156,6 @@ function showLeadForm(onSubmit) {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
           },
-          credentials: 'omit',
           mode: 'cors',
           body: JSON.stringify(leadData)
         })
@@ -176,7 +175,6 @@ function showLeadForm(onSubmit) {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
           },
-          credentials: 'omit',
           mode: 'cors',
           body: JSON.stringify({
             firstName,
