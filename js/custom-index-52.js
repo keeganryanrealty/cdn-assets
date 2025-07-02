@@ -281,7 +281,10 @@ function showLeadForm(onSubmit) {
 
         console.log("✅ Login form modal injected");
 
-          // LOGIN IN BLOCK
+      // LOGIN IN BLOCK
+      window.addEventListener('supabase-ready', () => {
+      console.log("🟢 Supabase is now ready — initializing login");
+
         const observeLoginSubmit = setInterval(() => {
         const loginForm = document.getElementById('login-form');
           if (!loginForm) return;
@@ -314,9 +317,10 @@ function showLeadForm(onSubmit) {
             window.location.href = lastViewed;
           } else {
             window.location.reload(); // fallback
-          }
-        });
+              }
+          });
       }, 500);
+    });
       // END LOGIN BLOCK
 
         // Intercept view clicks
