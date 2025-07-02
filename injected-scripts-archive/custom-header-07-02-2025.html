@@ -1,22 +1,42 @@
-<!-- SUPABASE -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<!-- Remove LockManager before Supabase loads -->
 <script>
-  window.supabase = supabase.createClient(
+  delete Navigator.prototype.locks;
+  console.log("LockManager removed from navigator before Supabase");
+</script>
+
+<!-- Load Supabase library -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
+<!-- Initialize Supabase client -->
+<script>
+  window.supabase = window.supabase.createClient(
     'https://icjapwvmzdrdepiogzws.supabase.co',
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImljamFwd3ZtemRyZGVwaW9nendzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE0ODMyMzMsImV4cCI6MjA2NzA1OTIzM30.XslPFKFKFYMK6cc9X-1ouEbiwnq_BQOT7p2P7sK4VVY'
   );
 </script>
 <script>
-  window.supabase = supabase.createClient(
-    'https://icjapwvmzdrdepiogzws.supabase.co',
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImljamFwd3ZtemRyZGVwaW9nendzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE0ODMyMzMsImV4cCI6MjA2NzA1OTIzM30.XslPFKFKFYMK6cc9X-1ouEbiwnq_BQOT7p2P7sK4VVY
-  );
+  window.addEventListener('DOMContentLoaded', async () => {
+    const { data, error } = await window.supabase.auth.getSession();
 
-  // WORKAROUND: trigger lazy session init & catch navigator.lock bug
-  window.supabase.auth.getSession().catch((err) => {
-    console.warn(' Suppressed Supabase auth lock error:', err);
+    if (error) {
+      console.error('Error fetching session:', error.message);
+      return;
+    }
+
+    if (data.session) {
+      console.log("Restored session for:", data.session.user.email);
+      sessionStorage.setItem('leadCaptured', 'true');
+      // You can also update UI here (e.g. hide login modal, show user's name, etc.)
+    } else {
+      console.log("No active session found.");
+    }
   });
 </script>
+
+
+
+
+
 
 
 <!-- DO NOT REMOVE Google Code for MIR Lead -->
@@ -49,9 +69,12 @@
   }
 </style>
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/css/styles-15380.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/css/styles-15381.css">
+
 <script src="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/js/loadheader-09.js" defer=""></script>
+
 <script src="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/js/about-me-022.js"></script>
+
 <script src="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/js/lakeville-upsizers-8.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/js/index-lakeville-8.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/js/custom-index-51.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/js/custom-index-54.js"></script>
