@@ -535,10 +535,18 @@ transition: all 0s ease;
 }
 
 /* Hide KV Login */
-#login_modal {
-  display: none !important;
-  visibility: hidden !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
+  #login_modal,
+  .modal-backdrop,
+  .modal-open {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    overflow: auto !important;
+  }
+
+  body.modal-open {
+    overflow: auto !important; /* Re-enable scrolling */
+  }
+
 
