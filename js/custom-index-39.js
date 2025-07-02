@@ -140,7 +140,14 @@ function showLeadForm(onSubmit) {
         const nameParts = fullName.split(" ");
         const firstName = nameParts[0] || '';
         const lastName = nameParts.slice(1).join(" ") || '';
-
+           // Capture MLS ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const mlsid = urlParams.get('mlsid') || '';
+    // Extract property address from DOM
+        const addressElement = document.querySelector('.listing-detail-attribute .value');
+        const propertyAddress = addressElement?.innerText?.trim() || '';
+    
+        // LeadData Payload
         const leadData = {
           email: form.email.value,
           merge_fields: {
@@ -148,7 +155,9 @@ function showLeadForm(onSubmit) {
             LNAME: lastName,
             PHONE: form.phone.value || ''
           },
-          tags: ["Buyer", "Browsing Lead"]
+          tags: ["Buyer", "Browsing Lead"],
+          mlsid: mlsid, // for Zapier field mapping
+          address: propertyAddress // to be injected in the Notes section
         };
 
         // ✅ Send to Mailchimp
