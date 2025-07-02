@@ -134,6 +134,8 @@ function showLeadForm(onSubmit) {
       form.addEventListener('submit', function (e) {
         e.preventDefault();
 
+        console.log("📡 Submitting Mailchimp at", new Date().toISOString());
+
         const fullName = form.name.value.trim();
         const nameParts = fullName.split(" ");
         const firstName = nameParts[0] || '';
