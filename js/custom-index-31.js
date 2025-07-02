@@ -110,89 +110,105 @@ document.addEventListener('click', function (e) {
 // 2. Show your lead form modal and handle submission
 function showLeadForm(onSubmit) {
   const modal = document.getElementById('lead-form-modal');
-  const form = document.getElementById('lead-form');
 
   if (!modal) {
     console.warn("❌ Lead form modal not found.");
     return;
   }
 
-  // ✅ Always show the modal
+  // ✅ Always show the modal immediately
   modal.style.display = 'block';
 
-  // ⚠️ Only attach handler if form exists and not already attached
-  if (form && form.dataset.handlerAttached !== "true") {
-    form.dataset.handlerAttached = "true";
+  // ⏳ Poll until the form is loaded in the DOM
+  const pollInterval = 100; // ms
+  const maxAttempts = 50;
+  let attempts = 0;
 
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
+  const waitForForm = setInterval(() => {
+    const form = document.getElementById('lead-form');
 
-      const fullName = form.name.value.trim();
-      const nameParts = fullName.split(" ");
-      const firstName = nameParts[0] || '';
-      const lastName = nameParts.slice(1).join(" ") || '';
+    if (form && form.dataset.handlerAttached !== "true") {
+      clearInterval(waitForForm);
+      form.dataset.handlerAttached = "true";
 
-      const leadData = {
-        email: form.email.value,
-        merge_fields: {
-          FNAME: firstName,
-          LNAME: lastName,
-          PHONE: form.phone.value || ''
-        },
-        tags: ["Buyer", "Browsing Lead"]
-      };
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
 
-      // ✅ Send to Mailchimp
-      fetch('https://api-six-tau-53.vercel.app/api/mailchimp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json',
-    'Accept': 'application/json' },
-      //  credentials: 'include',
-        mode: 'cors',
-        body: JSON.stringify(leadData)
-      })
-      .then(async res => {
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message || 'Mailchimp error');
-        console.log("✅ Lead sent to Mailchimp:", data);
-      })
-      .catch(error => {
-        console.error("❌ Mailchimp error:", error.message);
-      });
+        const fullName = form.name.value.trim();
+        const nameParts = fullName.split(" ");
+        const firstName = nameParts[0] || '';
+        const lastName = nameParts.slice(1).join(" ") || '';
 
-      // ✅ Send to KVCore
-      fetch('https://api-six-tau-53.vercel.app/api/kvcore', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json',
-    'Accept': 'application/json' },
-    //    credentials: 'include',
-        mode: 'cors',
-        body: JSON.stringify({
-          firstName,
-          lastName,
+        const leadData = {
           email: form.email.value,
-          phone: form.phone.value || ''
-        })
-      })
-      .then(async res => {
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.message || 'KVCore error');
-        console.log("✅ Lead sent to KVCore:", data);
-      })
-      .catch(error => {
-        console.error("❌ KVCore error:", error.message);
-      });
+          merge_fields: {
+            FNAME: firstName,
+            LNAME: lastName,
+            PHONE: form.phone.value || ''
+          },
+          tags: ["Buyer", "Browsing Lead"]
+        };
 
-      // ✅ Close modal and run onSubmit (after short delay to help mobile reliability)
-      setTimeout(() => {
-        modal.style.display = 'none';
-        if (typeof onSubmit === 'function') {
-          onSubmit();
-        }
-      }, 250); // Slight delay helps mobile Safari preserve requests
-    });
-  }
+        // ✅ Send to Mailchimp
+        fetch('https://api-six-tau-53.vercel.app/api/mailchimp', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          mode: 'cors',
+          body: JSON.stringify(leadData)
+        })
+        .then(async res => {
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.message || 'Mailchimp error');
+          console.log("✅ Lead sent to Mailchimp:", data);
+        })
+        .catch(error => {
+          console.error("❌ Mailchimp error:", error.message);
+        });
+
+        // ✅ Send to KVCore
+        fetch('https://api-six-tau-53.vercel.app/api/kvcore', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          mode: 'cors',
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            email: form.email.value,
+            phone: form.phone.value || ''
+          })
+        })
+        .then(async res => {
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.message || 'KVCore error');
+          console.log("✅ Lead sent to KVCore:", data);
+        })
+        .catch(error => {
+          console.error("❌ KVCore error:", error.message);
+        });
+
+        // ✅ Close modal and trigger onSubmit
+        setTimeout(() => {
+          modal.style.display = 'none';
+          if (typeof onSubmit === 'function') {
+            onSubmit();
+          }
+        }, 250);
+      });
+    }
+
+    if (++attempts > maxAttempts) {
+      clearInterval(waitForForm);
+      console.warn("❌ Gave up waiting for lead form to load.");
+    }
+  }, pollInterval);
 }
+
 
 
 // 3. Inject the form HTML from GitHub, then initialize watchers
