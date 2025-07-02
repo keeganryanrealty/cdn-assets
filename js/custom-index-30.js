@@ -117,19 +117,6 @@ function showLeadForm(onSubmit) {
     return;
   }
 
-    // Delay to give time for form to mount in DOM (especially on mobile)
-  setTimeout(() => {
-    const form = document.getElementById('lead-form');
-    if (!form) {
-      console.warn("⛔️ Form not found after modal open");
-      return;
-    }
-
-    // Avoid duplicate handlers
-    if (form.dataset.handlerAttached !== "true") {
-      form.dataset.handlerAttached = "true";
-      console.log("✅ Form handler attached");
-
   // ✅ Always show the modal
   modal.style.display = 'block';
 
