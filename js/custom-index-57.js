@@ -338,21 +338,6 @@ function showLeadForm(onSubmit) {
 
         return "Login failed: " + error.message;
       }
-
-
-      
-          console.log("✅ Logged in as:", data.user.email);
-          sessionStorage.setItem('leadCaptured', 'true');
-
-          const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
-          const lastViewed = viewed[viewed.length - 1];
-          if (lastViewed) {
-            window.location.href = lastViewed;
-          } else {
-            window.location.reload(); // fallback
-          }
-        });
-      }, 500);
       // END LOGIN BLOCK
 
 
