@@ -110,38 +110,23 @@ document.addEventListener('click', function (e) {
 // 2. Show your lead form modal and handle submission
 function showLeadForm(onSubmit) {
   const modal = document.getElementById('lead-form-modal');
-  if (!modal) {
-    console.warn("Lead form modal not found.");
-    return;
-  }
-
- 
-if (form.dataset.handlerAttached !== "true") {
-  form.dataset.handlerAttached = "true";
-
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    // ... submission logic
-  });
-}
-
-// ✅ Only now display modal
-modal.style.display = 'block';
-  
   const form = document.getElementById('lead-form');
-  if (!form) {
-    console.warn("Lead form element missing inside modal.");
+
+  if (!modal) {
+    console.warn("❌ Lead form modal not found.");
     return;
   }
 
-  if (form.dataset.handlerAttached !== "true") {
+  // ✅ Always show the modal — even if form doesn't exist yet
+  modal.style.display = 'block';
+
+  // ⚠️ Only attach handler if form exists and not already attached
+  if (form && form.dataset.handlerAttached !== "true") {
     form.dataset.handlerAttached = "true";
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
 
-      // ✅ Split name into first and last
       const fullName = form.name.value.trim();
       const nameParts = fullName.split(" ");
       const firstName = nameParts[0] || '';
@@ -156,7 +141,7 @@ modal.style.display = 'block';
         },
         tags: ["Buyer", "Browsing Lead"]
       };
-     
+
       // ✅ Send to Mailchimp
       fetch('https://api-six-tau-53.vercel.app/api/mailchimp', {
         method: 'POST',
@@ -170,33 +155,32 @@ modal.style.display = 'block';
       .catch(error => {
         console.error("❌ Mailchimp error:", error);
       });
-      // ✅ Send to KVCore
-     fetch('https://api-six-tau-53.vercel.app/api/kvcore', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        firstName,
-        lastName,
-        email: form.email.value,
-        phone: form.phone.value || ''
-      })
-    })
-  .then(res => res.json())
-  .then(result => {
-    console.log("✅ Lead sent to KVCore:", result);
-  })
-  .catch(error => {
-    console.error("❌ KVCore error:", error);
-});
 
-modal.style.display = 'none';
-onSubmit();
+      // ✅ Send to KVCore
+      fetch('https://api-six-tau-53.vercel.app/api/kvcore', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email: form.email.value,
+          phone: form.phone.value || ''
+        })
+      })
+      .then(res => res.json())
+      .then(result => {
+        console.log("✅ Lead sent to KVCore:", result);
+      })
+      .catch(error => {
+        console.error("❌ KVCore error:", error);
+      });
 
       modal.style.display = 'none';
       onSubmit();
     });
   }
 }
+
 
 
 // 3. Inject the form HTML from GitHub, then initialize watchers
