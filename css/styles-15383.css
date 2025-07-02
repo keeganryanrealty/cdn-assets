@@ -550,3 +550,15 @@ transition: all 0s ease;
   }
 
 
+
+/* Login Styles */
+#login-error-message {
+  color: #d33;
+  background: #fff3f3;
+  border: 1px solid #e99;
+  padding: 8px 12px;
+  border-radius: 6px;
+  margin-top: 10px;
+  font-family: 'BodyFont', sans-serif;
+}
+
