@@ -115,8 +115,20 @@ function showLeadForm(onSubmit) {
     return;
   }
 
-  modal.style.display = 'block';
+ 
+if (form.dataset.handlerAttached !== "true") {
+  form.dataset.handlerAttached = "true";
 
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    // ... submission logic
+  });
+}
+
+// ✅ Only now display modal
+modal.style.display = 'block';
+  
   const form = document.getElementById('lead-form');
   if (!form) {
     console.warn("Lead form element missing inside modal.");
