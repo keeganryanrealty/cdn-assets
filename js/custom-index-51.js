@@ -130,7 +130,9 @@ document.addEventListener('click', function (e) {
 function showLeadForm(onSubmit) {
   const modal = document.getElementById('lead-form-modal');
   if (!modal) return;
-
+  
+  console.log("📩 Attaching form listener in showLeadForm()");
+ 
   modal.style.display = 'block';
 
   const pollInterval = 100;
@@ -145,8 +147,9 @@ function showLeadForm(onSubmit) {
       form.dataset.handlerAttached = "true";
 
       // ✅ NOW the form exists — safe to attach submit listener
-      form.addEventListener('submit', function (e) {
+      form.addEventListener('submit', async function (e) {
         e.preventDefault();
+        const modal = document.getElementById("lead-form-modal");
 
         const fullName = form.name.value.trim();
         const nameParts = fullName.split(" ");
@@ -154,13 +157,16 @@ function showLeadForm(onSubmit) {
         const lastName = nameParts.slice(1).join(" ") || '';
         const email = form.email.value;
         const phone = form.phone.value || '';
-
+      
+        console.log("📤 Attempting Supabase signup:", email);
+        
         const mlsid = sessionStorage.getItem('lead-mlsid') || '';
         const propertyAddress = sessionStorage.getItem('lead-address') || '';
 
         console.log("📍 MLS ID (from session):", mlsid);
         console.log("🏠 Property Address (from session):", propertyAddress);
-
+        const password = form.password.value; // must be included in your form
+        
         const leadData = {
           email,
           merge_fields: {
@@ -172,6 +178,22 @@ function showLeadForm(onSubmit) {
           mlsid,
           address: propertyAddress
         };
+
+        // SIGN UP in Supabase
+        const { data, error } = await window.supabase.auth.signUp({
+          email,
+          password,
+          options: {
+          data: { full_name: fullName }
+          }
+        });
+
+        if (error) {
+          alert("Signup error: " + error.message);
+          return;
+        }
+
+        console.log("✅ Supabase user created:", data.user.email);
 
         // ✅ Mailchimp call
         fetch('https://api-six-tau-53.vercel.app/api/mailchimp', {
@@ -248,7 +270,7 @@ function showLeadForm(onSubmit) {
       .then(html => {
         const wrapper = document.createElement("div");
         wrapper.innerHTML = html;
-
+        
         const footer = document.getElementById("footer");
         if (footer && footer.parentNode) {
           footer.parentNode.insertBefore(wrapper, footer);
@@ -258,6 +280,44 @@ function showLeadForm(onSubmit) {
         }
 
         console.log("✅ Login form modal injected");
+
+          // LOGIN IN BLOCK
+        const observeLoginSubmit = setInterval(() => {
+        const loginForm = document.getElementById('login-form');
+          if (!loginForm) return;
+
+        clearInterval(observeLoginSubmit);
+  
+        loginForm.addEventListener('submit', async function (e) {
+          e.preventDefault();
+
+          const email = loginForm.email.value.trim();
+          const password = loginForm.password.value;
+
+          const { data, error } = await window.supabase.auth.signInWithPassword({
+            email,
+            password
+          });
+
+          if (error) {
+            alert("Login error: " + error.message);
+            return;
+          }
+
+          console.log("✅ Logged in as:", data.user.email);
+
+          sessionStorage.setItem('leadCaptured', 'true');
+
+          const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
+          const lastViewed = viewed[viewed.length - 1];
+          if (lastViewed) {
+            window.location.href = lastViewed;
+          } else {
+            window.location.reload(); // fallback
+          }
+        });
+      }, 500);
+      // END LOGIN BLOCK
 
         // Intercept view clicks
         const recheckInterval = setInterval(() => {
