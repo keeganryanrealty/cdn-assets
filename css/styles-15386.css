@@ -534,6 +534,19 @@ transition: all 0s ease;
   vertical-align: middle;
 }
 
+.logout-link {
+  font-size: 13px;
+  text-decoration: underline;
+  color: #888;
+  cursor: pointer;
+  font-family: 'BodyFont', sans-serif;
+}
+
+.logout-link:hover {
+  color: #000;
+}
+
+
 /* Hide KV Login */
   #login_modal,
   .modal-backdrop,
