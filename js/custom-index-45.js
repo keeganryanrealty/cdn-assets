@@ -77,6 +77,7 @@ function setupMapPopupInterception() {
     });
   });
 }
+
 // Intercept Image click events
 document.addEventListener('click', function (e) {
   const box = e.target.closest('div.listing-box[data-link]');
@@ -89,12 +90,31 @@ document.addEventListener('click', function (e) {
   const targetURL = box.dataset.link;
   if (!targetURL) return;
 
+  // ✅ Extract MLS ID
+  const mlsMatch = targetURL.match(/-\d+-/);
+  const mlsid = mlsMatch ? mlsMatch[0].replace(/-/g, '') : '';
+
+  // ✅ Extract Property Address from URL
+  const addressPart = targetURL.split('-').slice(2).join(' ');
+  const propertyAddress = addressPart
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, c => c.toUpperCase()); // Title Case
+
+  // ✅ Store in sessionStorage
+  sessionStorage.setItem('lead-mlsid', mlsid);
+  sessionStorage.setItem('lead-address', propertyAddress);
+
+  console.log("📌 Captured from Click → MLS ID:", mlsid);
+  console.log("🏡 Captured Address:", propertyAddress);
+
+  // Save viewed
   const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
   if (!viewed.includes(targetURL)) {
     viewed.push(targetURL);
     sessionStorage.setItem('viewedProperties', JSON.stringify(viewed));
   }
 
+  // Skip form if already captured
   if (sessionStorage.getItem('leadCaptured')) {
     window.location.href = targetURL;
     return;
@@ -104,17 +124,12 @@ document.addEventListener('click', function (e) {
     sessionStorage.setItem('leadCaptured', 'true');
     window.location.href = targetURL;
   });
-}, true); // Capture phase
+}, true);
 
-
-// 2. Show your lead form modal and handle submission
+// 2. View Details Submit Form Logic
 function showLeadForm(onSubmit) {
   const modal = document.getElementById('lead-form-modal');
-
-  if (!modal) {
-    console.warn("❌ Lead form modal not found.");
-    return;
-  }
+  if (!modal) return;
 
   modal.style.display = 'block';
 
@@ -129,10 +144,9 @@ function showLeadForm(onSubmit) {
       clearInterval(waitForForm);
       form.dataset.handlerAttached = "true";
 
+      // ✅ NOW the form exists — safe to attach submit listener
       form.addEventListener('submit', function (e) {
         e.preventDefault();
-
-        console.log("📡 Submitting Mailchimp at", new Date().toISOString());
 
         const fullName = form.name.value.trim();
         const nameParts = fullName.split(" ");
@@ -141,95 +155,79 @@ function showLeadForm(onSubmit) {
         const email = form.email.value;
         const phone = form.phone.value || '';
 
-        // ✅ Extract MLS ID from pathname
-        const pathname = window.location.pathname;
-        const mlsMatch = pathname.match(/\/property\/\d+-(\d+)-/);
-        const mlsid = mlsMatch ? mlsMatch[1] : '';
-        console.log("🛣️ Pathname:", pathname);
-        console.log("📍 MLS ID:", mlsid);
+        const mlsid = sessionStorage.getItem('lead-mlsid') || '';
+        const propertyAddress = sessionStorage.getItem('lead-address') || '';
 
-        // ✅ Wait for Address to Load
-        const checkInterval = 300;
-        const maxWaitTime = 5000;
-        const start = Date.now();
+        console.log("📍 MLS ID (from session):", mlsid);
+        console.log("🏠 Property Address (from session):", propertyAddress);
 
-        const interval = setInterval(() => {
-          const addressElement = document.querySelector('.listing-detail-attribute .value');
+        const leadData = {
+          email,
+          merge_fields: {
+            FNAME: firstName,
+            LNAME: lastName,
+            PHONE: phone
+          },
+          tags: ["Buyer", "Browsing Lead"],
+          mlsid,
+          address: propertyAddress
+        };
 
-          if (addressElement || Date.now() - start > maxWaitTime) {
-            clearInterval(interval);
+        // ✅ Mailchimp call
+        fetch('https://api-six-tau-53.vercel.app/api/mailchimp', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          mode: 'cors',
+          credentials: 'include',
+          body: JSON.stringify(leadData)
+        })
+        .then(async res => {
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.message || 'Mailchimp error');
+          console.log("✅ Lead sent to Mailchimp:", data);
+        })
+        .catch(error => {
+          console.error("❌ Mailchimp error:", error.message);
+        });
 
-            const propertyAddress = addressElement?.innerText?.trim() || '';
-            console.log("🏠 Property Address:", propertyAddress);
+        // ✅ KVCore call
+        fetch('https://api-six-tau-53.vercel.app/api/kvcore', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          mode: 'cors',
+          credentials: 'include',
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            email,
+            phone,
+            mlsid,
+            address: propertyAddress
+          })
+        })
+        .then(async res => {
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.message || 'KVCore error');
+          console.log("✅ Lead sent to KVCore:", data);
+        })
+        .catch(error => {
+          console.error("❌ KVCore error:", error.message);
+        });
 
-            const leadData = {
-              email,
-              merge_fields: {
-                FNAME: firstName,
-                LNAME: lastName,
-                PHONE: phone
-              },
-              tags: ["Buyer", "Browsing Lead"],
-              mlsid,
-              address: propertyAddress
-            };
-
-            // ✅ Send to Mailchimp
-            fetch('https://api-six-tau-53.vercel.app/api/mailchimp', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-              },
-              mode: 'cors',
-              credentials: 'include',
-              body: JSON.stringify(leadData)
-            })
-            .then(async res => {
-              const data = await res.json();
-              if (!res.ok) throw new Error(data.message || 'Mailchimp error');
-              console.log("✅ Lead sent to Mailchimp:", data);
-            })
-            .catch(error => {
-              console.error("❌ Mailchimp error:", error.message);
-            });
-
-            // ✅ Send to KVCore
-            fetch('https://api-six-tau-53.vercel.app/api/kvcore', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-              },
-              mode: 'cors',
-              credentials: 'include',
-              body: JSON.stringify({
-                firstName,
-                lastName,
-                email,
-                phone,
-                mlsid,
-                address: propertyAddress
-              })
-            })
-            .then(async res => {
-              const data = await res.json();
-              if (!res.ok) throw new Error(data.message || 'KVCore error');
-              console.log("✅ Lead sent to KVCore:", data);
-            })
-            .catch(error => {
-              console.error("❌ KVCore error:", error.message);
-            });
-
-            // ✅ Close modal
-            setTimeout(() => {
-              modal.style.display = 'none';
-              if (typeof onSubmit === 'function') {
-                onSubmit();
-              }
-            }, 250);
+        setTimeout(() => {
+          modal.style.display = 'none';
+          sessionStorage.removeItem('lead-mlsid');
+          sessionStorage.removeItem('lead-address');
+          if (typeof onSubmit === 'function') {
+            onSubmit();
           }
-        }, checkInterval);
+        }, 250);
       });
     }
 
@@ -239,8 +237,6 @@ function showLeadForm(onSubmit) {
     }
   }, pollInterval);
 }
-
-
 
 
 // 3. Inject the form HTML from GitHub, then initialize watchers
