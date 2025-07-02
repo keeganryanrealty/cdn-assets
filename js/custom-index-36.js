@@ -150,7 +150,7 @@ function showLeadForm(onSubmit) {
         };
 
         // ✅ Send to Mailchimp
-        fetch('/api/mailchimp', {
+        fetch('https://api-six-tau-53.vercel.app/api/mailchimp', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -169,7 +169,7 @@ function showLeadForm(onSubmit) {
         });
 
         // ✅ Send to KVCore
-        fetch('/api/kvcore', {
+        fetch('https://api-six-tau-53.vercel.app/api/kvcore', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
