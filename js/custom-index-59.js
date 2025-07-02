@@ -270,7 +270,7 @@ function showLeadForm(onSubmit) {
       .then(html => {
         const wrapper = document.createElement("div");
         wrapper.innerHTML = html;
-        
+
         const footer = document.getElementById("footer");
         if (footer && footer.parentNode) {
           footer.parentNode.insertBefore(wrapper, footer);
@@ -281,65 +281,44 @@ function showLeadForm(onSubmit) {
 
         console.log("✅ Login form modal injected");
 
-      // LOGIN IN BLOCK
-const observeLoginSubmit = setInterval(() => {
-  const loginForm = document.getElementById('login-form');
-  if (!loginForm) return;
+        // Observe login submit
+        const observeLoginSubmit = setInterval(() => {
+          const loginForm = document.getElementById('login-form');
+          if (!loginForm) return;
 
-  clearInterval(observeLoginSubmit);
+          clearInterval(observeLoginSubmit);
 
-  loginForm.addEventListener('submit', async function (e) {
-    e.preventDefault();
+          loginForm.addEventListener('submit', async function (e) {
+            e.preventDefault();
 
-    const email = loginForm.email.value.trim();
-    const password = loginForm.password.value;
+            const email = loginForm.email.value.trim();
+            const password = loginForm.password.value;
 
-    const { data, error } = await window.supabase.auth.signInWithPassword({ email, password });
+            const { data, error } = await window.supabase.auth.signInWithPassword({ email, password });
+            const errorBox = document.getElementById('login-error-message');
 
-    const errorBox = document.getElementById('login-error-message');
+            if (error) {
+              if (errorBox) {
+                errorBox.textContent = formatSupabaseError(error);
+                errorBox.style.display = 'block';
+              }
+              return;
+            }
 
-    if (error) {
-      if (errorBox) {
-        errorBox.textContent = formatSupabaseError(error);
-        errorBox.style.display = 'block';
-      }
-      return;
-    }
+            if (errorBox) errorBox.style.display = 'none';
 
-    if (errorBox) errorBox.style.display = 'none';
+            console.log("✅ Logged in as:", data.user.email);
+            sessionStorage.setItem('leadCaptured', 'true');
 
-    console.log("✅ Logged in as:", data.user.email);
-    sessionStorage.setItem('leadCaptured', 'true');
-
-    const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
-    const lastViewed = viewed[viewed.length - 1];
-    if (lastViewed) {
-      window.location.href = lastViewed;
-    } else {
-      window.location.reload(); // fallback
-    }
-  });
-}, 500);
-
-function formatSupabaseError(error) {
-  const msg = error.message.toLowerCase();
-
-  if (msg.includes("invalid login credentials")) {
-    return "Incorrect email or password. Please try again.";
-  }
-
-  if (msg.includes("email not confirmed")) {
-    return "Please confirm your email before logging in. Check your inbox.";
-  }
-
-  if (msg.includes("user not found")) {
-    return "No account found with this email.";
-  }
-
-  return "Login failed: " + error.message;
-}
-      // END LOGIN BLOCK
-
+            const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
+            const lastViewed = viewed[viewed.length - 1];
+            if (lastViewed) {
+              window.location.href = lastViewed;
+            } else {
+              window.location.reload();
+            }
+          });
+        }, 500);
 
         // Intercept view clicks
         const recheckInterval = setInterval(() => {
@@ -348,7 +327,7 @@ function formatSupabaseError(error) {
         }, 1000);
         setTimeout(() => clearInterval(recheckInterval), 30000);
 
-        // 🧠 Watch for "Create Account" button click inside login form
+        // Watch for "Create Account"
         const observeCreateClick = setInterval(() => {
           const createBtn = document.getElementById("create-account-btn");
           if (!createBtn) return;
@@ -364,8 +343,44 @@ function formatSupabaseError(error) {
         console.error("❌ Failed to load login form:", err);
       });
   });
+})(); // ✅ FIXED — closes IIFE
 
-  // 🔁 Load Create Account form (create-account.html)
+// Error formatter functions should be defined OUTSIDE
+function formatSupabaseError(error) {
+  const msg = error.message.toLowerCase();
+
+  if (msg.includes("invalid login credentials")) {
+    return "Incorrect email or password. Please try again.";
+  }
+  if (msg.includes("email not confirmed")) {
+    return "Please confirm your email before logging in. Check your inbox.";
+  }
+  if (msg.includes("user not found")) {
+    return "No account found with this email.";
+  }
+  return "Login failed: " + error.message;
+}
+
+function formatSupabaseSignupError(error) {
+  const msg = error.message.toLowerCase();
+
+  if (msg.includes("user already registered") || msg.includes("user already exists")) {
+    return "This email is already registered. Try logging in instead.";
+  }
+  if (msg.includes("invalid email")) {
+    return "Please enter a valid email address.";
+  }
+  if (msg.includes("password should be at least")) {
+    return "Password must be at least 6 characters long.";
+  }
+  if (msg.includes("email rate limit")) {
+    return "Too many sign-up attempts. Please wait a moment and try again.";
+  }
+
+  return "Signup failed: " + error.message;
+}
+
+// Signup swap
 function swapToSignupForm() {
   fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/create-account.html")
     .then(response => response.text())
@@ -393,8 +408,8 @@ function swapToSignupForm() {
             const password = form.password.value;
 
             const { data, error } = await window.supabase.auth.signUp({ email, password });
-
             const errorBox = document.getElementById('signup-error-message');
+
             if (error) {
               if (errorBox) {
                 errorBox.textContent = formatSupabaseSignupError(error);
@@ -415,29 +430,6 @@ function swapToSignupForm() {
       console.error("❌ Failed to load signup form:", err);
     });
 }
-
-function formatSupabaseSignupError(error) {
-  const msg = error.message.toLowerCase();
-
-  if (msg.includes("user already registered") || msg.includes("user already exists")) {
-    return "This email is already registered. Try logging in instead.";
-  }
-
-  if (msg.includes("invalid email")) {
-    return "Please enter a valid email address.";
-  }
-
-  if (msg.includes("password should be at least")) {
-    return "Password must be at least 6 characters long.";
-  }
-
-  if (msg.includes("email rate limit")) {
-    return "Too many sign-up attempts. Please wait a moment and try again.";
-  }
-
-  return "Signup failed: " + error.message;
-}
-
 // === END VIEW DETAILS LEAD FORM LOGIC ===
 
 
