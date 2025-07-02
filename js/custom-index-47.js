@@ -239,10 +239,11 @@ function showLeadForm(onSubmit) {
 }
 
 
-// 3. Inject the form HTML from GitHub, then initialize watchers
+// 3. Inject Login Form HTML and Watch for Create Account Click ===
 (function () {
   document.addEventListener("DOMContentLoaded", function () {
-    fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/view-details-form-1.html")
+    // Load LOGIN form first
+    fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form.html")
       .then(response => response.text())
       .then(html => {
         const wrapper = document.createElement("div");
@@ -256,19 +257,66 @@ function showLeadForm(onSubmit) {
           console.warn("⚠️ Footer not found — content injected at end of body.");
         }
 
-        console.log("✅ Lead form modal injected");
+        console.log("✅ Login form modal injected");
 
-        // Watch for View Details links and attach intercepts
+        // Intercept view clicks
         const recheckInterval = setInterval(() => {
           setupViewDetailsInterception();
           setupMapPopupInterception();
-                              }, 1000);
-        setTimeout(() => clearInterval(recheckInterval), 30000); // Optional: stop after 30s
+        }, 1000);
+        setTimeout(() => clearInterval(recheckInterval), 30000);
+
+        // 🧠 Watch for "Create Account" button click inside login form
+        const observeCreateClick = setInterval(() => {
+          const createBtn = document.getElementById("create-account-btn");
+          if (!createBtn) return;
+
+          clearInterval(observeCreateClick);
+          createBtn.addEventListener("click", () => {
+            console.log("🌀 Switching to Create Account form...");
+            swapToSignupForm();
+          });
+        }, 500);
       })
       .catch(err => {
-        console.error("❌ Failed to load injected form HTML:", err);
+        console.error("❌ Failed to load login form:", err);
       });
   });
+
+  // 🔁 Load Create Account form (view-details-form-2.html)
+  function swapToSignupForm() {
+    fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/view-details-form-2.html")
+      .then(response => response.text())
+      .then(html => {
+        const modal = document.getElementById("lead-form-modal");
+        if (!modal) {
+          console.error("❌ Modal container not found to inject signup form");
+          return;
+        }
+
+        // Replace modal contents with signup form
+        modal.innerHTML = html;
+
+        console.log("✅ Signup form loaded");
+
+        // ✅ Re-run submission watcher logic
+        const recheck = setInterval(() => {
+          const form = document.getElementById("lead-form");
+          if (!form) return;
+
+          clearInterval(recheck);
+          if (!form.dataset.handlerAttached) {
+            form.dataset.handlerAttached = "true";
+            // Your form submit handling is already defined elsewhere
+            // This ensures it gets picked up again after injection
+            showLeadForm(); // Or manually attach the event listener here
+          }
+        }, 300);
+      })
+      .catch(err => {
+        console.error("❌ Failed to load signup form:", err);
+      });
+  }
 })();
 // === END VIEW DETAILS LEAD FORM LOGIC ===
 
