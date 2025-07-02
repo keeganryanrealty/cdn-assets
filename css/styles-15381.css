@@ -533,3 +533,12 @@ transition: all 0s ease;
   margin-left: 6px;
   vertical-align: middle;
 }
+
+/* Hide KV Login */
+#login_modal {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
