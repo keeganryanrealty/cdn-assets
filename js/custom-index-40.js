@@ -193,7 +193,9 @@ function showLeadForm(onSubmit) {
             firstName,
             lastName,
             email: form.email.value,
-            phone: form.phone.value || ''
+            phone: form.phone.value || '',
+            mlsid,                    
+            address: propertyAddress
           })
         })
         .then(async res => {
