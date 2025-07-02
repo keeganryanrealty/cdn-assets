@@ -1,0 +1,15 @@
+<div id="custom-hero-placeholder"></div>
+
+<script>
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/hero-section-animated-15268.html")
+    .then(res => res.text())
+    .then(html => {
+      document.getElementById("custom-hero-placeholder").innerHTML = html;
+    });
+</script>
+
+<script src="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets/js/hero-animate-152638.js" defer></script>
+
+<div id="about-me-placeholder"></div>
+
+<script src="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets/js/about-11.js"></script>
