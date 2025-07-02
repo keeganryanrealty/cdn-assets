@@ -265,7 +265,7 @@ function showLeadForm(onSubmit) {
 (function () {
   document.addEventListener("DOMContentLoaded", function () {
     // Load LOGIN form first
-    fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form-3.html")
+    fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form-4.html")
       .then(response => response.text())
       .then(html => {
         const wrapper = document.createElement("div");
@@ -382,7 +382,7 @@ function formatSupabaseSignupError(error) {
 
 // Signup swap
 function swapToSignupForm() {
-  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/create-account-3.html")
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/create-account-4.html")
     .then(response => response.text())
     .then(html => {
       const modal = document.getElementById("lead-form-modal");
@@ -430,7 +430,36 @@ function swapToSignupForm() {
       console.error("❌ Failed to load signup form:", err);
     });
 }
+
+document.addEventListener("click", function (e) {
+  if (e.target.matches(".modal-close-btn")) {
+    const modal = document.getElementById("lead-form-modal");
+    if (modal) modal.style.display = "none";
+  }
+});
 // === END VIEW DETAILS LEAD FORM LOGIC ===
+
+// === LOGOUT ===
+document.addEventListener("DOMContentLoaded", function () {
+  const logoutLink = document.getElementById("logout-link");
+
+  if (logoutLink) {
+    logoutLink.addEventListener("click", async function (e) {
+      e.preventDefault();
+      const { error } = await window.supabase.auth.signOut();
+      if (!error) {
+        console.log("✅ Logged out");
+        sessionStorage.removeItem("leadCaptured");
+        sessionStorage.removeItem("viewedProperties");
+        window.location.reload();
+      } else {
+        console.error("❌ Logout failed:", error.message);
+      }
+    });
+  }
+});
+
+
 
 
 
@@ -452,5 +481,7 @@ const intervalId = setInterval(() => {
 
 // Optional: Stop checking after 30 seconds
 setTimeout(() => clearInterval(intervalId), 30000);
+
+
 
 
