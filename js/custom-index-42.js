@@ -145,10 +145,12 @@ function showLeadForm(onSubmit) {
         const mlsid = mlsidMatch ? mlsidMatch[1] : '';
         console.log("📍 MLS ID:", mlsid);
 
-        // Extract property address safely
-        const addressElement = document.querySelector('.listing-detail-attribute .value');
-        const propertyAddress = addressElement?.innerText?.trim() || '';
-        console.log("🏠 Property Address:", propertyAddress);
+        setTimeout(() => {
+          const addressElement = document.querySelector('.listing-detail-attribute .value');
+          const propertyAddress = addressElement?.innerText?.trim() || '';
+          console.log("🏠 Property Address:", propertyAddress);
+          // Continue your fetch or submit logic with propertyAddress now available
+        }, 250); // slight delay to allow DOM rendering
     
         // LeadData Payload
         const leadData = {
