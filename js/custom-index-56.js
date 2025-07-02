@@ -265,7 +265,7 @@ function showLeadForm(onSubmit) {
 (function () {
   document.addEventListener("DOMContentLoaded", function () {
     // Load LOGIN form first
-    fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form.html")
+    fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form-1.html")
       .then(response => response.text())
       .then(html => {
         const wrapper = document.createElement("div");
@@ -294,15 +294,52 @@ function showLeadForm(onSubmit) {
           const email = loginForm.email.value.trim();
           const password = loginForm.password.value;
 
-          const { data, error } = await window.supabase.auth.signInWithPassword({
-            email,
-            password
-          });
+          const { data, error } = await window.supabase.auth.signInWithPassword({ email, password });
+
+          const errorBox = document.getElementById('login-error-message');
 
           if (error) {
-            alert("Login error: " + error.message);
+            if (errorBox) {
+              errorBox.textContent = formatSupabaseError(error);
+        errorBox.style.display = 'block';
+            }
             return;
           }
+
+          if (errorBox) errorBox.style.display = 'none';
+
+          console.log("✅ Logged in as:", data.user.email);
+          sessionStorage.setItem('leadCaptured', 'true');
+
+          const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
+          const lastViewed = viewed[viewed.length - 1];
+          if (lastViewed) {
+            window.location.href = lastViewed;
+          } else {
+            window.location.reload(); // fallback
+          }
+        });
+      }, 500);
+
+      function formatSupabaseError(error) {
+        const msg = error.message.toLowerCase();
+
+        if (msg.includes("invalid login credentials")) {
+          return "Incorrect email or password. Please try again.";
+        }
+
+        if (msg.includes("email not confirmed")) {
+          return "Please confirm your email before logging in. Check your inbox.";
+        }
+
+        if (msg.includes("user not found")) {
+          return "No account found with this email.";
+        }
+
+        return "Login failed: " + error.message;
+      }
+
+
       
           console.log("✅ Logged in as:", data.user.email);
           sessionStorage.setItem('leadCaptured', 'true');
@@ -343,40 +380,79 @@ function showLeadForm(onSubmit) {
       });
   });
 
-  // 🔁 Load Create Account form (view-details-form-2.html)
-  function swapToSignupForm() {
-    fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/view-details-form-3.html")
-      .then(response => response.text())
-      .then(html => {
-        const modal = document.getElementById("lead-form-modal");
-        if (!modal) {
-          console.error("❌ Modal container not found to inject signup form");
-          return;
+  // 🔁 Load Create Account form (create-account.html)
+function swapToSignupForm() {
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/create-account.html")
+    .then(response => response.text())
+    .then(html => {
+      const modal = document.getElementById("lead-form-modal");
+      if (!modal) {
+        console.error("❌ Modal container not found to inject signup form");
+        return;
+      }
+
+      modal.innerHTML = html;
+
+      const recheck = setInterval(() => {
+        const form = document.getElementById("lead-form");
+        if (!form) return;
+
+        clearInterval(recheck);
+        if (!form.dataset.handlerAttached) {
+          form.dataset.handlerAttached = "true";
+
+          form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+
+            const email = form.email.value.trim();
+            const password = form.password.value;
+
+            const { data, error } = await window.supabase.auth.signUp({ email, password });
+
+            const errorBox = document.getElementById('signup-error-message');
+            if (error) {
+              if (errorBox) {
+                errorBox.textContent = formatSupabaseSignupError(error);
+                errorBox.style.display = 'block';
+              }
+              return;
+            }
+
+            if (errorBox) errorBox.style.display = 'none';
+
+            console.log("✅ Signup successful:", data.user.email);
+            showLeadForm(); // Optional logic after signup
+          });
         }
+      }, 300);
+    })
+    .catch(err => {
+      console.error("❌ Failed to load signup form:", err);
+    });
+}
 
-        // Replace modal contents with signup form
-        modal.innerHTML = html;
+function formatSupabaseSignupError(error) {
+  const msg = error.message.toLowerCase();
 
-        console.log("✅ Signup form loaded");
-
-        // ✅ Re-run submission watcher logic
-          const recheck = setInterval(() => {
-            const form = document.getElementById("lead-form");
-            if (!form) return;
-
-            clearInterval(recheck);
-            if (!form.dataset.handlerAttached) {
-              form.dataset.handlerAttached = "true";
-        showLeadForm(); // Or manually attach the event listener here
-    }
-}, 300);
-
-      })
-      .catch(err => {
-        console.error("❌ Failed to load signup form:", err);
-      });
+  if (msg.includes("user already registered") || msg.includes("user already exists")) {
+    return "This email is already registered. Try logging in instead.";
   }
-})();
+
+  if (msg.includes("invalid email")) {
+    return "Please enter a valid email address.";
+  }
+
+  if (msg.includes("password should be at least")) {
+    return "Password must be at least 6 characters long.";
+  }
+
+  if (msg.includes("email rate limit")) {
+    return "Too many sign-up attempts. Please wait a moment and try again.";
+  }
+
+  return "Signup failed: " + error.message;
+}
+
 // === END VIEW DETAILS LEAD FORM LOGIC ===
 
 
