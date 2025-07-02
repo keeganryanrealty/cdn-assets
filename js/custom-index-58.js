@@ -282,62 +282,62 @@ function showLeadForm(onSubmit) {
         console.log("✅ Login form modal injected");
 
       // LOGIN IN BLOCK
-      const observeLoginSubmit = setInterval(() => {
-        const loginForm = document.getElementById('login-form');
-        if (!loginForm) return;
+const observeLoginSubmit = setInterval(() => {
+  const loginForm = document.getElementById('login-form');
+  if (!loginForm) return;
 
-        clearInterval(observeLoginSubmit);
+  clearInterval(observeLoginSubmit);
 
-        loginForm.addEventListener('submit', async function (e) {
-          e.preventDefault();
+  loginForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
 
-          const email = loginForm.email.value.trim();
-          const password = loginForm.password.value;
+    const email = loginForm.email.value.trim();
+    const password = loginForm.password.value;
 
-          const { data, error } = await window.supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await window.supabase.auth.signInWithPassword({ email, password });
 
-          const errorBox = document.getElementById('login-error-message');
+    const errorBox = document.getElementById('login-error-message');
 
-          if (error) {
-            if (errorBox) {
-              errorBox.textContent = formatSupabaseError(error);
+    if (error) {
+      if (errorBox) {
+        errorBox.textContent = formatSupabaseError(error);
         errorBox.style.display = 'block';
-            }
-            return;
-          }
-
-          if (errorBox) errorBox.style.display = 'none';
-
-          console.log("✅ Logged in as:", data.user.email);
-          sessionStorage.setItem('leadCaptured', 'true');
-
-          const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
-          const lastViewed = viewed[viewed.length - 1];
-          if (lastViewed) {
-            window.location.href = lastViewed;
-          } else {
-            window.location.reload(); // fallback
-          }
-        });
-      }, 500);
-
-      function formatSupabaseError(error) {
-        const msg = error.message.toLowerCase();
-
-        if (msg.includes("invalid login credentials")) {
-          return "Incorrect email or password. Please try again.";
-        }
-
-        if (msg.includes("email not confirmed")) {
-          return "Please confirm your email before logging in. Check your inbox.";
-        }
-
-        if (msg.includes("user not found")) {
-          return "No account found with this email.";
-        }
-
-        return "Login failed: " + error.message;
       }
+      return;
+    }
+
+    if (errorBox) errorBox.style.display = 'none';
+
+    console.log("✅ Logged in as:", data.user.email);
+    sessionStorage.setItem('leadCaptured', 'true');
+
+    const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
+    const lastViewed = viewed[viewed.length - 1];
+    if (lastViewed) {
+      window.location.href = lastViewed;
+    } else {
+      window.location.reload(); // fallback
+    }
+  });
+}, 500);
+
+function formatSupabaseError(error) {
+  const msg = error.message.toLowerCase();
+
+  if (msg.includes("invalid login credentials")) {
+    return "Incorrect email or password. Please try again.";
+  }
+
+  if (msg.includes("email not confirmed")) {
+    return "Please confirm your email before logging in. Check your inbox.";
+  }
+
+  if (msg.includes("user not found")) {
+    return "No account found with this email.";
+  }
+
+  return "Login failed: " + error.message;
+}
       // END LOGIN BLOCK
 
 
