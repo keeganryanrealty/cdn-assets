@@ -282,12 +282,12 @@ function showLeadForm(onSubmit) {
         console.log("✅ Login form modal injected");
 
       // LOGIN IN BLOCK
-        const observeLoginSubmit = setInterval(() => {
+      const observeLoginSubmit = setInterval(() => {
         const loginForm = document.getElementById('login-form');
-          if (!loginForm) return;
+        if (!loginForm) return;
 
         clearInterval(observeLoginSubmit);
-  
+
         loginForm.addEventListener('submit', async function (e) {
           e.preventDefault();
 
@@ -303,9 +303,8 @@ function showLeadForm(onSubmit) {
             alert("Login error: " + error.message);
             return;
           }
-
+      
           console.log("✅ Logged in as:", data.user.email);
-
           sessionStorage.setItem('leadCaptured', 'true');
 
           const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
@@ -314,10 +313,11 @@ function showLeadForm(onSubmit) {
             window.location.href = lastViewed;
           } else {
             window.location.reload(); // fallback
-              }
-          });
+          }
+        });
       }, 500);
       // END LOGIN BLOCK
+
 
         // Intercept view clicks
         const recheckInterval = setInterval(() => {
