@@ -116,11 +116,9 @@ function showLeadForm(onSubmit) {
     return;
   }
 
-  // ✅ Always show the modal immediately
   modal.style.display = 'block';
 
-  // ⏳ Poll until the form is loaded in the DOM
-  const pollInterval = 100; // ms
+  const pollInterval = 100;
   const maxAttempts = 50;
   let attempts = 0;
 
@@ -140,110 +138,98 @@ function showLeadForm(onSubmit) {
         const nameParts = fullName.split(" ");
         const firstName = nameParts[0] || '';
         const lastName = nameParts.slice(1).join(" ") || '';
-        // Extract MLS ID from pathname
-        const mlsidMatch = window.location.pathname.match(/property\/\d+-(\d+)-/);
-        const mlsid = mlsidMatch ? mlsidMatch[1] : '';
-        console.log("🛣️ Pathname:", window.location.pathname);
-        // Extract Property Address Once Loaded
-        function waitForElement(selector, timeout = 3000) {
-  return new Promise((resolve, reject) => {
-    const intervalTime = 100;
-    let timeElapsed = 0;
-    const interval = setInterval(() => {
-      const element = document.querySelector(selector);
-      if (element) {
-        clearInterval(interval);
-        resolve(element);
-      } else if (timeElapsed >= timeout) {
-        clearInterval(interval);
-        reject(new Error("Element not found in time"));
-      }
-      timeElapsed += intervalTime;
-    }, intervalTime);
-  });
-}
-// End Property Extraction
-        
-// Usage inside showLeadForm or wherever
-waitForElement('.listing-detail-attribute .value')
-  .then(addressElement => {
-    const propertyAddress = addressElement.innerText.trim();
-    console.log("🏠 Property Address:", propertyAddress);
+        const email = form.email.value;
+        const phone = form.phone.value || '';
 
-    // Attach to your fetch payload here
-  })
-  .catch(err => {
-    console.warn("⛔ Address element not found:", err.message);
-  });
+        // ✅ Extract MLS ID from pathname
+        const pathname = window.location.pathname;
+        const mlsMatch = pathname.match(/\/property\/\d+-(\d+)-/);
+        const mlsid = mlsMatch ? mlsMatch[1] : '';
+        console.log("🛣️ Pathname:", pathname);
+        console.log("📍 MLS ID:", mlsid);
 
-    
-        // LeadData Payload
-        const leadData = {
-          email: form.email.value,
-          merge_fields: {
-            FNAME: firstName,
-            LNAME: lastName,
-            PHONE: form.phone.value || ''
-          },
-          tags: ["Buyer", "Browsing Lead"],
-          mlsid: mlsid, // for Zapier field mapping
-          address: propertyAddress // to be injected in the Notes section
-        };
+        // ✅ Wait for Address to Load
+        const checkInterval = 300;
+        const maxWaitTime = 5000;
+        const start = Date.now();
 
-        // ✅ Send to Mailchimp
-        fetch('https://api-six-tau-53.vercel.app/api/mailchimp', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          mode: 'cors',
-          credentials: 'include',
-          body: JSON.stringify(leadData)
-        })
-        .then(async res => {
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.message || 'Mailchimp error');
-          console.log("✅ Lead sent to Mailchimp:", data);
-        })
-        .catch(error => {
-          console.error("❌ Mailchimp error:", error.message);
-        });
+        const interval = setInterval(() => {
+          const addressElement = document.querySelector('.listing-detail-attribute .value');
 
-        // ✅ Send to KVCore
-        fetch('https://api-six-tau-53.vercel.app/api/kvcore', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          mode: 'cors',
-          credentials: 'include',
-          body: JSON.stringify({
-            firstName,
-            lastName,
-            email: form.email.value,
-            phone: form.phone.value || '',
-            mlsid,                    
-            address: propertyAddress
-          })
-        })
-        .then(async res => {
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.message || 'KVCore error');
-          console.log("✅ Lead sent to KVCore:", data);
-        })
-        .catch(error => {
-          console.error("❌ KVCore error:", error.message);
-        });
+          if (addressElement || Date.now() - start > maxWaitTime) {
+            clearInterval(interval);
 
-        // ✅ Close modal and trigger onSubmit
-        setTimeout(() => {
-          modal.style.display = 'none';
-          if (typeof onSubmit === 'function') {
-            onSubmit();
+            const propertyAddress = addressElement?.innerText?.trim() || '';
+            console.log("🏠 Property Address:", propertyAddress);
+
+            const leadData = {
+              email,
+              merge_fields: {
+                FNAME: firstName,
+                LNAME: lastName,
+                PHONE: phone
+              },
+              tags: ["Buyer", "Browsing Lead"],
+              mlsid,
+              address: propertyAddress
+            };
+
+            // ✅ Send to Mailchimp
+            fetch('https://api-six-tau-53.vercel.app/api/mailchimp', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              },
+              mode: 'cors',
+              credentials: 'include',
+              body: JSON.stringify(leadData)
+            })
+            .then(async res => {
+              const data = await res.json();
+              if (!res.ok) throw new Error(data.message || 'Mailchimp error');
+              console.log("✅ Lead sent to Mailchimp:", data);
+            })
+            .catch(error => {
+              console.error("❌ Mailchimp error:", error.message);
+            });
+
+            // ✅ Send to KVCore
+            fetch('https://api-six-tau-53.vercel.app/api/kvcore', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              },
+              mode: 'cors',
+              credentials: 'include',
+              body: JSON.stringify({
+                firstName,
+                lastName,
+                email,
+                phone,
+                mlsid,
+                address: propertyAddress
+              })
+            })
+            .then(async res => {
+              const data = await res.json();
+              if (!res.ok) throw new Error(data.message || 'KVCore error');
+              console.log("✅ Lead sent to KVCore:", data);
+            })
+            .catch(error => {
+              console.error("❌ KVCore error:", error.message);
+            });
+
+            // ✅ Close modal
+            setTimeout(() => {
+              modal.style.display = 'none';
+              if (typeof onSubmit === 'function') {
+                onSubmit();
+              }
+            }, 250);
           }
-        }, 250);
+        }, checkInterval);
       });
     }
 
@@ -253,6 +239,7 @@ waitForElement('.listing-detail-attribute .value')
     }
   }, pollInterval);
 }
+
 
 
 
