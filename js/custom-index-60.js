@@ -382,7 +382,7 @@ function formatSupabaseSignupError(error) {
 
 // Signup swap
 function swapToSignupForm() {
-  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/create-account.html")
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/create-account-1.html")
     .then(response => response.text())
     .then(html => {
       const modal = document.getElementById("lead-form-modal");
