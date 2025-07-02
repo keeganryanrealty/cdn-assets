@@ -285,7 +285,7 @@ function showLeadForm(onSubmit) {
 
   // 🔁 Load Create Account form (view-details-form-2.html)
   function swapToSignupForm() {
-    fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/view-details-form-2.html")
+    fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/view-details-form-3.html")
       .then(response => response.text())
       .then(html => {
         const modal = document.getElementById("lead-form-modal");
