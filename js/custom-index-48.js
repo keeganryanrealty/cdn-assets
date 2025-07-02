@@ -300,18 +300,17 @@ function showLeadForm(onSubmit) {
         console.log("✅ Signup form loaded");
 
         // ✅ Re-run submission watcher logic
-        const recheck = setInterval(() => {
-          const form = document.getElementById("lead-form");
-          if (!form) return;
+          const recheck = setInterval(() => {
+            const form = document.getElementById("lead-form");
+            if (!form) return;
 
-          clearInterval(recheck);
-          if (!form.dataset.handlerAttached) {
-            form.dataset.handlerAttached = "true";
-            // Your form submit handling is already defined elsewhere
-            // This ensures it gets picked up again after injection
-            showLeadForm(); // Or manually attach the event listener here
-          }
-        }, 300);
+            clearInterval(recheck);
+            if (!form.dataset.handlerAttached) {
+              form.dataset.handlerAttached = "true";
+        showLeadForm(); // Or manually attach the event listener here
+    }
+}, 300);
+
       })
       .catch(err => {
         console.error("❌ Failed to load signup form:", err);
