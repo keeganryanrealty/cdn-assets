@@ -143,14 +143,39 @@ function showLeadForm(onSubmit) {
         // Extract MLS ID from pathname
         const mlsidMatch = window.location.pathname.match(/property\/\d+-(\d+)-/);
         const mlsid = mlsidMatch ? mlsidMatch[1] : '';
-        console.log("📍 MLS ID:", mlsid);
+        console.log("🛣️ Pathname:", window.location.pathname);
+        // Extract Property Address Once Loaded
+        function waitForElement(selector, timeout = 3000) {
+  return new Promise((resolve, reject) => {
+    const intervalTime = 100;
+    let timeElapsed = 0;
+    const interval = setInterval(() => {
+      const element = document.querySelector(selector);
+      if (element) {
+        clearInterval(interval);
+        resolve(element);
+      } else if (timeElapsed >= timeout) {
+        clearInterval(interval);
+        reject(new Error("Element not found in time"));
+      }
+      timeElapsed += intervalTime;
+    }, intervalTime);
+  });
+}
+// End Property Extraction
+        
+// Usage inside showLeadForm or wherever
+waitForElement('.listing-detail-attribute .value')
+  .then(addressElement => {
+    const propertyAddress = addressElement.innerText.trim();
+    console.log("🏠 Property Address:", propertyAddress);
 
-        setTimeout(() => {
-          const addressElement = document.querySelector('.listing-detail-attribute .value');
-          const propertyAddress = addressElement?.innerText?.trim() || '';
-          console.log("🏠 Property Address:", propertyAddress);
-          // Continue your fetch or submit logic with propertyAddress now available
-        }, 250); // slight delay to allow DOM rendering
+    // Attach to your fetch payload here
+  })
+  .catch(err => {
+    console.warn("⛔ Address element not found:", err.message);
+  });
+
     
         // LeadData Payload
         const leadData = {
