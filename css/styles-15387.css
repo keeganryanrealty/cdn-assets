@@ -535,6 +535,7 @@ transition: all 0s ease;
 }
 
 .logout-link {
+  text-align: center;
   font-size: 13px;
   text-decoration: underline;
   color: #888;
