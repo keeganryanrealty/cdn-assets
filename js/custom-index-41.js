@@ -140,12 +140,15 @@ function showLeadForm(onSubmit) {
         const nameParts = fullName.split(" ");
         const firstName = nameParts[0] || '';
         const lastName = nameParts.slice(1).join(" ") || '';
-           // Capture MLS ID from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const mlsid = urlParams.get('mlsid') || '';
-    // Extract property address from DOM
+        // Extract MLS ID from pathname
+        const mlsidMatch = window.location.pathname.match(/property\/\d+-(\d+)-/);
+        const mlsid = mlsidMatch ? mlsidMatch[1] : '';
+        console.log("📍 MLS ID:", mlsid);
+
+        // Extract property address safely
         const addressElement = document.querySelector('.listing-detail-attribute .value');
         const propertyAddress = addressElement?.innerText?.trim() || '';
+        console.log("🏠 Property Address:", propertyAddress);
     
         // LeadData Payload
         const leadData = {
