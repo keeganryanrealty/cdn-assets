@@ -117,7 +117,7 @@ function showLeadForm(onSubmit) {
     return;
   }
 
-  // ✅ Always show the modal — even if form doesn't exist yet
+  // ✅ Always show the modal
   modal.style.display = 'block';
 
   // ⚠️ Only attach handler if form exists and not already attached
@@ -146,20 +146,23 @@ function showLeadForm(onSubmit) {
       fetch('https://api-six-tau-53.vercel.app/api/mailchimp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(leadData)
       })
-      .then(res => res.json())
-      .then(result => {
-        console.log("✅ Lead sent to Mailchimp:", result);
+      .then(async res => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Mailchimp error');
+        console.log("✅ Lead sent to Mailchimp:", data);
       })
       .catch(error => {
-        console.error("❌ Mailchimp error:", error);
+        console.error("❌ Mailchimp error:", error.message);
       });
 
       // ✅ Send to KVCore
       fetch('https://api-six-tau-53.vercel.app/api/kvcore', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({
           firstName,
           lastName,
@@ -167,20 +170,25 @@ function showLeadForm(onSubmit) {
           phone: form.phone.value || ''
         })
       })
-      .then(res => res.json())
-      .then(result => {
-        console.log("✅ Lead sent to KVCore:", result);
+      .then(async res => {
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'KVCore error');
+        console.log("✅ Lead sent to KVCore:", data);
       })
       .catch(error => {
-        console.error("❌ KVCore error:", error);
+        console.error("❌ KVCore error:", error.message);
       });
 
-      modal.style.display = 'none';
-      onSubmit();
+      // ✅ Close modal and run onSubmit (after short delay to help mobile reliability)
+      setTimeout(() => {
+        modal.style.display = 'none';
+        if (typeof onSubmit === 'function') {
+          onSubmit();
+        }
+      }, 250); // Slight delay helps mobile Safari preserve requests
     });
   }
 }
-
 
 
 // 3. Inject the form HTML from GitHub, then initialize watchers
