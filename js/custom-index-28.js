@@ -147,7 +147,7 @@ function showLeadForm(onSubmit) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json',
     'Accept': 'application/json' },
-        credentials: 'include',
+      //  credentials: 'include',
         mode: 'cors',
         body: JSON.stringify(leadData)
       })
@@ -165,7 +165,7 @@ function showLeadForm(onSubmit) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json',
     'Accept': 'application/json' },
-        credentials: 'include',
+    //    credentials: 'include',
         mode: 'cors',
         body: JSON.stringify({
           firstName,
