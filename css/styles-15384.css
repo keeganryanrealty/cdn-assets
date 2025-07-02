@@ -562,3 +562,110 @@ transition: all 0s ease;
   font-family: 'BodyFont', sans-serif;
 }
 
+/* ========== Modal Wrapper ========== */
+#lead-form-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 9999;
+  font-family: 'BodyFont', sans-serif;
+}
+
+/* ========== Form Container ========== */
+.lead-form-container {
+  max-width: 400px;
+  margin: 10% auto;
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+  font-family: 'BodyFont', sans-serif;
+}
+
+/* ========== Headings ========== */
+.lead-form-container h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #100f0d;
+}
+
+/* ========== Input Fields ========== */
+.lead-form-container input {
+  width: 100%;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  font-size: 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  transition: border-color 0.3s ease;
+  font-family: 'BodyFont', sans-serif;
+}
+
+.lead-form-container input:focus {
+  outline: none;
+  border-color: #100f0d;
+}
+
+/* ========== Buttons ========== */
+.lead-form-container button[type="submit"] {
+  display: inline-block;
+  width: 100%;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 30px;
+  background: #100f0d;
+  color: white;
+  font-size: 16px;
+  font-family: 'BodyFont', sans-serif;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.lead-form-container button[type="submit"]:hover {
+  background: #333;
+}
+
+/* ========== Link Button (Create Account) ========== */
+#create-account-btn {
+  background: none;
+  border: none;
+  color: #007BFF;
+  cursor: pointer;
+  padding: 0;
+  font-size: 13px;
+  font-family: 'BodyFont', sans-serif;
+}
+
+#create-account-btn:hover {
+  text-decoration: underline;
+}
+
+/* ========== Small Print & Links ========== */
+.lead-form-container p {
+  font-size: 12px;
+  color: #666;
+  margin-top: 10px;
+  line-height: 1.4;
+}
+
+.lead-form-container p a {
+  color: #007BFF;
+  text-decoration: none;
+}
+
+.lead-form-container p a:hover {
+  text-decoration: underline;
+}
+
+/* ========== Error Message ========== */
+#error-message,
+#login-error-message,
+#signup-error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 8px;
+  display: none;
+}
+
