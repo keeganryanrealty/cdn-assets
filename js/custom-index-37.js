@@ -157,6 +157,7 @@ function showLeadForm(onSubmit) {
             'Accept': 'application/json'
           },
           mode: 'cors',
+          credentials: 'include',
           body: JSON.stringify(leadData)
         })
         .then(async res => {
@@ -176,6 +177,7 @@ function showLeadForm(onSubmit) {
             'Accept': 'application/json'
           },
           mode: 'cors',
+          credentials: 'include',
           body: JSON.stringify({
             firstName,
             lastName,
