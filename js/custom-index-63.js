@@ -459,8 +459,25 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
+document.addEventListener("DOMContentLoaded", async function () {
+  const loginBtn = document.getElementById("login-link"); // Update with your actual ID
+  const logoutBtn = document.getElementById("logout-link"); // Optional
 
+  const {
+    data: { session },
+  } = await window.supabase.auth.getSession();
 
+  if (session && session.user) {
+    // User is logged in
+    if (loginBtn) loginBtn.style.display = "none";
+    if (logoutBtn) logoutBtn.style.display = "inline";
+  } else {
+    // User is logged out
+    if (loginBtn) loginBtn.style.display = "inline";
+    if (logoutBtn) logoutBtn.style.display = "none";
+  }
+});
+// === END LOGOUT ===
 
 
 
