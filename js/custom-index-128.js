@@ -765,6 +765,27 @@ if (document.readyState === 'loading') {
   watchForListings();
   highlightSavedListings();
 }
+// Top Spacer for Listing/Detail Pages
+function isListingPage() {
+  const path = window.location.pathname;
+  return path.includes('/property/') || path.includes('/details.php');
+}
+
+function injectTopSpacer() {
+  if (!isListingPage()) return;
+
+  const existingSpacer = document.querySelector('#custom-top-spacer');
+  if (existingSpacer) return;
+
+  const spacer = document.createElement('div');
+  spacer.id = 'custom-top-spacer';
+  spacer.style.height = '200px';
+  spacer.style.width = '100%';
+  document.body.prepend(spacer);
+}
+
+// Run immediately
+injectTopSpacer();
 
 
 // ==========================
