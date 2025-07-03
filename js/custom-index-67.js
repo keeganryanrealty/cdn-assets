@@ -394,15 +394,71 @@ function swapToSignupForm() {
 
       modal.innerHTML = html;
 
-            const observeBackToLogin = setInterval(() => {
-              const backBtn = document.getElementById("back-to-login-btn");
-                   if (!backBtn) return;
-                   clearInterval(observeBackToLogin);
-                   backBtn.addEventListener("click", () => {
-                   console.log("🔁 Switching back to login form...");
-                   window.location.reload(); // reloads login form version
-                 });
-           }, 300);
+const observeBackToLogin = setInterval(() => {
+  const backBtn = document.getElementById("back-to-login-btn");
+  if (!backBtn) return;
+
+  clearInterval(observeBackToLogin);
+
+  backBtn.addEventListener("click", () => {
+    console.log("🔁 Switching back to login form...");
+
+    // Back to login form HTML again
+    fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form-4.html")
+      .then(response => response.text())
+      .then(loginHtml => {
+        const modal = document.getElementById("lead-form-modal");
+        if (modal) {
+          modal.innerHTML = loginHtml;
+
+          // 👇 Reattach login listeners (same logic from your initial injection)
+          const loginForm = document.getElementById('login-form');
+          if (loginForm) {
+            loginForm.addEventListener('submit', async function (e) {
+              e.preventDefault();
+              const email = loginForm.email.value.trim();
+              const password = loginForm.password.value;
+
+              const { data, error } = await window.supabase.auth.signInWithPassword({ email, password });
+              const errorBox = document.getElementById('login-error-message');
+
+              if (error) {
+                if (errorBox) {
+                  errorBox.textContent = formatSupabaseError(error);
+                  errorBox.style.display = 'block';
+                }
+                return;
+              }
+
+              if (errorBox) errorBox.style.display = 'none';
+
+              console.log("✅ Logged in as:", data.user.email);
+              sessionStorage.setItem('leadCaptured', 'true');
+
+              const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
+              const lastViewed = viewed[viewed.length - 1];
+              if (lastViewed) {
+                window.location.href = lastViewed;
+              } else {
+                window.location.reload();
+              }
+            });
+          }
+
+          // 👇 Reconnect create-account-btn logic
+          const createBtn = document.getElementById("create-account-btn");
+          if (createBtn) {
+            createBtn.addEventListener("click", () => {
+              swapToSignupForm();
+            });
+          }
+        }
+      })
+      .catch(err => {
+        console.error("❌ Failed to reload login form:", err);
+      });
+  });
+}, 300);
 
       const recheck = setInterval(() => {
         const form = document.getElementById("lead-form");
@@ -489,6 +545,26 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 });
 // === END LOGOUT ===
+
+// LOGIN DISPLAY FOR /PROPERTY/ PAGES Wait for Supabase to initialize + login modal to inject
+document.addEventListener("DOMContentLoaded", async function () {
+  const pathname = window.location.pathname;
+
+  // Check if on a /property/ page
+  if (pathname.includes("/property/")) {
+    const { data: { session } } = await window.supabase.auth.getSession();
+
+    const isLoggedIn = !!session?.user;
+
+    if (!isLoggedIn) {
+      console.log("🔒 Not logged in on /property/ page — showing login modal");
+      const modal = document.getElementById("lead-form-modal");
+      if (modal) modal.style.display = "block";
+    } else {
+      console.log("✅ User is logged in");
+    }
+  }
+});
 
 
 
