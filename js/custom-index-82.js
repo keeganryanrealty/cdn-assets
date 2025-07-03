@@ -295,7 +295,7 @@ function injectLoginForm(showImmediately = false) {
       console.error("❌ Failed to load login form:", err);
     });
 }
-
+// Attach Log In Handlers
 function attachLoginHandlers() {
   const observeLoginSubmit = setInterval(() => {
     const loginForm = document.getElementById('login-form');
@@ -325,13 +325,45 @@ function attachLoginHandlers() {
       console.log("✅ Logged in as:", data.user.email);
       sessionStorage.setItem('leadCaptured', 'true');
 
-      const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
-      const lastViewed = viewed[viewed.length - 1];
-      if (lastViewed) {
-        window.location.href = lastViewed;
+      // Check if login was triggered by Save Listing
+      if (sessionStorage.getItem('lead-save-clicked')) {
+        console.log("💾 Saving listing after login...");
+
+        const mlsid = sessionStorage.getItem('lead-mlsid') || '';
+        const address = sessionStorage.getItem('lead-address') || '';
+        const listingKey = `${mlsid}:${address}`;
+
+        // Save the listing
+        saveListingAfterLogin(listingKey);
+      
+        // Optionally update all matching buttons
+        const allSaveBtns = document.querySelectorAll(`.custom-save-btn[data-mlsid="${mlsid}"]`);
+        allSaveBtns.forEach(btn => {
+          btn.innerHTML = '<i class="fa fa-check"></i><span>Saved</span>';
+        });
+
+        // Cleanup session storage
+        sessionStorage.removeItem('lead-save-clicked');
+        sessionStorage.removeItem('lead-mlsid');
+        sessionStorage.removeItem('lead-address');
+
+        // Close modal
+        const modal = document.getElementById("lead-form-modal");
+        if (modal) {
+          modal.style.display = "none";
+          modal.querySelector('h2').textContent = 'Log In to View Property Details';
+        }
+
       } else {
-        window.location.reload();
-      }
+        // Normal flow: redirect to last viewed property
+        const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
+        const lastViewed = viewed[viewed.length - 1];
+        if (lastViewed) {
+          window.location.href = lastViewed;
+        } else {
+          window.location.reload();
+        }
+      }      
     });
   }, 500);
 
@@ -460,13 +492,22 @@ const observeBackToLogin = setInterval(() => {
       console.error("❌ Failed to load signup form:", err);
     });
 }
-
+// Close Button Handler
 document.addEventListener("click", function (e) {
   if (e.target.matches(".modal-close-btn")) {
     const modal = document.getElementById("lead-form-modal");
-    if (modal) modal.style.display = "none";
+    const currentPath = window.location.pathname;
+
+    if (currentPath !== "/" && currentPath !== "/index.php") {
+      // Redirect to homepage if not already on it
+      window.location.href = "/";
+    } else {
+      // Otherwise, just close the modal
+      if (modal) modal.style.display = "none";
+    }
   }
 });
+
 // === END VIEW DETAILS LEAD FORM LOGIC ===
 
 // === LOGOUT ===
@@ -600,34 +641,28 @@ document.addEventListener('click', function (e) {
 
   const mlsid = btn.dataset.mlsid;
   const mls = btn.dataset.mls;
-
-  const viewed = JSON.parse(sessionStorage.getItem('savedProperties') || '[]');
   const listingKey = `${mls}-${mlsid}`;
+
+  sessionStorage.setItem('lead-mlsid', mlsid);
+  sessionStorage.setItem('lead-save-clicked', 'true');
+  // Optionally set address
+  const address = btn.closest('.listing-box')?.dataset.address || '';
+  sessionStorage.setItem('lead-address', address);
 
   // If not logged in
   window.supabase.auth.getSession().then(({ data: { session } }) => {
     if (!session) {
       console.log("🔒 User not logged in — opening modal");
-      sessionStorage.setItem('lead-mlsid', mlsid);
-      sessionStorage.setItem('lead-save-clicked', 'true');
-      showLeadForm(() => {
-        saveListingAfterLogin(listingKey);
-      });
+      const modal = document.getElementById('lead-form-modal');
+      if (modal) {
+        modal.querySelector('h2').textContent = 'Login to Save Listing';
+        modal.style.display = 'block';
+      }
     } else {
       saveListingAfterLogin(listingKey);
     }
   });
 }, true);
-
-// Actual save logic
-function saveListingAfterLogin(listingKey) {
-  const saved = JSON.parse(sessionStorage.getItem('savedProperties') || '[]');
-  if (!saved.includes(listingKey)) {
-    saved.push(listingKey);
-    sessionStorage.setItem('savedProperties', JSON.stringify(saved));
-    console.log("💾 Saved listing:", listingKey);
-  }
-}
 
 
 
