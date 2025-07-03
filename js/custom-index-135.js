@@ -875,10 +875,21 @@ async function injectSaveButtonOnDetailPage() {
   newLi.className = 'nav-item';
   newLi.style.textAlign = 'left';
 
+  
+  const { mls, mlsid } = extractMLSFromURL(); // ✅ Reuse helper
+
+  // ✅ Save address for Supabase (adjust selector as needed)
+  let address = document.querySelector('.property-address')?.textContent?.trim() || 'Unknown Address';
+  sessionStorage.setItem('lead-address', address);
+  sessionStorage.setItem('lead-mls', mls);
+  sessionStorage.setItem('lead-mlsid', mlsid);
+  
   const btn = document.createElement('a');
   btn.href = '#';
   btn.className = 'custom-save-btn nav-link';
-  btn.innerHTML = `<i class="fa fa-heart"></i><span style="margin-left: 6px;">Save</span>`;
+  btn.dataset.mls = mls;
+  btn.dataset.mlsid = mlsid;
+  btn.innerHTML = `<i class="fa fa-heart"></i> Save`;
   btn.style.display = 'block';
 
   newLi.appendChild(btn);
@@ -890,6 +901,7 @@ async function injectSaveButtonOnDetailPage() {
 
 // Initial injection
 injectSaveButtonOnDetailPage();
+highlightSavedListings();
 
 // Also observe DOM changes in case content loads after delay
 if (isListingPage()) {
@@ -898,6 +910,7 @@ if (isListingPage()) {
     if (!window.__lastSaveBtnRun || now - window.__lastSaveBtnRun > 1000) {
       window.__lastSaveBtnRun = now;
       injectSaveButtonOnDetailPage();
+      highlightSavedListings();
     }
   });
 
