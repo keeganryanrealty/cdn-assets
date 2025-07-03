@@ -262,7 +262,7 @@ function showLeadForm(onSubmit) {
 
 
 // 3. Inject Login Form HTML and Watch for Create Account Click ===
-function injectLoginForm() {
+function injectLoginForm(showImmediately = false) {
   fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form-5.html")
     .then(response => response.text())
     .then(html => {
@@ -282,10 +282,13 @@ function injectLoginForm() {
         if (!modal) return;
 
         clearInterval(waitForModal);
-        modal.style.display = "block"; // ✅ Ensure it appears
 
-        console.log("✅ Login form modal injected and displayed");
-        attachLoginHandlers(); // 👈 must be defined globally
+        if (showImmediately) {
+          modal.style.display = "block"; // ✅ Show only if triggered to
+        }
+
+        console.log("✅ Login form modal injected");
+        attachLoginHandlers();
       }, 200);
     })
     .catch(err => {
@@ -346,9 +349,9 @@ function attachLoginHandlers() {
 }
 
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', injectLoginForm);
+  document.addEventListener('DOMContentLoaded', injectLoginForm(false));
 } else {
-  injectLoginForm();
+  injectLoginForm(false);
 }
 
 
@@ -416,7 +419,7 @@ const observeBackToLogin = setInterval(() => {
     if (modal) modal.remove();
 
     // Re-inject the login form
-    injectLoginForm(); // ⬅️ Calls your main function that loads the login HTML + listeners
+    injectLoginForm(true); // ⬅️ Calls your main function that loads the login HTML + listeners
   });
 }, 300);
 
