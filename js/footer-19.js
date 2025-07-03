@@ -2,7 +2,7 @@
   const footerAlreadyLoaded = document.querySelector('#custom-footer');
   if (footerAlreadyLoaded) return;
 
-  const res = await fetch('https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/footer-18.html');
+  const res = await fetch('https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/footer-19.html');
   const html = await res.text();
   const footer = document.createElement('div');
   footer.innerHTML = html;
