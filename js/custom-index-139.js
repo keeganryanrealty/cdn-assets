@@ -902,8 +902,10 @@ async function injectSaveButtonOnDetailPage() {
 
   // ✅ Save address for Supabase (adjust selector as needed)
   const address = extractAddressFromDetailsPage();
-  sessionStorage.setItem('lead-address', address);
-  
+  btn.dataset.address = address;
+  sessionStorage.setItem('lead-address', address); // Optional, for fallback
+
+
   const btn = document.createElement('a');
   btn.href = '#';
   btn.className = 'custom-save-btn nav-link';
