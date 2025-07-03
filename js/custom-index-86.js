@@ -601,17 +601,18 @@ function injectCustomSaveButtons() {
     const mlsid = originalSave.dataset.mlsid;
     const mls = originalSave.dataset.mls;
 
+    const container = document.createElement('div');
+    container.className = 'custom-save-container';
+
     const saveBtn = document.createElement('a');
     saveBtn.href = 'javascript:void(0)';
     saveBtn.className = 'custom-save-btn';
     saveBtn.dataset.mlsid = mlsid;
     saveBtn.dataset.mls = mls;
-
-    // Match layout and structure of other buttons
     saveBtn.innerHTML = `<i class="fa fa-heart"></i><span>Save</span>`;
 
-    // Insert as the last button (matching original position)
-    wrapper.appendChild(saveBtn);
+    container.appendChild(saveBtn);
+    wrapper.appendChild(container);
   });
 }
 
