@@ -638,6 +638,24 @@ if (document.readyState === 'loading') {
 } else {
   watchForListings();
 }
+// Address Slug
+function extractAddressFromSlug(slug) {
+  const parts = slug.split('/property/')[1]?.split('-') || [];
+
+  if (parts.length < 6) return 'Unknown Address';
+
+  const zip = parts.pop();
+  const state = parts.pop().toUpperCase();
+  const city = capitalize(parts.pop());
+  const streetParts = parts.slice(2); // Skip MLS and MLS ID
+  const street = streetParts.join(' ');
+
+  return `${street}, ${city}, ${state} ${zip}`;
+}
+
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
 // 2. Intercept custom save clicks (and stop redirect)
 document.addEventListener('click', function (e) {
@@ -655,7 +673,7 @@ document.addEventListener('click', function (e) {
   sessionStorage.setItem('lead-mlsid', mlsid);
   sessionStorage.setItem('lead-save-clicked', 'true');
 
-  const address = btn.closest('.listing-box')?.dataset.address || '';
+  const address = btn.closest('.listing-box')?.querySelector('.listing-box-location')?.textContent?.trim() || '';
   sessionStorage.setItem('lead-address', address);
 
   window.supabase.auth.getSession().then(({ data: { session } }) => {
@@ -676,13 +694,17 @@ document.addEventListener('click', function (e) {
 // ✅ Save listing to Supabase
 async function saveListingAfterLogin(listingKey, session) {
   const [mls, mlsid] = listingKey.split('-');
-  const address = sessionStorage.getItem('lead-address') || '';
-  const userId = session.user?.id;
+  const href = btn.closest('.listing-box')?.querySelector('.listing-box-title a')?.getAttribute('href') || '';
+  const address = extractAddressFromSlug(href);
+  sessionStorage.setItem('lead-address', address);
 
-  if (!userId) {
-    console.error("❌ No user ID found.");
-    return;
-  }
+  const userId = session?.user?.id;
+
+if (!userId) {
+  console.error("❌ No user ID found in session:", session);
+  return;
+}
+
 
   const { error } = await window.supabase.from('saved_listings').insert([
     {
@@ -700,6 +722,43 @@ async function saveListingAfterLogin(listingKey, session) {
     // Optional: update UI to "Saved"
   }
 }
+
+// 3. Saved Listings Persistent
+async function highlightSavedListings() {
+  const { data: session } = await window.supabase.auth.getSession();
+
+  const userId = session?.user?.id;
+  if (!userId) return;
+
+  const { data: savedListings, error } = await window.supabase
+    .from('saved_listings')
+    .select('mls_id, mls');
+
+  if (error) {
+    console.error("❌ Failed to fetch saved listings:", error.message);
+    return;
+  }
+
+  savedListings.forEach(({ mls, mls_id }) => {
+    const selector = `.custom-save-btn[data-mls="${mls}"][data-mlsid="${mls_id}"]`;
+    const btn = document.querySelector(selector);
+    if (btn) {
+      const icon = btn.querySelector('.fa');
+      const text = btn.querySelector('span');
+      if (icon) icon.classList.remove('fa-heart');
+      if (icon) icon.classList.add('fa-check');
+      if (text) text.textContent = 'Saved';
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  highlightSavedListings();
+});
+
+
+
+
 
 
 
