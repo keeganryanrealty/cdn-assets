@@ -340,11 +340,10 @@ loginForm.addEventListener('submit', async function (e) {
 
   // 🔍 Check for save intent
   if (sessionStorage.getItem('lead-save-clicked')) {
+  const mls = sessionStorage.getItem('lead-mls') || '';
   const mlsid = sessionStorage.getItem('lead-mlsid') || '';
   const address = sessionStorage.getItem('lead-address') || '';
-  const mls = '133'; // or grab from dataset if needed
   const listingKey = `${mls}-${mlsid}`;
-
   await saveListingAfterLogin(listingKey);
 
   // update button visually
@@ -670,6 +669,7 @@ document.addEventListener('click', function (e) {
   const listingKey = `${mls}-${mlsid}`;
 
   sessionStorage.setItem('lead-mlsid', mlsid);
+  sessionStorage.setItem('lead-mls', mls); 
   sessionStorage.setItem('lead-save-clicked', 'true');
 
   const address = btn.closest('.listing-box')?.querySelector('.listing-box-location')?.textContent?.trim() || '';
@@ -706,6 +706,7 @@ document.addEventListener('click', function (e) {
 async function saveListingAfterLogin(listingKey) {
   const [mls, mlsid] = listingKey.split('-');
   const address = sessionStorage.getItem('lead-address') || '';
+  const address = sessionStorage.getItem('lead-address') || 'Unknown address';
 
   // ✅ Get FRESH session
   const { data: { session }, error: sessionError } = await window.supabase.auth.getSession();
@@ -734,6 +735,12 @@ async function saveListingAfterLogin(listingKey) {
     console.log("ℹ️ Listing already saved:", listingKey);
     return; // Prevent duplicate insert
   }
+
+  // Optional UI update
+const allSaveBtns = document.querySelectorAll(`.custom-save-btn[data-mlsid="${mlsid}"]`);
+allSaveBtns.forEach(btn => {
+  btn.innerHTML = '<i class="fa fa-check"></i><span>Saved</span>';
+});
 
   // ✅ Insert new save
   const { error: insertError } = await window.supabase.from('saved_listings').insert([
