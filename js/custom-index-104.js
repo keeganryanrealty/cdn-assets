@@ -706,43 +706,17 @@ document.addEventListener('click', function (e) {
 async function saveListingAfterLogin(listingKey) {
   const [mls, mlsid] = listingKey.split('-');
   const address = sessionStorage.getItem('lead-address') || '';
-
-  // ✅ Get FRESH session
+  
+  // 🔒 Get the current session
   const { data: { session }, error: sessionError } = await window.supabase.auth.getSession();
-  const userId = session?.user?.id;
-
-  if (!userId) {
-    console.error("❌ No user ID found in session:", sessionError);
+  if (sessionError || !session || !session.user) {
+    console.error("❌ No user session found.");
     return;
   }
 
-  // ✅ Check if already saved
-  const { data: existing, error: fetchError } = await window.supabase
-    .from('saved_listings')
-    .select('id')
-    .eq('user_id', userId)
-    .eq('mls_id', mlsid)
-    .eq('mls', mls)
-    .maybeSingle();
+  const userId = session.user.id;
 
-  if (fetchError) {
-    console.error("❌ Failed to check existing listing:", fetchError.message);
-    return;
-  }
-
-  if (existing) {
-    console.log("ℹ️ Listing already saved:", listingKey);
-    return; // Prevent duplicate insert
-  }
-
-  // Optional UI update
-const allSaveBtns = document.querySelectorAll(`.custom-save-btn[data-mlsid="${mlsid}"]`);
-allSaveBtns.forEach(btn => {
-  btn.innerHTML = '<i class="fa fa-check"></i><span>Saved</span>';
-});
-
-  // ✅ Insert new save
-  const { error: insertError } = await window.supabase.from('saved_listings').insert([
+  const { error } = await window.supabase.from('saved_listings').insert([
     {
       user_id: userId,
       mls_id: mlsid,
@@ -751,10 +725,16 @@ allSaveBtns.forEach(btn => {
     }
   ]);
 
-  if (insertError) {
-    console.error("❌ Insert failed:", insertError.message);
+  if (error) {
+    console.error("❌ Failed to save listing:", error.message);
   } else {
-    console.log("✅ Listing saved to Supabase:", listingKey);
+    console.log("✅ Listing saved to Supabase:", `${mls}-${mlsid}`);
+    
+    // Update the button UI
+    const allSaveBtns = document.querySelectorAll(`.custom-save-btn[data-mlsid="${mlsid}"]`);
+    allSaveBtns.forEach(btn => {
+      btn.innerHTML = '<i class="fa fa-check"></i><span>Saved</span>';
+    });
   }
 }
 
