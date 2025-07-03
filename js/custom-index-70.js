@@ -266,80 +266,78 @@ function injectLoginForm() {
   fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form-5.html")
     .then(response => response.text())
     .then(html => {
-      const wrapper = document.createElement("div");
-      wrapper.innerHTML = html;
+      const modal = document.getElementById("lead-form-modal");
 
-      const footer = document.getElementById("footer");
-      if (footer && footer.parentNode) {
-        footer.parentNode.insertBefore(wrapper, footer);
+      if (modal) {
+        // 🧼 Clear & replace existing content
+        modal.innerHTML = html;
+        modal.style.display = "block"; // make sure it's visible
       } else {
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = html;
         document.body.appendChild(wrapper);
-        console.warn("⚠️ Footer not found — content injected at end of body.");
+        console.warn("⚠️ lead-form-modal not found, appended fresh.");
       }
 
       console.log("✅ Login form modal injected");
 
-      // Observe login submit
-      const observeLoginSubmit = setInterval(() => {
-        const loginForm = document.getElementById('login-form');
-        if (!loginForm) return;
-
-        clearInterval(observeLoginSubmit);
-
-        loginForm.addEventListener('submit', async function (e) {
-          e.preventDefault();
-
-          const email = loginForm.email.value.trim();
-          const password = loginForm.password.value;
-
-          const { data, error } = await window.supabase.auth.signInWithPassword({ email, password });
-          const errorBox = document.getElementById('login-error-message');
-
-          if (error) {
-            if (errorBox) {
-              errorBox.textContent = formatSupabaseError(error);
-              errorBox.style.display = 'block';
-            }
-            return;
-          }
-
-          if (errorBox) errorBox.style.display = 'none';
-
-          console.log("✅ Logged in as:", data.user.email);
-          sessionStorage.setItem('leadCaptured', 'true');
-
-          const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
-          const lastViewed = viewed[viewed.length - 1];
-          if (lastViewed) {
-            window.location.href = lastViewed;
-          } else {
-            window.location.reload();
-          }
-        });
-      }, 500);
-
-      // Intercept view clicks
-      const recheckInterval = setInterval(() => {
-        setupViewDetailsInterception();
-        setupMapPopupInterception();
-      }, 1000);
-      setTimeout(() => clearInterval(recheckInterval), 30000);
-
-      // Watch for "Create Account"
-      const observeCreateClick = setInterval(() => {
-        const createBtn = document.getElementById("create-account-btn");
-        if (!createBtn) return;
-
-        clearInterval(observeCreateClick);
-        createBtn.addEventListener("click", () => {
-          console.log("🌀 Switching to Create Account form...");
-          swapToSignupForm();
-        });
-      }, 500);
+      attachLoginHandlers(); // 👇 Move your submit listeners here
     })
     .catch(err => {
       console.error("❌ Failed to load login form:", err);
     });
+}
+
+function attachLoginHandlers() {
+  const observeLoginSubmit = setInterval(() => {
+    const loginForm = document.getElementById('login-form');
+    if (!loginForm) return;
+
+    clearInterval(observeLoginSubmit);
+
+    loginForm.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const email = loginForm.email.value.trim();
+      const password = loginForm.password.value;
+
+      const { data, error } = await window.supabase.auth.signInWithPassword({ email, password });
+      const errorBox = document.getElementById('login-error-message');
+
+      if (error) {
+        if (errorBox) {
+          errorBox.textContent = formatSupabaseError(error);
+          errorBox.style.display = 'block';
+        }
+        return;
+      }
+
+      if (errorBox) errorBox.style.display = 'none';
+
+      console.log("✅ Logged in as:", data.user.email);
+      sessionStorage.setItem('leadCaptured', 'true');
+
+      const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
+      const lastViewed = viewed[viewed.length - 1];
+      if (lastViewed) {
+        window.location.href = lastViewed;
+      } else {
+        window.location.reload();
+      }
+    });
+  }, 500);
+
+  // Reattach signup button logic
+  const observeCreateClick = setInterval(() => {
+    const createBtn = document.getElementById("create-account-btn");
+    if (!createBtn) return;
+
+    clearInterval(observeCreateClick);
+    createBtn.addEventListener("click", () => {
+      console.log("🌀 Switching to Create Account form...");
+      swapToSignupForm();
+    });
+  }, 500);
 }
 
 document.addEventListener("DOMContentLoaded", injectLoginForm);
@@ -402,10 +400,9 @@ const observeBackToLogin = setInterval(() => {
 
   backBtn.addEventListener("click", () => {
     console.log("🔁 Switching back to login form...");
-    injectLoginForm(); // ⬅️ Loads the full login form + reattaches all logic
+    injectLoginForm(); // 👈 now reloads login HTML AND re-attaches logic
   });
 }, 300);
-
 
 
       const recheck = setInterval(() => {
