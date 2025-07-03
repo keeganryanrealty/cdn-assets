@@ -733,19 +733,19 @@ transition: all 0s ease;
 
 /* ========== CUSTOM SAVE BUTTON ========== */
 .custom-save-btn {
-  all: unset; /* reset native button styling */
+  all: unset;
   background-color: rgba(179, 0, 0, 0.85) !important;
   color: #fff !important;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   font-size: 0.95em;
   font-weight: 600;
-  text-align: left;
-  height: 33.33333333%;
-  padding-left: 20px;
+  padding: 10px 20px;
   width: 100%;
   cursor: pointer;
-  z-index: 1001 !important;
+  margin-top: 5px;
+  z-index: 999;
 }
 
 .custom-save-btn:hover {
