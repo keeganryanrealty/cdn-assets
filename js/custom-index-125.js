@@ -598,6 +598,7 @@ function injectCustomSaveButtons() {
     const originalSave = listingBox.querySelector('.saveListing');
     if (!originalSave) return;
 
+
     const mlsid = originalSave.dataset.mlsid;
     const mls = originalSave.dataset.mls;
     const stack = listingBox.querySelector('.listing-box-image-links');
@@ -882,10 +883,21 @@ if (isListingPage()) {
 
 
 
-// Initial run in case elements are already on the page
-document.querySelectorAll('.saveListing').forEach(el => {
-  el.style.setProperty('display', 'none', 'important');
-});
+// Hide only .saveListing buttons inside the nav on detail pages
+function hideSystemSaveButtonsOnDetailPage() {
+  const path = window.location.pathname;
+  const isDetailPage = path.includes('/property/') || path.includes('/details.php');
+
+  if (!isDetailPage) return;
+
+  document.querySelectorAll('.saveListing').forEach(el => {
+    el.style.setProperty('display', 'none', 'important');
+  });
+}
+
+// Run after your button injection
+setTimeout(hideSystemSaveButtonsOnDetailPage, 1000);
+
 
 // Recheck every 1.5 seconds for dynamically loaded elements
 const intervalId = setInterval(() => {
