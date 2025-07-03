@@ -846,25 +846,25 @@ function injectSaveButtonOnDetailPage() {
         const { data: { session: newSession } } = await window.supabase.auth.getSession();
         if (newSession) {
           window.removeEventListener('supabase:auth:login', onLogin);
-          saveListingAfterLogin(listingKey, newSession.user.id, address);
-          markButtonAsSaved(btn);
+          await saveListingAfterLogin(listingKey, session.user.id, address);
+          updateSaveButtonsUI(mls, mlsid);
         }
       };
 
       window.addEventListener('supabase:auth:login', onLogin);
     } else {
-      saveListingAfterLogin(listingKey, session.user.id, address);
-      markButtonAsSaved(btn);
+      await saveListingAfterLogin(listingKey, newSession.user.id, address);
+      updateSaveButtonsUI(mls, mlsid);
     }
   });
 }
 
 // 🧠 Mutation observer to keep it injected
-const observer = new MutationObserver(() => {
+const detailObserver = new MutationObserver(() => {
   injectSaveButtonOnDetailPage();
 });
 
-observer.observe(document.body, {
+detailObserver.observe(document.body, {
   childList: true,
   subtree: true,
 });
