@@ -604,8 +604,7 @@ function injectCustomSaveButtons() {
     const container = document.createElement('div');
     container.className = 'custom-save-container';
 
-    const saveBtn = document.createElement('a');
-    saveBtn.href = 'javascript:void(0)';
+    const saveBtn = document.createElement('button');
     saveBtn.className = 'custom-save-btn';
     saveBtn.dataset.mlsid = mlsid;
     saveBtn.dataset.mls = mls;
