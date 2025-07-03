@@ -644,6 +644,8 @@ document.addEventListener('click', function (e) {
   if (!btn) return;
 
   e.preventDefault();
+  e.stopPropagation();
+  e.stopImmediatePropagation(); // 🔥 Ensures KVCore doesn’t hijack this
 
   const mlsid = btn.dataset.mlsid;
   const mls = btn.dataset.mls;
@@ -651,11 +653,11 @@ document.addEventListener('click', function (e) {
 
   sessionStorage.setItem('lead-mlsid', mlsid);
   sessionStorage.setItem('lead-save-clicked', 'true');
-  // Optionally set address
+
+  // Optional: Set address
   const address = btn.closest('.listing-box')?.dataset.address || '';
   sessionStorage.setItem('lead-address', address);
 
-  // If not logged in
   window.supabase.auth.getSession().then(({ data: { session } }) => {
     if (!session) {
       console.log("🔒 User not logged in — opening modal");
@@ -669,7 +671,6 @@ document.addEventListener('click', function (e) {
     }
   });
 }, true);
-
 
 
 
