@@ -825,7 +825,7 @@ async function injectSaveButtonOnDetailPage() {
   if (!isListingPage() || hasInjectedSaveBtn) return;
 
   await new Promise(res => setTimeout(res, 500));
-  const navList = await waitForSelector('.nav-style-primary').catch(() => null);
+  const navList = await waitForSelector('.col-lg-3 .widget:not(.hidden-sm-down) .nav-style-primary').catch(() => null);
 
   if (!navList) {
     console.log('❌ Could not find nav list');
