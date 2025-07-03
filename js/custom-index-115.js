@@ -768,123 +768,124 @@ if (document.readyState === 'loading') {
 // ==========================
 // 6. Inject Save Buttons on Listing Pages
 // ==========================
-function injectSaveButtonOnDetailPage() {
-  const navList = document.querySelector('.Widget ul.nav-style-primary');
-  if (!navList || navList.querySelector('.custom-save-btn')) return;
+function waitForElement(selector, timeout = 5000) {
+  return new Promise((resolve, reject) => {
+    const start = Date.now();
 
-  // Get MLS & MLS ID from URL
-  const path = window.location.pathname;
-  const params = new URLSearchParams(window.location.search);
-  let mls = '';
-  let mlsid = '';
+    const check = () => {
+      const el = document.querySelector(selector);
+      if (el) return resolve(el);
+      if (Date.now() - start > timeout) return reject(new Error('Element not found'));
+      requestAnimationFrame(check);
+    };
 
-  if (path.includes('/property/')) {
-    const slug = path.split('/property/')[1];
-    const parts = slug.split('-');
-    if (parts.length >= 3) {
-      mls = parts[0];
-      mlsid = parts[1];
-    }
-  } else if (path.includes('/details.php')) {
-    mls = params.get('mls');
-    mlsid = params.get('mlsid');
-  }
-
-  if (!mls || !mlsid) return;
-
-  const listingKey = `${mls}-${mlsid}`;
-  let address = document.querySelector('h1')?.textContent?.trim();
-  if (!address || address.toLowerCase().includes('undefined') || address.length < 5) {
-    const slug = window.location.pathname;
-    address = extractAddressFromSlug(slug);
-  }
-
-  // Create button
-  const li = document.createElement('li');
-  li.className = 'nav-item';
-
-  const btn = document.createElement('a');
-  btn.href = 'javascript:void(0)';
-  btn.className = 'custom-save-btn nav-link';
-  btn.dataset.mls = mls;
-  btn.dataset.mlsid = mlsid;
-  btn.innerHTML = `<i class="fa fa-heart"></i> <span>Save Listing</span>`;
-
-  li.appendChild(btn);
-  navList.prepend(li);
-
-  // Check saved state
-  window.supabase.auth.getSession().then(async ({ data: { session } }) => {
-    const userId = session?.user?.id;
-    if (!userId) return;
-
-    const { data: saved } = await window.supabase
-      .from('saved_listings')
-      .select('id')
-      .eq('mls_id', mlsid)
-      .eq('mls', mls)
-      .eq('user_id', userId)
-      .maybeSingle();
-
-    if (saved) markButtonAsSaved(btn);
+    check();
   });
+}
 
-  // Click handler
-  btn.addEventListener('click', async (e) => {
-    e.preventDefault();
+async function injectSaveButtonOnDetailPage() {
+  try {
+    const navList = await waitForElement('.Widget ul.nav-style-primary');
+    if (navList.querySelector('.custom-save-btn')) return;
 
-    const { data: { session } } = await window.supabase.auth.getSession();
+    // Get MLS & MLS ID from URL
+    const path = window.location.pathname;
+    const params = new URLSearchParams(window.location.search);
+    let mls = '';
+    let mlsid = '';
 
-    if (!session) {
-      const modal = document.getElementById('lead-form-modal');
-      if (modal) {
-        modal.querySelector('h2').textContent = 'Login to Save Listing';
-        modal.style.display = 'block';
+    if (path.includes('/property/')) {
+      const slug = path.split('/property/')[1];
+      const parts = slug.split('-');
+      if (parts.length >= 3) {
+        mls = parts[0];
+        mlsid = parts[1];
       }
+    } else if (path.includes('/details.php')) {
+      mls = params.get('mls');
+      mlsid = params.get('mlsid');
+    }
 
-      const onLogin = async () => {
-        const { data: { session: newSession } } = await window.supabase.auth.getSession();
-        if (newSession) {
-          window.removeEventListener('supabase:auth:login', onLogin);
-          await saveListingAfterLogin(listingKey, newSession.user.id, address);
-          updateSaveButtonsUI(mls, mlsid);
+    if (!mls || !mlsid) return;
+
+    const listingKey = `${mls}-${mlsid}`;
+    let address = document.querySelector('h1')?.textContent?.trim();
+    if (!address || address.toLowerCase().includes('undefined')) {
+      const slug = window.location.pathname;
+      address = extractAddressFromSlug(slug);
+    }
+
+    // Create Save button
+    const li = document.createElement('li');
+    li.className = 'nav-item';
+
+    const btn = document.createElement('a');
+    btn.href = 'javascript:void(0)';
+    btn.className = 'custom-save-btn nav-link';
+    btn.dataset.mls = mls;
+    btn.dataset.mlsid = mlsid;
+    btn.innerHTML = `<i class="fa fa-heart"></i> <span>Save Listing</span>`;
+    li.appendChild(btn);
+    navList.prepend(li);
+
+    // Check if already saved
+    const { data: { session } } = await window.supabase.auth.getSession();
+    const userId = session?.user?.id;
+    if (userId) {
+      const { data: saved } = await window.supabase
+        .from('saved_listings')
+        .select('id')
+        .eq('mls_id', mlsid)
+        .eq('mls', mls)
+        .eq('user_id', userId)
+        .maybeSingle();
+
+      if (saved) markButtonAsSaved(btn);
+    }
+
+    // Click handler
+    btn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      const { data: { session } } = await window.supabase.auth.getSession();
+      if (!session) {
+        const modal = document.getElementById('lead-form-modal');
+        if (modal) {
+          modal.querySelector('h2').textContent = 'Login to Save Listing';
+          modal.style.display = 'block';
         }
-      };
 
-      window.addEventListener('supabase:auth:login', onLogin);
-    } else {
-  await saveListingAfterLogin(listingKey, session.user.id, address);
-      updateSaveButtonsUI(mls, mlsid);
-    }
-  });
+        const onLogin = async () => {
+          const { data: { session: newSession } } = await window.supabase.auth.getSession();
+          if (newSession) {
+            window.removeEventListener('supabase:auth:login', onLogin);
+            await saveListingAfterLogin(listingKey, newSession.user.id, address);
+            updateSaveButtonsUI(mls, mlsid);
+          }
+        };
+
+        window.addEventListener('supabase:auth:login', onLogin);
+      } else {
+        await saveListingAfterLogin(listingKey, session.user.id, address);
+        updateSaveButtonsUI(mls, mlsid);
+      }
+    });
+  } catch (err) {
+    console.warn('🕓 Save button not injected — nav list not found in time');
+  }
 }
 
-// 🧠 Mutation observer to keep it injected
-function waitForNavListAndInject() {
-  const target = document.querySelector('.Widget');
-  if (!target) return;
+// Run it immediately and use MutationObserver to retry if needed
+injectSaveButtonOnDetailPage();
 
-  const observer = new MutationObserver((mutations, obs) => {
-    const navList = target.querySelector('ul.nav-style-primary');
-    if (navList && !navList.querySelector('.custom-save-btn')) {
-      console.log("🎯 Injecting save button into nav list...");
-      injectSaveButtonOnDetailPage(); // 👈 safe to run now
-      obs.disconnect(); // ✅ stop observing once injected
-    }
-  });
+const detailObserver = new MutationObserver(() => {
+  injectSaveButtonOnDetailPage();
+});
+detailObserver.observe(document.body, { childList: true, subtree: true });
 
-  observer.observe(target, {
-    childList: true,
-    subtree: true,
-  });
-}
 
-// Run once 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', waitForNavListAndInject);
-} else {
-  waitForNavListAndInject();
-}
+
+
+
 
 
 
