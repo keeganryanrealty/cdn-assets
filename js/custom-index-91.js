@@ -588,12 +588,12 @@ if (window.location.pathname.includes("/property/")) {
 
 
 
-// SAVE LISTING MECHANICS
-// 1. Inject Save Button
+// ==== SAVE LISTING MECHANICS ====
+
+// 1. Inject Custom Save Button
 function injectCustomSaveButtons() {
   document.querySelectorAll('.listing-box').forEach(listingBox => {
-    // Prevent duplicates
-    if (listingBox.querySelector('.custom-save-overlay')) return;
+    if (listingBox.querySelector('.custom-save-btn')) return;
 
     const originalSave = listingBox.querySelector('.saveListing');
     if (!originalSave) return;
@@ -601,73 +601,45 @@ function injectCustomSaveButtons() {
     const mlsid = originalSave.dataset.mlsid;
     const mls = originalSave.dataset.mls;
 
-    // ✅ STEP 1: Inject fake button inside the visual stack
+    const btn = document.createElement('a');
+    btn.href = 'javascript:void(0)';
+    btn.className = 'custom-save-btn';
+    btn.dataset.mlsid = mlsid;
+    btn.dataset.mls = mls;
+    btn.innerHTML = `<i class="fa fa-heart"></i><span style="margin-left: 8px;">Save</span>`;
+
     const stack = listingBox.querySelector('.listing-box-image-links');
-    if (!stack) return;
-
-    const fakeBtn = document.createElement('a');
-    fakeBtn.href = 'javascript:void(0)';
-    fakeBtn.className = 'custom-save-fake';
-    fakeBtn.innerHTML = `<i class="fa fa-heart"></i><span style="margin-left: 8px;">Save</span>`;
-    stack.appendChild(fakeBtn);
-
-    // ✅ STEP 2: Inject invisible overlay for real logic
-    const overlay = document.createElement('div');
-    overlay.className = 'custom-save-overlay';
-    overlay.dataset.mlsid = mlsid;
-    overlay.dataset.mls = mls;
-    listingBox.appendChild(overlay);
+    if (stack) stack.appendChild(btn);
   });
 }
 
-
-
-function watchForListings() {
-  const observer = new MutationObserver(() => {
-    injectCustomSaveButtons();
-  });
-
-  const targetNode = document.body; // you can narrow this to the listings container if known
-
-  observer.observe(targetNode, {
-    childList: true,
-    subtree: true,
-  });
-
-  // Initial inject in case some listings are already loaded
-  injectCustomSaveButtons();
-}
-
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', watchForListings);
-} else {
-  watchForListings();
-}
-
-
-// 2. Intecept Custom Save Button Clicks
+// 2. Intercept Custom Save Button Clicks
 document.addEventListener('click', function (e) {
   const btn = e.target.closest('.custom-save-btn');
   if (!btn) return;
 
   e.preventDefault();
   e.stopPropagation();
-  e.stopImmediatePropagation();
 
   const mlsid = btn.dataset.mlsid;
   const mls = btn.dataset.mls;
   const listingKey = `${mls}-${mlsid}`;
 
+  const listingBox = btn.closest('.listing-box');
+  if (!listingBox) return;
+
+  // 🧠 Temporarily remove data-link to prevent redirect
+  const originalDataLink = listingBox.getAttribute('data-link');
+  listingBox.removeAttribute('data-link');
+
   sessionStorage.setItem('lead-mlsid', mlsid);
   sessionStorage.setItem('lead-save-clicked', 'true');
 
-  // Optionally set address if you want to log it
-  const address = btn.closest('.listing-box')?.dataset.address || '';
+  const address = listingBox.dataset.address || '';
   sessionStorage.setItem('lead-address', address);
 
   window.supabase.auth.getSession().then(({ data: { session } }) => {
     if (!session) {
-      console.log("🔒 User not logged in — opening modal");
       const modal = document.getElementById('lead-form-modal');
       if (modal) {
         modal.querySelector('h2').textContent = 'Login to Save Listing';
@@ -676,9 +648,28 @@ document.addEventListener('click', function (e) {
     } else {
       saveListingAfterLogin(listingKey);
     }
+
+    // 🔁 Restore data-link after logic completes
+    if (originalDataLink) {
+      setTimeout(() => {
+        listingBox.setAttribute('data-link', originalDataLink);
+      }, 200);
+    }
   });
 }, true);
 
+// 3. Watch for DOM Updates (listings load dynamically)
+function watchForListings() {
+  const observer = new MutationObserver(injectCustomSaveButtons);
+  observer.observe(document.body, { childList: true, subtree: true });
+  injectCustomSaveButtons();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', watchForListings);
+} else {
+  watchForListings();
+}
 
 
 
