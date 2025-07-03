@@ -706,7 +706,6 @@ document.addEventListener('click', function (e) {
 async function saveListingAfterLogin(listingKey) {
   const [mls, mlsid] = listingKey.split('-');
   const address = sessionStorage.getItem('lead-address') || '';
-  const address = sessionStorage.getItem('lead-address') || 'Unknown address';
 
   // ✅ Get FRESH session
   const { data: { session }, error: sessionError } = await window.supabase.auth.getSession();
