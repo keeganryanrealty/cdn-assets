@@ -338,7 +338,12 @@ function attachLoginHandlers() {
   }, 500);
 }
 
-document.addEventListener("DOMContentLoaded", injectLoginForm);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', injectLoginForm);
+} else {
+  injectLoginForm();
+}
+
 
 // Error formatter functions should be defined OUTSIDE
 function formatSupabaseError(error) {
