@@ -621,15 +621,18 @@ function watchForListings() {
 }
 
 function extractAddressFromSlug(slug) {
-  const parts = slug.split('/property/')[1]?.split('-') || [];
+  const path = slug.split('/property/')[1];
+  if (!path) return 'Unknown Address';
 
-  if (parts.length < 6) return 'Unknown Address';
+  const parts = path.split('-');
+  if (parts.length < 5) return 'Unknown Address';
 
+  // Assume format: MLS-MLSID-[Street Parts]-City-State-Zip
   const zip = parts.pop();
   const state = parts.pop().toUpperCase();
   const city = capitalize(parts.pop());
-  const streetParts = parts.slice(2); // Skip MLS and MLS ID
-  const street = streetParts.join(' ');
+  const streetParts = parts.slice(2); // Skip MLS + MLSID
+  const street = streetParts.map(capitalize).join(' ');
 
   return `${street}, ${city}, ${state} ${zip}`;
 }
