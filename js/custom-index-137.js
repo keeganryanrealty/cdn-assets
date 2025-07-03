@@ -817,6 +817,21 @@ function extractMLSFromURL() {
   return { mls, mlsid };
 }
 
+function extractAddressFromDetailsPage() {
+  const keyEls = document.querySelectorAll('.listing-detail-attribute');
+
+  for (const el of keyEls) {
+    const key = el.querySelector('.key')?.textContent?.trim();
+    const value = el.querySelector('.value')?.textContent?.trim();
+
+    if (key === 'Address' && value) {
+      return value;
+    }
+  }
+
+  return 'Unknown Address';
+}
+
 function waitForSelector(selector, timeout = 5000) {
   return new Promise((resolve, reject) => {
     const interval = 100;
@@ -879,10 +894,8 @@ async function injectSaveButtonOnDetailPage() {
   const { mls, mlsid } = extractMLSFromURL(); // ✅ Reuse helper
 
   // ✅ Save address for Supabase (adjust selector as needed)
-  const addressEl = document.querySelector('.listing-attributes-main .listing-detail-attribute .value');
-  const address = addressEl?.textContent?.trim() || 'Unknown Address';
+  const address = extractAddressFromDetailsPage();
   sessionStorage.setItem('lead-address', address);
-
   
   const btn = document.createElement('a');
   btn.href = '#';
