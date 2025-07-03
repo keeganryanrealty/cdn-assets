@@ -591,28 +591,26 @@ if (window.location.pathname.includes("/property/")) {
 // SAVE LISTING MECHANICS
 // 1. Inject Save Button
 function injectCustomSaveButtons() {
-  document.querySelectorAll('.listing-box-image-links').forEach(wrapper => {
-    // Prevent duplicates
-    if (wrapper.querySelector('.custom-save-btn')) return;
+  document.querySelectorAll('.listing-box').forEach(listingBox => {
+    if (listingBox.querySelector('.custom-save-btn')) return;
 
-    const originalSave = wrapper.querySelector('.saveListing');
+    const originalSave = listingBox.querySelector('.saveListing');
     if (!originalSave) return;
 
     const mlsid = originalSave.dataset.mlsid;
     const mls = originalSave.dataset.mls;
 
-    const container = document.createElement('div');
-    container.className = 'custom-save-container';
+    const btn = document.createElement('button');
+    btn.className = 'custom-save-btn';
+    btn.dataset.mlsid = mlsid;
+    btn.dataset.mls = mls;
+    btn.innerHTML = `<i class="fa fa-heart"></i><span style="margin-left: 8px;">Save</span>`;
 
-    const saveBtn = document.createElement('button');
-    saveBtn.className = 'custom-save-btn';
-    saveBtn.dataset.mlsid = mlsid;
-    saveBtn.dataset.mls = mls;
-    saveBtn.innerHTML = `<i class="fa fa-heart"></i><span>Save</span>`;
-    wrapper.appendChild(saveBtn);
-
+    // ✅ Inject it after the button stack, but inside listingBox
+    listingBox.appendChild(btn);
   });
 }
+
 
 function watchForListings() {
   const observer = new MutationObserver(() => {
