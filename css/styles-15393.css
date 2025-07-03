@@ -421,13 +421,12 @@ transition: all 0s ease;
 /* ✅ Override for CONTACT / OFFICE links — white by default */
 #custom-footer .footer-contact a,
 #custom-footer .footer-office a {
-  color: #fff;
+  color: #fff !important;
 }
 
-/* Hover: grey on hover for those */
 #custom-footer .footer-contact a:hover,
 #custom-footer .footer-office a:hover {
-  color: #ccc;
+  color: #ccc !important;
 }
 
 /* Top Section: Logo + Socials */
