@@ -694,17 +694,33 @@ document.addEventListener('click', function (e) {
 // ✅ Save listing to Supabase
 async function saveListingAfterLogin(listingKey, session, btn) {
   const [mls, mlsid] = listingKey.split('-');
+
   const href = btn.closest('.listing-box')?.querySelector('.listing-box-title a')?.getAttribute('href') || '';
   const address = extractAddressFromSlug(href);
-  sessionStorage.setItem('lead-address', address);
-
   const userId = session?.user?.id;
 
-if (!userId) {
-  console.error("❌ No user ID found in session:", session);
-  return;
-}
+  if (!userId) {
+    console.error("❌ No user ID found in session:", session);
+    return;
+  }
 
+  // ✅ Check if already saved
+  const { data: existing, error: selectError } = await window.supabase
+    .from('saved_listings')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('mls_id', mlsid)
+    .limit(1);
+
+  if (selectError) {
+    console.error("❌ Error checking for existing saved listing:", selectError.message);
+    return;
+  }
+
+  if (existing && existing.length > 0) {
+    console.log("⚠️ Listing already saved:", listingKey);
+    return; // or show a "Saved" toast or icon toggle
+  }
 
   const { error } = await window.supabase.from('saved_listings').insert([
     {
@@ -719,7 +735,7 @@ if (!userId) {
     console.error("❌ Failed to save listing:", error.message);
   } else {
     console.log("✅ Listing saved to Supabase:", listingKey);
-    // Optional: update UI to "Saved"
+    markButtonAsSaved(btn); // ✅ optional: visually update button
   }
 }
 
@@ -756,6 +772,44 @@ document.addEventListener('DOMContentLoaded', () => {
   highlightSavedListings();
 });
 
+// Mark Listings as Saved
+async function markSavedListingsOnPage() {
+  const { data: session } = await window.supabase.auth.getSession();
+  const userId = session?.session?.user?.id;
+  if (!userId) return;
+
+  const { data: savedListings, error } = await window.supabase
+    .from('saved_listings')
+    .select('mls_id, mls')
+    .eq('user_id', userId);
+
+  if (error) {
+    console.error("❌ Error fetching saved listings:", error.message);
+    return;
+  }
+
+  const savedKeys = new Set(savedListings.map(l => `${l.mls}-${l.mls_id}`));
+
+  document.querySelectorAll('.custom-save-btn').forEach(btn => {
+    const mlsid = btn.dataset.mlsid;
+    const mls = btn.dataset.mls;
+    const key = `${mls}-${mlsid}`;
+    if (savedKeys.has(key)) {
+      markButtonAsSaved(btn);
+    }
+  });
+}
+
+function markButtonAsSaved(btn) {
+  btn.classList.add('saved'); // style in CSS
+  btn.innerHTML = `<i class="fa fa-check"></i><span style="margin-left: 8px;">Saved</span>`;
+}
+
+window.supabase.auth.getSession().then(({ data: { session } }) => {
+  if (session) {
+    markSavedListingsOnPage();
+  }
+});
 
 
 
