@@ -990,12 +990,18 @@ const intervalId = setInterval(() => {
 setTimeout(() => clearInterval(intervalId), 30000);
 
 // ==========================
-// Modify Listing Page Nav Links (Improved)
+// Modify Listing Page Nav Links (Targeting Visible Only)
 // ==========================
 if (isListingPage()) {
   const navEditInterval = setInterval(() => {
-    // Hide unwanted nav links
-    document.querySelectorAll('a.nav-link').forEach(link => {
+    // ✅ Only target the VISIBLE nav-style-primary within widget.hidden-sm-down
+    const navList = document.querySelector(
+      '.col-sm-12.col-md-12.col-lg-3 .widget.hidden-sm-down .nav-style-primary'
+    );
+    if (!navList) return;
+
+    // Hide unwanted nav items
+    navList.querySelectorAll('a.nav-link').forEach(link => {
       const text = link.textContent?.trim()?.toLowerCase();
 
       if (
@@ -1007,8 +1013,8 @@ if (isListingPage()) {
       }
     });
 
-    // Ask Agent ➜ /pages/contact
-    const askLink = document.querySelector('a.ask-question.nav-link');
+    // Intercept "Ask agent a question"
+    const askLink = navList.querySelector('a.ask-question.nav-link');
     if (askLink) {
       const newLink = askLink.cloneNode(true);
       newLink.href = '/pages/contact';
@@ -1020,8 +1026,8 @@ if (isListingPage()) {
       askLink.replaceWith(newLink);
     }
 
-    // Request Showing ➜ Calendly
-    const showLink = document.querySelector('a.showing-request.nav-link');
+    // Intercept "Request Showing"
+    const showLink = navList.querySelector('a.showing-request.nav-link');
     if (showLink) {
       const newLink = showLink.cloneNode(true);
       newLink.href = 'https://calendly.com/keegan-ryan-exprealty/schedule-a-consultation';
