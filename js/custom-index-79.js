@@ -538,6 +538,80 @@ if (window.location.pathname.includes("/property/")) {
 
 
 
+
+
+
+// SAVE LISTING MECHANICS
+// 1. Inject Save Button
+function injectCustomSaveButtons() {
+  document.querySelectorAll('.listing-box-image-links').forEach(wrapper => {
+    // Prevent duplicate buttons
+    if (wrapper.querySelector('.custom-save-btn')) return;
+
+    const saveBtn = document.createElement('a');
+    saveBtn.href = 'javascript:void(0)';
+    saveBtn.className = 'custom-save-btn';
+    saveBtn.innerHTML = '<i class="fa fa-heart"></i><span>Save</span>';
+    saveBtn.style.marginLeft = '10px'; // adjust styling as needed
+
+    const originalSave = wrapper.querySelector('.saveListing');
+    if (originalSave) {
+      saveBtn.dataset.mls = originalSave.dataset.mls;
+      saveBtn.dataset.mlsid = originalSave.dataset.mlsid;
+    }
+
+    wrapper.appendChild(saveBtn);
+  });
+}
+
+// 2. Intecept Custom Save Button Clicks
+document.addEventListener('click', function (e) {
+  const btn = e.target.closest('.custom-save-btn');
+  if (!btn) return;
+
+  e.preventDefault();
+
+  const mlsid = btn.dataset.mlsid;
+  const mls = btn.dataset.mls;
+
+  const viewed = JSON.parse(sessionStorage.getItem('savedProperties') || '[]');
+  const listingKey = `${mls}-${mlsid}`;
+
+  // If not logged in
+  window.supabase.auth.getSession().then(({ data: { session } }) => {
+    if (!session) {
+      console.log("🔒 User not logged in — opening modal");
+      sessionStorage.setItem('lead-mlsid', mlsid);
+      sessionStorage.setItem('lead-save-clicked', 'true');
+      showLeadForm(() => {
+        saveListingAfterLogin(listingKey);
+      });
+    } else {
+      saveListingAfterLogin(listingKey);
+    }
+  });
+}, true);
+
+// Actual save logic
+function saveListingAfterLogin(listingKey) {
+  const saved = JSON.parse(sessionStorage.getItem('savedProperties') || '[]');
+  if (!saved.includes(listingKey)) {
+    saved.push(listingKey);
+    sessionStorage.setItem('savedProperties', JSON.stringify(saved));
+    console.log("💾 Saved listing:", listingKey);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
 // Initial run in case elements are already on the page
 document.querySelectorAll('.saveListing').forEach(el => {
   el.style.setProperty('display', 'none', 'important');
