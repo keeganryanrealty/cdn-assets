@@ -262,88 +262,87 @@ function showLeadForm(onSubmit) {
 
 
 // 3. Inject Login Form HTML and Watch for Create Account Click ===
-(function () {
-  document.addEventListener("DOMContentLoaded", function () {
-    // Load LOGIN form first
-    fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form-5.html")
-      .then(response => response.text())
-      .then(html => {
-        const wrapper = document.createElement("div");
-        wrapper.innerHTML = html;
+function injectLoginForm() {
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form-5.html")
+    .then(response => response.text())
+    .then(html => {
+      const wrapper = document.createElement("div");
+      wrapper.innerHTML = html;
 
-        const footer = document.getElementById("footer");
-        if (footer && footer.parentNode) {
-          footer.parentNode.insertBefore(wrapper, footer);
-        } else {
-          document.body.appendChild(wrapper);
-          console.warn("⚠️ Footer not found — content injected at end of body.");
-        }
+      const footer = document.getElementById("footer");
+      if (footer && footer.parentNode) {
+        footer.parentNode.insertBefore(wrapper, footer);
+      } else {
+        document.body.appendChild(wrapper);
+        console.warn("⚠️ Footer not found — content injected at end of body.");
+      }
 
-        console.log("✅ Login form modal injected");
+      console.log("✅ Login form modal injected");
 
-        // Observe login submit
-        const observeLoginSubmit = setInterval(() => {
-          const loginForm = document.getElementById('login-form');
-          if (!loginForm) return;
+      // Observe login submit
+      const observeLoginSubmit = setInterval(() => {
+        const loginForm = document.getElementById('login-form');
+        if (!loginForm) return;
 
-          clearInterval(observeLoginSubmit);
+        clearInterval(observeLoginSubmit);
 
-          loginForm.addEventListener('submit', async function (e) {
-            e.preventDefault();
+        loginForm.addEventListener('submit', async function (e) {
+          e.preventDefault();
 
-            const email = loginForm.email.value.trim();
-            const password = loginForm.password.value;
+          const email = loginForm.email.value.trim();
+          const password = loginForm.password.value;
 
-            const { data, error } = await window.supabase.auth.signInWithPassword({ email, password });
-            const errorBox = document.getElementById('login-error-message');
+          const { data, error } = await window.supabase.auth.signInWithPassword({ email, password });
+          const errorBox = document.getElementById('login-error-message');
 
-            if (error) {
-              if (errorBox) {
-                errorBox.textContent = formatSupabaseError(error);
-                errorBox.style.display = 'block';
-              }
-              return;
+          if (error) {
+            if (errorBox) {
+              errorBox.textContent = formatSupabaseError(error);
+              errorBox.style.display = 'block';
             }
+            return;
+          }
 
-            if (errorBox) errorBox.style.display = 'none';
+          if (errorBox) errorBox.style.display = 'none';
 
-            console.log("✅ Logged in as:", data.user.email);
-            sessionStorage.setItem('leadCaptured', 'true');
+          console.log("✅ Logged in as:", data.user.email);
+          sessionStorage.setItem('leadCaptured', 'true');
 
-            const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
-            const lastViewed = viewed[viewed.length - 1];
-            if (lastViewed) {
-              window.location.href = lastViewed;
-            } else {
-              window.location.reload();
-            }
-          });
-        }, 500);
+          const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
+          const lastViewed = viewed[viewed.length - 1];
+          if (lastViewed) {
+            window.location.href = lastViewed;
+          } else {
+            window.location.reload();
+          }
+        });
+      }, 500);
 
-        // Intercept view clicks
-        const recheckInterval = setInterval(() => {
-          setupViewDetailsInterception();
-          setupMapPopupInterception();
-        }, 1000);
-        setTimeout(() => clearInterval(recheckInterval), 30000);
+      // Intercept view clicks
+      const recheckInterval = setInterval(() => {
+        setupViewDetailsInterception();
+        setupMapPopupInterception();
+      }, 1000);
+      setTimeout(() => clearInterval(recheckInterval), 30000);
 
-        // Watch for "Create Account"
-        const observeCreateClick = setInterval(() => {
-          const createBtn = document.getElementById("create-account-btn");
-          if (!createBtn) return;
+      // Watch for "Create Account"
+      const observeCreateClick = setInterval(() => {
+        const createBtn = document.getElementById("create-account-btn");
+        if (!createBtn) return;
 
-          clearInterval(observeCreateClick);
-          createBtn.addEventListener("click", () => {
-            console.log("🌀 Switching to Create Account form...");
-            swapToSignupForm();
-          });
-        }, 500);
-      })
-      .catch(err => {
-        console.error("❌ Failed to load login form:", err);
-      });
-  });
-})(); // ✅ FIXED — closes IIFE
+        clearInterval(observeCreateClick);
+        createBtn.addEventListener("click", () => {
+          console.log("🌀 Switching to Create Account form...");
+          swapToSignupForm();
+        });
+      }, 500);
+    })
+    .catch(err => {
+      console.error("❌ Failed to load login form:", err);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", injectLoginForm);
 
 // Error formatter functions should be defined OUTSIDE
 function formatSupabaseError(error) {
@@ -394,6 +393,7 @@ function swapToSignupForm() {
 
       modal.innerHTML = html;
 
+// Back to login form logic
 const observeBackToLogin = setInterval(() => {
   const backBtn = document.getElementById("back-to-login-btn");
   if (!backBtn) return;
@@ -402,64 +402,11 @@ const observeBackToLogin = setInterval(() => {
 
   backBtn.addEventListener("click", () => {
     console.log("🔁 Switching back to login form...");
-
-    // Back to login form HTML again
-    fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form-4.html")
-      .then(response => response.text())
-      .then(loginHtml => {
-        const modal = document.getElementById("lead-form-modal");
-        if (modal) {
-          modal.innerHTML = loginHtml;
-          modal.style.display = "block";
-
-          // 👇 Reattach login listeners (same logic from your initial injection)
-          const loginForm = document.getElementById('login-form');
-          if (loginForm) {
-            loginForm.addEventListener('submit', async function (e) {
-              e.preventDefault();
-              const email = loginForm.email.value.trim();
-              const password = loginForm.password.value;
-
-              const { data, error } = await window.supabase.auth.signInWithPassword({ email, password });
-              const errorBox = document.getElementById('login-error-message');
-
-              if (error) {
-                if (errorBox) {
-                  errorBox.textContent = formatSupabaseError(error);
-                  errorBox.style.display = 'block';
-                }
-                return;
-              }
-
-              if (errorBox) errorBox.style.display = 'none';
-
-              console.log("✅ Logged in as:", data.user.email);
-              sessionStorage.setItem('leadCaptured', 'true');
-
-              const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
-              const lastViewed = viewed[viewed.length - 1];
-              if (lastViewed) {
-                window.location.href = lastViewed;
-              } else {
-                window.location.reload();
-              }
-            });
-          }
-
-          // 👇 Reconnect create-account-btn logic
-          const createBtn = document.getElementById("create-account-btn");
-          if (createBtn) {
-            createBtn.addEventListener("click", () => {
-              swapToSignupForm();
-            });
-          }
-        }
-      })
-      .catch(err => {
-        console.error("❌ Failed to reload login form:", err);
-      });
+    injectLoginForm(); // ⬅️ Loads the full login form + reattaches all logic
   });
 }, 300);
+
+
 
       const recheck = setInterval(() => {
         const form = document.getElementById("lead-form");
