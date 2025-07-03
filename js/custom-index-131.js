@@ -846,36 +846,43 @@ async function injectSaveButtonOnDetailPage() {
   if (!isListingPage() || hasInjectedSaveBtn) return;
 
   await new Promise(res => setTimeout(res, 500));
-  const navList = await waitForSelector('.col-lg-3 ul.nav-style-primary').catch(() => null);
-
+  const navList = await waitForSelector('.nav-style-primary').catch(() => null);
   if (!navList) {
     console.log('❌ Could not find nav list');
     return;
   }
 
+  // ✅ Find the widget-nav li to insert after
+  const widgetNavLi = navList.querySelector('li.widget-nav');
+  if (!widgetNavLi) {
+    console.log('❌ Could not find widget-nav item');
+    return;
+  }
+
+  // ✅ Avoid duplicate insertion
   if (navList.querySelector('.custom-save-btn')) {
     console.log('⚠️ Save button already present');
     hasInjectedSaveBtn = true;
     return;
   }
 
-  console.log('✅ Found nav list:', navList);
+  console.log('✅ Injecting Save Button after widget-nav');
 
-  const li = document.createElement('li');
-  li.className = 'nav-item';
-  li.style.textAlign = 'left';
+  const newLi = document.createElement('li');
+  newLi.className = 'nav-item';
+  newLi.style.textAlign = 'left';
 
   const btn = document.createElement('a');
   btn.href = '#';
   btn.className = 'custom-save-btn nav-link';
-  btn.innerHTML = `<i class="fa fa-heart"></i><span style="margin-left: 6px;">Save Listing</span>`;
+  btn.innerHTML = `<i class="fa fa-heart"></i><span style="margin-left: 6px;">Save</span>`;
   btn.style.display = 'block';
 
-  li.appendChild(btn);
-  navList.prepend(li);
+  newLi.appendChild(btn);
+  widgetNavLi.insertAdjacentElement('afterend', newLi); // ✅ Insert right after widget-nav
   hasInjectedSaveBtn = true;
 
-  console.log('✅ Save button injected');
+  console.log('✅ Save button injected below widget-nav');
 }
 
 // Initial injection
