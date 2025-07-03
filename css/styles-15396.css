@@ -734,7 +734,7 @@ transition: all 0s ease;
 /* ========== CUSTOM SAVE BUTTON ========== */
 .custom-save-btn {
   align-items: center;
-  background-color: rgba(179, 0, 0, 0.9);
+  background-color: rgba(179, 0, 0, 0.7); /* ✅ Slight transparency by default */
   color: #fff;
   display: flex;
   font-size: 0.95em;
@@ -743,11 +743,11 @@ transition: all 0s ease;
   height: 33.33333333%;
   padding: 0 0 0 20px;
   position: relative;
-  transition: padding 0.15s linear, background-color 0.15s linear;
+  transition: background-color 0.15s linear, padding 0.15s linear;
   width: 100%;
   z-index: 11;
 }
 
 .custom-save-btn:hover {
-  background-color: #a00;
+  background-color: #b30000; /* ✅ Fully opaque red on hover */
 }
