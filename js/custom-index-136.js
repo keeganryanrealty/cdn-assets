@@ -879,10 +879,10 @@ async function injectSaveButtonOnDetailPage() {
   const { mls, mlsid } = extractMLSFromURL(); // ✅ Reuse helper
 
   // ✅ Save address for Supabase (adjust selector as needed)
-  let address = document.querySelector('.property-address')?.textContent?.trim() || 'Unknown Address';
+  const addressEl = document.querySelector('.listing-attributes-main .listing-detail-attribute .value');
+  const address = addressEl?.textContent?.trim() || 'Unknown Address';
   sessionStorage.setItem('lead-address', address);
-  sessionStorage.setItem('lead-mls', mls);
-  sessionStorage.setItem('lead-mlsid', mlsid);
+
   
   const btn = document.createElement('a');
   btn.href = '#';
