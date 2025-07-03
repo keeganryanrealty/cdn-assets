@@ -403,7 +403,27 @@ const observeBackToLogin = setInterval(() => {
 
   backBtn.addEventListener("click", () => {
     console.log("🔁 Switching back to login form...");
-    injectLoginForm(); // 👈 now reloads login HTML AND re-attaches logic
+
+    const modal = document.getElementById("lead-form-modal");
+
+    // Step 1: Clear modal innerHTML
+    if (modal) modal.innerHTML = "";
+
+    // Step 2: Inject login HTML
+    fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form-5.html")
+      .then(response => response.text())
+      .then(loginHtml => {
+        if (modal) {
+          modal.innerHTML = loginHtml;
+          modal.style.display = "block"; // ✅ This is the critical part!
+
+          // Step 3: Reattach login form logic
+          attachLoginHandlers(); // You must define this as a shared function
+        }
+      })
+      .catch(err => {
+        console.error("❌ Failed to reload login form:", err);
+      });
   });
 }, 300);
 
