@@ -345,7 +345,7 @@ loginForm.addEventListener('submit', async function (e) {
     const address = sessionStorage.getItem('lead-address') || '';
     const listingKey = `${mlsid}:${address}`;
 
-    saveListingAfterLogin(listingKey);
+    saveListingAfterLogin(listingKey, session, btn);
 
     // Mark button as saved
     const allSaveBtns = document.querySelectorAll(`.custom-save-btn[data-mlsid="${mlsid}"]`);
@@ -685,14 +685,14 @@ document.addEventListener('click', function (e) {
         modal.style.display = 'block';
       }
     } else {
-      saveListingAfterLogin(listingKey, session);
+      saveListingAfterLogin(listingKey, session, btn);
     }
   });
 }, true);
 
 
 // ✅ Save listing to Supabase
-async function saveListingAfterLogin(listingKey, session) {
+async function saveListingAfterLogin(listingKey, session, btn) {
   const [mls, mlsid] = listingKey.split('-');
   const href = btn.closest('.listing-box')?.querySelector('.listing-box-title a')?.getAttribute('href') || '';
   const address = extractAddressFromSlug(href);
