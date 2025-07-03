@@ -588,18 +588,26 @@ if (window.location.pathname.includes("/property/")) {
 
 
 
-// ==== SAVE LISTING MECHANICS ====
-
+// SAVE LISTING MECHANICS
 // 1. Inject Custom Save Button
 function injectCustomSaveButtons() {
   document.querySelectorAll('.listing-box').forEach(listingBox => {
+    // Skip if already injected
     if (listingBox.querySelector('.custom-save-btn')) return;
 
+    // Remove data-link to prevent click-through
+    listingBox.removeAttribute('data-link');
+
+    // Grab original button to extract data
     const originalSave = listingBox.querySelector('.saveListing');
     if (!originalSave) return;
 
     const mlsid = originalSave.dataset.mlsid;
     const mls = originalSave.dataset.mls;
+
+    // Inject our custom Save button into the stack
+    const stack = listingBox.querySelector('.listing-box-image-links');
+    if (!stack) return;
 
     const btn = document.createElement('a');
     btn.href = 'javascript:void(0)';
@@ -608,60 +616,20 @@ function injectCustomSaveButtons() {
     btn.dataset.mls = mls;
     btn.innerHTML = `<i class="fa fa-heart"></i><span style="margin-left: 8px;">Save</span>`;
 
-    const stack = listingBox.querySelector('.listing-box-image-links');
-    if (stack) stack.appendChild(btn);
+    stack.appendChild(btn);
   });
 }
 
-// 2. Intercept Custom Save Button Clicks
-document.addEventListener('click', function (e) {
-  const btn = e.target.closest('.custom-save-btn');
-  if (!btn) return;
-
-  e.preventDefault();
-  e.stopPropagation();
-
-  const mlsid = btn.dataset.mlsid;
-  const mls = btn.dataset.mls;
-  const listingKey = `${mls}-${mlsid}`;
-
-  const listingBox = btn.closest('.listing-box');
-  if (!listingBox) return;
-
-  // 🧠 Temporarily remove data-link to prevent redirect
-  const originalDataLink = listingBox.getAttribute('data-link');
-  listingBox.removeAttribute('data-link');
-
-  sessionStorage.setItem('lead-mlsid', mlsid);
-  sessionStorage.setItem('lead-save-clicked', 'true');
-
-  const address = listingBox.dataset.address || '';
-  sessionStorage.setItem('lead-address', address);
-
-  window.supabase.auth.getSession().then(({ data: { session } }) => {
-    if (!session) {
-      const modal = document.getElementById('lead-form-modal');
-      if (modal) {
-        modal.querySelector('h2').textContent = 'Login to Save Listing';
-        modal.style.display = 'block';
-      }
-    } else {
-      saveListingAfterLogin(listingKey);
-    }
-
-    // 🔁 Restore data-link after logic completes
-    if (originalDataLink) {
-      setTimeout(() => {
-        listingBox.setAttribute('data-link', originalDataLink);
-      }, 200);
-    }
-  });
-}, true);
-
-// 3. Watch for DOM Updates (listings load dynamically)
 function watchForListings() {
-  const observer = new MutationObserver(injectCustomSaveButtons);
-  observer.observe(document.body, { childList: true, subtree: true });
+  const observer = new MutationObserver(() => {
+    injectCustomSaveButtons();
+  });
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
+
   injectCustomSaveButtons();
 }
 
@@ -671,8 +639,38 @@ if (document.readyState === 'loading') {
   watchForListings();
 }
 
+// 2. Intercept custom save clicks (and stop redirect)
+document.addEventListener('click', function (e) {
+  const btn = e.target.closest('.custom-save-btn');
+  if (!btn) return;
 
+  e.preventDefault();
+  e.stopPropagation();
+  e.stopImmediatePropagation();
 
+  const mlsid = btn.dataset.mlsid;
+  const mls = btn.dataset.mls;
+  const listingKey = `${mls}-${mlsid}`;
+
+  sessionStorage.setItem('lead-mlsid', mlsid);
+  sessionStorage.setItem('lead-save-clicked', 'true');
+
+  const address = btn.closest('.listing-box')?.dataset.address || '';
+  sessionStorage.setItem('lead-address', address);
+
+  window.supabase.auth.getSession().then(({ data: { session } }) => {
+    if (!session) {
+      console.log("🔒 User not logged in — opening modal");
+      const modal = document.getElementById('lead-form-modal');
+      if (modal) {
+        modal.querySelector('h2').textContent = 'Login to Save Listing';
+        modal.style.display = 'block';
+      }
+    } else {
+      saveListingAfterLogin(listingKey);
+    }
+  });
+}, true);
 
 
 
