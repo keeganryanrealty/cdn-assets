@@ -269,19 +269,21 @@ function injectLoginForm() {
       const modal = document.getElementById("lead-form-modal");
 
       if (modal) {
-        // 🧼 Clear & replace existing content
-        modal.innerHTML = html;
-        modal.style.display = "block"; // make sure it's visible
+        const tempWrapper = document.createElement("div");
+        tempWrapper.innerHTML = html;
+
+        const newModalContent = tempWrapper.querySelector("#lead-form-modal")?.innerHTML;
+        if (!newModalContent) {
+          console.error("❌ Login form content not found in fetched HTML");
+          return;
+        }
+
+        modal.innerHTML = newModalContent;
+        modal.style.display = "block";
+        attachLoginHandlers();
       } else {
-        const wrapper = document.createElement("div");
-        wrapper.innerHTML = html;
-        document.body.appendChild(wrapper);
-        console.warn("⚠️ lead-form-modal not found, appended fresh.");
+        console.error("❌ lead-form-modal not found in DOM");
       }
-
-      console.log("✅ Login form modal injected");
-
-      attachLoginHandlers(); // 👇 Move your submit listeners here
     })
     .catch(err => {
       console.error("❌ Failed to load login form:", err);
