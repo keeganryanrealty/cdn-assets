@@ -660,9 +660,15 @@ document.addEventListener('click', async function (e) {
     // ✳️ Address extraction
   let address = btn.closest('.listing-box')?.querySelector('.listing-box-location')?.textContent?.trim();
 
+  // Fallback to slug-based (used in index)
   if (!address) {
     const slug = btn.closest('.listing-box')?.querySelector('a[href*="/property/"]')?.getAttribute('href') || '';
     address = extractAddressFromSlug(slug);
+  }
+
+  // Final fallback: get address directly from button (used in details page)
+  if (!address) {
+    address = btn.dataset.address?.trim() || 'Unknown Address';
   }
 
 
