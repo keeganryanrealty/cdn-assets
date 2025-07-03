@@ -768,12 +768,11 @@ if (document.readyState === 'loading') {
 // ==========================
 // 6. Inject Save Buttons on Listing Pages
 // ==========================
-async function injectSaveButtonOnDetailPage() {
-  // Target sidebar
+function injectSaveButtonOnDetailPage() {
   const navList = document.querySelector('.Widget ul.nav-style-primary');
-  if (!navList || document.querySelector('.custom-save-btn')) return; // Prevent double insert
+  if (!navList || navList.querySelector('.custom-save-btn')) return;
 
-  // Extract MLS + MLS ID from URL (works for both /property/ and /details.php)
+  // Get MLS & MLS ID from URL
   const path = window.location.pathname;
   const params = new URLSearchParams(window.location.search);
   let mls = '';
@@ -794,8 +793,6 @@ async function injectSaveButtonOnDetailPage() {
   if (!mls || !mlsid) return;
 
   const listingKey = `${mls}-${mlsid}`;
-
-  // Grab address
   let address = document.querySelector('h1')?.textContent?.trim();
   if (!address || address.toLowerCase().includes('undefined')) {
     const slug = window.location.pathname;
@@ -814,14 +811,14 @@ async function injectSaveButtonOnDetailPage() {
   btn.innerHTML = `<i class="fa fa-heart"></i> <span>Save Listing</span>`;
 
   li.appendChild(btn);
-  navList.prepend(li); // Or use .appendChild if you prefer
+  navList.prepend(li);
 
   // Check saved state
-  const { data: sessionData } = await window.supabase.auth.getSession();
-  const userId = sessionData?.session?.user?.id;
+  window.supabase.auth.getSession().then(async ({ data: { session } }) => {
+    const userId = session?.user?.id;
+    if (!userId) return;
 
-  if (userId) {
-    const { data: saved, error } = await window.supabase
+    const { data: saved } = await window.supabase
       .from('saved_listings')
       .select('id')
       .eq('mls_id', mlsid)
@@ -830,9 +827,9 @@ async function injectSaveButtonOnDetailPage() {
       .maybeSingle();
 
     if (saved) markButtonAsSaved(btn);
-  }
+  });
 
-  // Add click handler
+  // Click handler
   btn.addEventListener('click', async (e) => {
     e.preventDefault();
 
@@ -862,13 +859,18 @@ async function injectSaveButtonOnDetailPage() {
   });
 }
 
-// 👟 Run it
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', injectSaveButtonOnDetailPage);
-} else {
+// 🧠 Mutation observer to keep it injected
+const observer = new MutationObserver(() => {
   injectSaveButtonOnDetailPage();
-}
+});
 
+observer.observe(document.body, {
+  childList: true,
+  subtree: true,
+});
+
+// Run once immediately
+injectSaveButtonOnDetailPage();
 
 
 
