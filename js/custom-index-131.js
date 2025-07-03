@@ -779,7 +779,7 @@ function injectTopSpacer() {
 
   const spacer = document.createElement('div');
   spacer.id = 'custom-top-spacer';
-  spacer.style.height = '50px';
+  spacer.style.height = '60px';
   spacer.style.width = '100%';
   document.body.prepend(spacer);
 }
