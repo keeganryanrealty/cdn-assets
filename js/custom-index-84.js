@@ -246,9 +246,15 @@ function showLeadForm(onSubmit) {
           modal.style.display = 'none';
           sessionStorage.removeItem('lead-mlsid');
           sessionStorage.removeItem('lead-address');
+          if (sessionStorage.getItem('lead-save-clicked')) {
+            // Let login handler take care of save action — don't call onSubmit callback
+            return;
+          }
+
           if (typeof onSubmit === 'function') {
             onSubmit();
           }
+
         }, 250);
       });
     }
@@ -355,29 +361,30 @@ loginForm.addEventListener('submit', async function (e) {
     return; // ✅ Stop here — no redirect!
   }
 
-  // ✅ Fallback: redirect to last viewed property
-  const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
-  const lastViewed = viewed[viewed.length - 1];
-  if (lastViewed) {
-    window.location.href = lastViewed;
-  } else {
-    window.location.reload();
-  }
-});
-  }, 500);
+    // ✅ Fallback: redirect to last viewed property
+    const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
+    const lastViewed = viewed[viewed.length - 1];
+    if (lastViewed) {
+      window.location.href = lastViewed;
+    } else {
+      window.location.reload();
+    }
+  });
+    }, 500);
 
-  // Reattach signup button logic
-  const observeCreateClick = setInterval(() => {
-    const createBtn = document.getElementById("create-account-btn");
-    if (!createBtn) return;
+    // Reattach signup button logic
+      const observeCreateClick = setInterval(() => {
+      const createBtn = document.getElementById("create-account-btn");
+      if (!createBtn) return;
 
-    clearInterval(observeCreateClick);
-    createBtn.addEventListener("click", () => {
-      console.log("🌀 Switching to Create Account form...");
-      swapToSignupForm();
-    });
+      clearInterval(observeCreateClick);
+      createBtn.addEventListener("click", () => {
+        console.log("🌀 Switching to Create Account form...");
+        swapToSignupForm();
+      });
   }, 500);
 }
+
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', injectLoginForm(false));
