@@ -769,6 +769,7 @@ if (document.readyState === 'loading') {
 // 6. Inject Save Buttons on Listing Pages
 // ==========================
 function injectSaveButtonOnDetailPage() {
+  console.log("📌 Injecting Save Button on Detail Page");
   const navList = document.querySelector('.Widget ul.nav-style-primary');
   if (!navList || navList.querySelector('.custom-save-btn')) return;
 
@@ -794,7 +795,7 @@ function injectSaveButtonOnDetailPage() {
 
   const listingKey = `${mls}-${mlsid}`;
   let address = document.querySelector('h1')?.textContent?.trim();
-  if (!address || address.toLowerCase().includes('undefined')) {
+  if (!address || address.toLowerCase().includes('undefined') || address.length < 5) {
     const slug = window.location.pathname;
     address = extractAddressFromSlug(slug);
   }
@@ -846,14 +847,18 @@ function injectSaveButtonOnDetailPage() {
         const { data: { session: newSession } } = await window.supabase.auth.getSession();
         if (newSession) {
           window.removeEventListener('supabase:auth:login', onLogin);
-          await saveListingAfterLogin(listingKey, session.user.id, address);
+          await saveListingAfterLogin(listingKey, newSession.user.id, address);
           updateSaveButtonsUI(mls, mlsid);
         }
       };
 
       window.addEventListener('supabase:auth:login', onLogin);
     } else {
-      await saveListingAfterLogin(listingKey, newSession.user.id, address);
+      // ❌ This is the broken line in your original:
+      // await saveListingAfterLogin(listingKey, newSession.user.id, address);
+
+      // ✅ This is the correct line:
+      await saveListingAfterLogin(listingKey, session.user.id, address);
       updateSaveButtonsUI(mls, mlsid);
     }
   });
