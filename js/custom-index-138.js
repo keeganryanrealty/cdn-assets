@@ -818,17 +818,24 @@ function extractMLSFromURL() {
 }
 
 function extractAddressFromDetailsPage() {
-  const keyEls = document.querySelectorAll('.listing-detail-attribute');
+  const attributes = document.querySelectorAll('.listing-detail-attribute');
 
-  for (const el of keyEls) {
-    const key = el.querySelector('.key')?.textContent?.trim();
-    const value = el.querySelector('.value')?.textContent?.trim();
+  for (const attr of attributes) {
+    const keyEl = attr.querySelector('.key');
+    const valueEl = attr.querySelector('.value');
+
+    const key = keyEl?.textContent?.trim();
+    const value = valueEl?.textContent?.trim();
 
     if (key === 'Address' && value) {
-      return value;
+      // Remove leading/trailing quotes and excess whitespace
+      const cleanedValue = value.replace(/['"]+/g, '').trim();
+      console.log('✅ Extracted Address:', cleanedValue);
+      return cleanedValue;
     }
   }
 
+  console.log('❌ Could not find address');
   return 'Unknown Address';
 }
 
