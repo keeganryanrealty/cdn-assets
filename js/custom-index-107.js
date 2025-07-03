@@ -620,6 +620,25 @@ function watchForListings() {
   injectCustomSaveButtons();
 }
 
+function extractAddressFromSlug(slug) {
+  const parts = slug.split('/property/')[1]?.split('-') || [];
+
+  if (parts.length < 6) return 'Unknown Address';
+
+  const zip = parts.pop();
+  const state = parts.pop().toUpperCase();
+  const city = capitalize(parts.pop());
+  const streetParts = parts.slice(2); // Skip MLS and MLS ID
+  const street = streetParts.join(' ');
+
+  return `${street}, ${city}, ${state} ${zip}`;
+}
+
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+
 // ==========================
 // 2. Handle Save Clicks
 // ==========================
@@ -634,7 +653,12 @@ document.addEventListener('click', async function (e) {
   const mlsid = btn.dataset.mlsid;
   const mls = btn.dataset.mls;
   const listingKey = `${mls}-${mlsid}`;
-  const address = btn.closest('.listing-box')?.querySelector('.listing-box-location')?.textContent?.trim() || '';
+    // ✳️ Address extraction
+    let address = btn.closest('.listing-box')?.querySelector('.listing-box-location')?.textContent?.trim();
+    if (!address) {
+    const slug = window.location.pathname;
+    address = extractAddressFromSlug(slug);
+    }
 
   sessionStorage.setItem('lead-save-clicked', 'true');
   sessionStorage.setItem('lead-mlsid', mlsid);
