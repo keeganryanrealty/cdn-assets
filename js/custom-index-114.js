@@ -769,7 +769,6 @@ if (document.readyState === 'loading') {
 // 6. Inject Save Buttons on Listing Pages
 // ==========================
 function injectSaveButtonOnDetailPage() {
-  console.log("📌 Injecting Save Button on Detail Page");
   const navList = document.querySelector('.Widget ul.nav-style-primary');
   if (!navList || navList.querySelector('.custom-save-btn')) return;
 
@@ -854,28 +853,38 @@ function injectSaveButtonOnDetailPage() {
 
       window.addEventListener('supabase:auth:login', onLogin);
     } else {
-      // ❌ This is the broken line in your original:
-      // await saveListingAfterLogin(listingKey, newSession.user.id, address);
-
-      // ✅ This is the correct line:
-      await saveListingAfterLogin(listingKey, session.user.id, address);
+  await saveListingAfterLogin(listingKey, session.user.id, address);
       updateSaveButtonsUI(mls, mlsid);
     }
   });
 }
 
 // 🧠 Mutation observer to keep it injected
-const detailObserver = new MutationObserver(() => {
-  injectSaveButtonOnDetailPage();
-});
+function waitForNavListAndInject() {
+  const target = document.querySelector('.Widget');
+  if (!target) return;
 
-detailObserver.observe(document.body, {
-  childList: true,
-  subtree: true,
-});
+  const observer = new MutationObserver((mutations, obs) => {
+    const navList = target.querySelector('ul.nav-style-primary');
+    if (navList && !navList.querySelector('.custom-save-btn')) {
+      console.log("🎯 Injecting save button into nav list...");
+      injectSaveButtonOnDetailPage(); // 👈 safe to run now
+      obs.disconnect(); // ✅ stop observing once injected
+    }
+  });
 
-// Run once immediately
-injectSaveButtonOnDetailPage();
+  observer.observe(target, {
+    childList: true,
+    subtree: true,
+  });
+}
+
+// Run once 
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', waitForNavListAndInject);
+} else {
+  waitForNavListAndInject();
+}
 
 
 
