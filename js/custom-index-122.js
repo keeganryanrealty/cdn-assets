@@ -765,6 +765,10 @@ if (document.readyState === 'loading') {
   highlightSavedListings();
 }
 
+
+// ==========================
+// 6. Save Button On Listing Page
+// ==========================
 function isListingPage() {
   const path = window.location.pathname;
   return path.includes('/property/') || path.includes('/details.php');
@@ -850,6 +854,25 @@ async function injectSaveButtonOnDetailPage() {
   hasInjectedSaveBtn = true;
 
   console.log('✅ Save button injected');
+}
+
+// Initial injection
+injectSaveButtonOnDetailPage();
+
+// Also observe DOM changes in case content loads after delay
+if (isListingPage()) {
+  const observer = new MutationObserver(() => {
+    const now = Date.now();
+    if (!window.__lastSaveBtnRun || now - window.__lastSaveBtnRun > 1000) {
+      window.__lastSaveBtnRun = now;
+      injectSaveButtonOnDetailPage();
+    }
+  });
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
 }
 
 
