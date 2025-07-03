@@ -568,6 +568,29 @@ function injectCustomSaveButtons() {
   });
 }
 
+function watchForListings() {
+  const observer = new MutationObserver(() => {
+    injectCustomSaveButtons();
+  });
+
+  const targetNode = document.body; // you can narrow this to the listings container if known
+
+  observer.observe(targetNode, {
+    childList: true,
+    subtree: true,
+  });
+
+  // Initial inject in case some listings are already loaded
+  injectCustomSaveButtons();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', watchForListings);
+} else {
+  watchForListings();
+}
+
+
 // 2. Intecept Custom Save Button Clicks
 document.addEventListener('click', function (e) {
   const btn = e.target.closest('.custom-save-btn');
