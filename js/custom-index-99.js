@@ -705,11 +705,9 @@ document.addEventListener('click', function (e) {
 
 
 // ✅ Save listing to Supabase
-async function saveListingAfterLogin(listingKey, session, btn) {
+async function saveListingAfterLogin(listingKey, session) {
   const [mls, mlsid] = listingKey.split('-');
-
-  const href = btn.closest('.listing-box')?.querySelector('.listing-box-title a')?.getAttribute('href') || '';
-  const address = extractAddressFromSlug(href);
+  const address = sessionStorage.getItem('lead-address') || '';
   const userId = session?.user?.id;
 
   if (!userId) {
@@ -717,24 +715,26 @@ async function saveListingAfterLogin(listingKey, session, btn) {
     return;
   }
 
-  // ✅ Check if already saved
-  const { data: existing, error: selectError } = await window.supabase
+  // ✅ 1. Check if this listing is already saved
+  const { data: existing, error: fetchError } = await window.supabase
     .from('saved_listings')
     .select('id')
     .eq('user_id', userId)
     .eq('mls_id', mlsid)
-    .limit(1);
+    .eq('mls', mls)
+    .maybeSingle();
 
-  if (selectError) {
-    console.error("❌ Error checking for existing saved listing:", selectError.message);
+  if (fetchError) {
+    console.error("❌ Error checking existing listing:", fetchError.message);
     return;
   }
 
-  if (existing && existing.length > 0) {
-    console.log("⚠️ Listing already saved:", listingKey);
-    return; // or show a "Saved" toast or icon toggle
+  if (existing) {
+    console.log("ℹ️ Listing already saved:", listingKey);
+    return; // Don't insert duplicate
   }
 
+  // ✅ 2. Insert if not already saved
   const { error } = await window.supabase.from('saved_listings').insert([
     {
       user_id: userId,
@@ -748,7 +748,6 @@ async function saveListingAfterLogin(listingKey, session, btn) {
     console.error("❌ Failed to save listing:", error.message);
   } else {
     console.log("✅ Listing saved to Supabase:", listingKey);
-    markButtonAsSaved(btn); // ✅ optional: visually update button
   }
 }
 
