@@ -990,10 +990,10 @@ const intervalId = setInterval(() => {
 setTimeout(() => clearInterval(intervalId), 30000);
 
 // ==========================
-// 7. Modify Listing Page Nav Links
+// Modify Listing Page Nav Links (Improved)
 // ==========================
 if (isListingPage()) {
-  const hideInterval = setInterval(() => {
+  const navEditInterval = setInterval(() => {
     // Hide unwanted nav links
     document.querySelectorAll('a.nav-link').forEach(link => {
       const text = link.textContent?.trim()?.toLowerCase();
@@ -1007,23 +1007,33 @@ if (isListingPage()) {
       }
     });
 
-    // Intercept Ask Agent and redirect to Contact page
-    const askAgent = document.querySelector('a.ask-question.nav-link');
-    if (askAgent) {
-      askAgent.href = '/pages/contact';
-      askAgent.onclick = null;
+    // Ask Agent ➜ /pages/contact
+    const askLink = document.querySelector('a.ask-question.nav-link');
+    if (askLink) {
+      const newLink = askLink.cloneNode(true);
+      newLink.href = '/pages/contact';
+      newLink.removeAttribute('onclick');
+      newLink.addEventListener('click', e => {
+        e.preventDefault();
+        window.location.href = '/pages/contact';
+      });
+      askLink.replaceWith(newLink);
     }
 
-    // Intercept Request Showing and redirect to Calendly
-    const requestShowing = document.querySelector('a.showing-request.nav-link');
-    if (requestShowing) {
-      requestShowing.href = 'https://calendly.com/keegan-ryan-exprealty/schedule-a-consultation';
-      requestShowing.onclick = null;
+    // Request Showing ➜ Calendly
+    const showLink = document.querySelector('a.showing-request.nav-link');
+    if (showLink) {
+      const newLink = showLink.cloneNode(true);
+      newLink.href = 'https://calendly.com/keegan-ryan-exprealty/schedule-a-consultation';
+      newLink.removeAttribute('onclick');
+      newLink.addEventListener('click', e => {
+        e.preventDefault();
+        window.open(newLink.href, '_blank');
+      });
+      showLink.replaceWith(newLink);
     }
-  }, 1000); // Repeat in case nav loads late
+  }, 1000);
 
-  // Stop checking after 30 seconds
-  setTimeout(() => clearInterval(hideInterval), 30000);
+  // Stop after 30 seconds
+  setTimeout(() => clearInterval(navEditInterval), 30000);
 }
-
-
