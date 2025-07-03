@@ -340,27 +340,25 @@ loginForm.addEventListener('submit', async function (e) {
 
   // 🔍 Check for save intent
   if (sessionStorage.getItem('lead-save-clicked')) {
-    console.log("💾 Saving listing after login...");
+  const mlsid = sessionStorage.getItem('lead-mlsid') || '';
+  const address = sessionStorage.getItem('lead-address') || '';
+  const mls = '133'; // or grab from dataset if needed
+  const listingKey = `${mls}-${mlsid}`;
 
-    const mlsid = sessionStorage.getItem('lead-mlsid') || '';
-    const address = sessionStorage.getItem('lead-address') || '';
-    const listingKey = `${mlsid}:${address}`;
+  await saveListingAfterLogin(listingKey);
 
-    saveListingAfterLogin(listingKey, session, btn);
+  // update button visually
+  const allSaveBtns = document.querySelectorAll(`.custom-save-btn[data-mlsid="${mlsid}"]`);
+  allSaveBtns.forEach(btn => {
+    btn.innerHTML = '<i class="fa fa-check"></i><span>Saved</span>';
+  });
 
-    // Mark button as saved
-    const allSaveBtns = document.querySelectorAll(`.custom-save-btn[data-mlsid="${mlsid}"]`);
-    allSaveBtns.forEach(btn => {
-      btn.innerHTML = '<i class="fa fa-check"></i><span>Saved</span>';
-    });
+  // cleanup
+  sessionStorage.removeItem('lead-save-clicked');
+  sessionStorage.removeItem('lead-mlsid');
+  sessionStorage.removeItem('lead-address');
+}
 
-    // Clear intent flags
-    sessionStorage.removeItem('lead-save-clicked');
-    sessionStorage.removeItem('lead-mlsid');
-    sessionStorage.removeItem('lead-address');
-
-    return; // ✅ Stop here — no redirect!
-  }
 
     // ✅ Fallback: redirect to last viewed property
     const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
@@ -705,17 +703,20 @@ document.addEventListener('click', function (e) {
 
 
 // ✅ Save listing to Supabase
-async function saveListingAfterLogin(listingKey, session) {
+async function saveListingAfterLogin(listingKey) {
   const [mls, mlsid] = listingKey.split('-');
   const address = sessionStorage.getItem('lead-address') || '';
+
+  // ✅ Get FRESH session
+  const { data: { session }, error: sessionError } = await window.supabase.auth.getSession();
   const userId = session?.user?.id;
 
   if (!userId) {
-    console.error("❌ No user ID found in session:", session);
+    console.error("❌ No user ID found in session:", sessionError);
     return;
   }
 
-  // ✅ 1. Check if this listing is already saved
+  // ✅ Check if already saved
   const { data: existing, error: fetchError } = await window.supabase
     .from('saved_listings')
     .select('id')
@@ -725,17 +726,17 @@ async function saveListingAfterLogin(listingKey, session) {
     .maybeSingle();
 
   if (fetchError) {
-    console.error("❌ Error checking existing listing:", fetchError.message);
+    console.error("❌ Failed to check existing listing:", fetchError.message);
     return;
   }
 
   if (existing) {
     console.log("ℹ️ Listing already saved:", listingKey);
-    return; // Don't insert duplicate
+    return; // Prevent duplicate insert
   }
 
-  // ✅ 2. Insert if not already saved
-  const { error } = await window.supabase.from('saved_listings').insert([
+  // ✅ Insert new save
+  const { error: insertError } = await window.supabase.from('saved_listings').insert([
     {
       user_id: userId,
       mls_id: mlsid,
@@ -744,8 +745,8 @@ async function saveListingAfterLogin(listingKey, session) {
     }
   ]);
 
-  if (error) {
-    console.error("❌ Failed to save listing:", error.message);
+  if (insertError) {
+    console.error("❌ Insert failed:", insertError.message);
   } else {
     console.log("✅ Listing saved to Supabase:", listingKey);
   }
