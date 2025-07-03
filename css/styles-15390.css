@@ -643,7 +643,7 @@ transition: all 0s ease;
   background: #333;
 }
 
-/* ========== Link Button (Create Account) ========== */
+/* ========== Link Button (Create Account/Back to Login) ========== */
 #create-account-btn {
   background: none;
   border: none;
@@ -655,6 +655,20 @@ transition: all 0s ease;
 }
 
 #create-account-btn:hover {
+  text-decoration: underline;
+}
+
+#back-to-login-btn {
+  background: none;
+  border: none;
+  color: #007BFF;
+  cursor: pointer;
+  padding: 0;
+  font-size: 13px;
+  font-family: 'BodyFont', sans-serif;
+}
+
+#back-to-login-btn:hover {
   text-decoration: underline;
 }
 
