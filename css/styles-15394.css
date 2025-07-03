@@ -729,3 +729,25 @@ transition: all 0s ease;
   color: #000;
 }
 
+
+
+/* ========== CUSTOM SAVE BUTTON ========== */
+.custom-save-btn {
+  align-items: center;
+  background-color: rgba(179, 0, 0, 0.9); /* same as nth-child(3) */
+  color: #fff;
+  display: flex;
+  font-size: 0.95em;
+  font-weight: 600;
+  text-align: left;
+  height: 33.33333333%;
+  padding: 0 0 0 20px;
+  position: relative;
+  transition: padding 0.15s linear, background-color 0.15s linear;
+  width: 100%;
+  z-index: 11;
+}
+
+.custom-save-btn:hover {
+  background-color: #a00;
+}
