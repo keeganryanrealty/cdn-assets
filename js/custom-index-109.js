@@ -657,11 +657,13 @@ document.addEventListener('click', async function (e) {
   const mls = btn.dataset.mls;
   const listingKey = `${mls}-${mlsid}`;
     // ✳️ Address extraction
-    let address = btn.closest('.listing-box')?.querySelector('.listing-box-location')?.textContent?.trim();
-    if (!address) {
-    const slug = window.location.pathname;
+  let address = btn.closest('.listing-box')?.querySelector('.listing-box-location')?.textContent?.trim();
+
+  if (!address) {
+    const slug = btn.closest('.listing-box')?.querySelector('a[href*="/property/"]')?.getAttribute('href') || '';
     address = extractAddressFromSlug(slug);
-    }
+  }
+
 
   sessionStorage.setItem('lead-save-clicked', 'true');
   sessionStorage.setItem('lead-mlsid', mlsid);
