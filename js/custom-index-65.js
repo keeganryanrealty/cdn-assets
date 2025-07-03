@@ -382,9 +382,10 @@ function formatSupabaseSignupError(error) {
 
 // Signup swap
 function swapToSignupForm() {
-  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/create-account-4.html")
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/create-account-5.html")
     .then(response => response.text())
     .then(html => {
+
       const modal = document.getElementById("lead-form-modal");
       if (!modal) {
         console.error("❌ Modal container not found to inject signup form");
@@ -392,6 +393,16 @@ function swapToSignupForm() {
       }
 
       modal.innerHTML = html;
+
+            const observeBackToLogin = setInterval(() => {
+              const backBtn = document.getElementById("back-to-login-btn");
+                   if (!backBtn) return;
+                   clearInterval(observeBackToLogin);
+                   backBtn.addEventListener("click", () => {
+                   console.log("🔁 Switching back to login form...");
+                   window.location.reload(); // reloads login form version
+                 });
+           }, 300);
 
       const recheck = setInterval(() => {
         const form = document.getElementById("lead-form");
