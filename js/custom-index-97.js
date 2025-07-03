@@ -677,15 +677,27 @@ document.addEventListener('click', function (e) {
   sessionStorage.setItem('lead-address', address);
 
   window.supabase.auth.getSession().then(({ data: { session } }) => {
-    if (!session) {
-      console.log("🔒 User not logged in — opening modal");
-      const modal = document.getElementById('lead-form-modal');
-      if (modal) {
-        modal.querySelector('h2').textContent = 'Login to Save Listing';
-        modal.style.display = 'block';
-      }
-    } else {
-      saveListingAfterLogin(listingKey, session, btn);
+  if (!session) {
+    console.log("🔒 User not logged in — opening modal");
+    const modal = document.getElementById('lead-form-modal');
+    if (modal) {
+      modal.querySelector('h2').textContent = 'Login to Save Listing';
+      modal.style.display = 'block';
+    }
+
+    // ✅ Listen for login event, then retry save
+    const onLogin = async () => {
+      const { data: fresh } = await window.supabase.auth.getSession();
+      const newSession = fresh?.session;
+        if (newSession) {
+        // Remove listener so it only triggers once
+        window.removeEventListener('supabase:auth:login', onLogin);
+        saveListingAfterLogin(listingKey, newSession, btn); // Retry with new session
+        }
+      };
+
+      // 🔁 Add listener
+      window.addEventListener('supabase:auth:login', onLogin);
     }
   });
 }, true);
