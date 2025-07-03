@@ -545,21 +545,25 @@ if (window.location.pathname.includes("/property/")) {
 // 1. Inject Save Button
 function injectCustomSaveButtons() {
   document.querySelectorAll('.listing-box-image-links').forEach(wrapper => {
-    // Prevent duplicate buttons
+    // Prevent duplicates
     if (wrapper.querySelector('.custom-save-btn')) return;
+
+    const originalSave = wrapper.querySelector('.saveListing');
+    if (!originalSave) return;
+
+    const mlsid = originalSave.dataset.mlsid;
+    const mls = originalSave.dataset.mls;
 
     const saveBtn = document.createElement('a');
     saveBtn.href = 'javascript:void(0)';
     saveBtn.className = 'custom-save-btn';
-    saveBtn.innerHTML = '<i class="fa fa-heart"></i><span>Save</span>';
-    saveBtn.style.marginLeft = '10px'; // adjust styling as needed
+    saveBtn.dataset.mlsid = mlsid;
+    saveBtn.dataset.mls = mls;
 
-    const originalSave = wrapper.querySelector('.saveListing');
-    if (originalSave) {
-      saveBtn.dataset.mls = originalSave.dataset.mls;
-      saveBtn.dataset.mlsid = originalSave.dataset.mlsid;
-    }
+    // Match layout and structure of other buttons
+    saveBtn.innerHTML = `<i class="fa fa-heart"></i><span>Save</span>`;
 
+    // Insert as the last button (matching original position)
     wrapper.appendChild(saveBtn);
   });
 }
