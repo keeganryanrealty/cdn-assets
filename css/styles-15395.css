@@ -734,7 +734,7 @@ transition: all 0s ease;
 /* ========== CUSTOM SAVE BUTTON ========== */
 .custom-save-btn {
   align-items: center;
-  background-color: rgba(179, 0, 0, 0.9); /* same as nth-child(3) */
+  background-color: rgba(179, 0, 0, 0.9);
   color: #fff;
   display: flex;
   font-size: 0.95em;
