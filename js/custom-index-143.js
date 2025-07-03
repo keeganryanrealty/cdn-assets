@@ -658,24 +658,22 @@ document.addEventListener('click', async function (e) {
   const mls = btn.dataset.mls;
   const listingKey = `${mls}-${mlsid}`;
     // ✳️ Address extraction
-   let address =
-    btn.closest('.listing-box')?.querySelector('.listing-box-location')?.textContent?.trim() || 
-    extractAddressFromSlug(btn.closest('.listing-box')?.querySelector('a[href*="/property/"]')?.getAttribute('href') || '') ||
-    btn.dataset.address || // ✅ this is the fallback for details.php
-    sessionStorage.getItem('lead-address') || // backup in case it's stored already
-    'Unknown Address'; // final fallback
+  let address = btn.dataset.address;
 
+if (!address || address === 'Unknown Address') {
+  address = sessionStorage.getItem('lead-address');
+}
 
-  // Fallback to slug-based (used in index)
-  if (!address) {
-    const slug = btn.closest('.listing-box')?.querySelector('a[href*="/property/"]')?.getAttribute('href') || '';
-    address = extractAddressFromSlug(slug);
-  }
+if (!address || address === 'Unknown Address') {
+  // Final fallback — try extracting from slug or whatever else
+  const slug = btn.closest('.listing-box')?.querySelector('a[href*="/property/"]')?.getAttribute('href') || '';
+  address = extractAddressFromSlug(slug);
+}
 
-  // Final fallback: get address directly from button (used in details page)
-  if (!address) {
-    address = btn.dataset.address?.trim() || 'Unknown Address';
-  }
+if (!address || address === 'Unknown Address') {
+  address = 'Unknown Address';
+}
+
 
 
   sessionStorage.setItem('lead-save-clicked', 'true');
