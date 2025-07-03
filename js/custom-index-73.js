@@ -266,24 +266,20 @@ function injectLoginForm() {
   fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form-5.html")
     .then(response => response.text())
     .then(html => {
-      const modal = document.getElementById("lead-form-modal");
+      const wrapper = document.createElement("div");
+      wrapper.innerHTML = html;
 
-      if (modal) {
-        const tempWrapper = document.createElement("div");
-        tempWrapper.innerHTML = html;
-
-        const newModalContent = tempWrapper.querySelector("#lead-form-modal")?.innerHTML;
-        if (!newModalContent) {
-          console.error("❌ Login form content not found in fetched HTML");
-          return;
-        }
-
-        modal.innerHTML = newModalContent;
-        modal.style.display = "block";
-        attachLoginHandlers();
+      const footer = document.getElementById("footer");
+      if (footer && footer.parentNode) {
+        footer.parentNode.insertBefore(wrapper, footer);
       } else {
-        console.error("❌ lead-form-modal not found in DOM");
+        document.body.appendChild(wrapper);
+        console.warn("⚠️ Footer not found — content injected at end of body.");
       }
+
+      console.log("✅ Login form modal injected");
+
+      attachLoginHandlers(); // ✅ login submit + "create account" listeners
     })
     .catch(err => {
       console.error("❌ Failed to load login form:", err);
@@ -342,11 +338,7 @@ function attachLoginHandlers() {
   }, 500);
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', injectLoginForm);
-} else {
-  injectLoginForm();
-}
+document.addEventListener("DOMContentLoaded", injectLoginForm);
 
 // Error formatter functions should be defined OUTSIDE
 function formatSupabaseError(error) {
