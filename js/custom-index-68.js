@@ -410,6 +410,7 @@ const observeBackToLogin = setInterval(() => {
         const modal = document.getElementById("lead-form-modal");
         if (modal) {
           modal.innerHTML = loginHtml;
+          modal.style.display = "block";
 
           // 👇 Reattach login listeners (same logic from your initial injection)
           const loginForm = document.getElementById('login-form');
@@ -547,24 +548,28 @@ document.addEventListener("DOMContentLoaded", async function () {
 // === END LOGOUT ===
 
 // LOGIN DISPLAY FOR /PROPERTY/ PAGES Wait for Supabase to initialize + login modal to inject
-document.addEventListener("DOMContentLoaded", async function () {
-  const pathname = window.location.pathname;
-
-  // Check if on a /property/ page
-  if (pathname.includes("/property/")) {
-    const { data: { session } } = await window.supabase.auth.getSession();
-
-    const isLoggedIn = !!session?.user;
-
-    if (!isLoggedIn) {
-      console.log("🔒 Not logged in on /property/ page — showing login modal");
+if (window.location.pathname.includes("/property/")) {
+  // Wait until DOM is ready
+  document.addEventListener("DOMContentLoaded", function () {
+    // Wait until modal exists (if dynamically loaded)
+    const checkExist = setInterval(() => {
       const modal = document.getElementById("lead-form-modal");
-      if (modal) modal.style.display = "block";
-    } else {
-      console.log("✅ User is logged in");
-    }
-  }
-});
+      if (!modal || window.supabase === undefined) return;
+
+      clearInterval(checkExist);
+
+      // Check login status
+      window.supabase.auth.getSession().then(({ data: { session } }) => {
+        if (!session) {
+          console.log("🔐 Not logged in — showing login modal");
+          modal.style.display = "block";
+        } else {
+          console.log("✅ Already logged in");
+        }
+      });
+    }, 300);
+  });
+}
 
 
 
