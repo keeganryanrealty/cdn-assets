@@ -810,6 +810,9 @@ async function injectSaveButtonOnDetailPage() {
   try {
     const navList = await waitForSelector('.nav-style-primary');
 
+    // 🧹 Always remove default Save Listing button
+    navList.querySelectorAll('.saveListing')?.forEach(el => el.closest('.nav-item')?.remove());
+
     // Avoid duplicate injection
     if (navList.querySelector('.custom-save-btn')) return;
 
@@ -850,8 +853,8 @@ async function injectSaveButtonOnDetailPage() {
     // Handle click
     btn.addEventListener('click', async (e) => {
       e.preventDefault();
-
       const { data: { session } } = await window.supabase.auth.getSession();
+
       if (!session) {
         const modal = document.getElementById('lead-form-modal');
         if (modal) {
@@ -876,25 +879,8 @@ async function injectSaveButtonOnDetailPage() {
     });
 
   } catch (err) {
-    if (typeof err === 'string') {
-      console.warn(err); // ⏰ selector not found
-    } else {
-      console.error("❌ Save button injection failed:", err);
-    }
+    console.warn("⚠️ Could not inject custom save button:", err);
   }
-}
-
-if (isListingPage()) {
-  const detailObserver = new MutationObserver(() => {
-    injectSaveButtonOnDetailPage();
-  });
-
-  detailObserver.observe(document.body, {
-    childList: true,
-    subtree: true,
-  });
-
-  injectSaveButtonOnDetailPage();
 }
 
 
