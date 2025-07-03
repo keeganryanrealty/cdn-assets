@@ -534,17 +534,19 @@ transition: all 0s ease;
   vertical-align: middle;
 }
 
-.logout-link {
+.footer-logout-wrapper {
   text-align: center;
-  font-size: 13px;
-  text-decoration: underline;
-  color: #888;
-  cursor: pointer;
-  font-family: 'BodyFont', sans-serif;
+  margin-top: 20px;
 }
 
-.logout-link:hover {
-  color: #000;
+.logout-link {
+  font-size: 14px;
+  color: #888;
+  text-decoration: underline;
+  font-family: 'BodyFont', sans-serif;
+  cursor: pointer;
+  background: none;
+  border: none;
 }
 
 
