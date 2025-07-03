@@ -303,68 +303,67 @@ function attachLoginHandlers() {
 
     clearInterval(observeLoginSubmit);
 
-    loginForm.addEventListener('submit', async function (e) {
-      e.preventDefault();
+loginForm.addEventListener('submit', async function (e) {
+  e.preventDefault();
 
-      const email = loginForm.email.value.trim();
-      const password = loginForm.password.value;
+  const email = loginForm.email.value.trim();
+  const password = loginForm.password.value;
+  const errorBox = document.getElementById('login-error-message');
 
-      const { data, error } = await window.supabase.auth.signInWithPassword({ email, password });
-      const errorBox = document.getElementById('login-error-message');
+  const { data, error } = await window.supabase.auth.signInWithPassword({ email, password });
 
-      if (error) {
-        if (errorBox) {
-          errorBox.textContent = formatSupabaseError(error);
-          errorBox.style.display = 'block';
-        }
-        return;
-      }
+  if (error) {
+    if (errorBox) {
+      errorBox.textContent = formatSupabaseError(error);
+      errorBox.style.display = 'block';
+    }
+    return;
+  }
 
-      if (errorBox) errorBox.style.display = 'none';
+  if (errorBox) errorBox.style.display = 'none';
 
-      console.log("✅ Logged in as:", data.user.email);
-      sessionStorage.setItem('leadCaptured', 'true');
+  console.log("✅ Logged in as:", data.user.email);
+  sessionStorage.setItem('leadCaptured', 'true');
 
-      // Check if login was triggered by Save Listing
-      if (sessionStorage.getItem('lead-save-clicked')) {
-        console.log("💾 Saving listing after login...");
+  const modal = document.getElementById("lead-form-modal");
+  if (modal) {
+    modal.style.display = "none";
+    modal.querySelector('h2').textContent = 'Log In to View Property Details';
+  }
 
-        const mlsid = sessionStorage.getItem('lead-mlsid') || '';
-        const address = sessionStorage.getItem('lead-address') || '';
-        const listingKey = `${mlsid}:${address}`;
+  // 🔍 Check for save intent
+  if (sessionStorage.getItem('lead-save-clicked')) {
+    console.log("💾 Saving listing after login...");
 
-        // Save the listing
-        saveListingAfterLogin(listingKey);
-      
-        // Optionally update all matching buttons
-        const allSaveBtns = document.querySelectorAll(`.custom-save-btn[data-mlsid="${mlsid}"]`);
-        allSaveBtns.forEach(btn => {
-          btn.innerHTML = '<i class="fa fa-check"></i><span>Saved</span>';
-        });
+    const mlsid = sessionStorage.getItem('lead-mlsid') || '';
+    const address = sessionStorage.getItem('lead-address') || '';
+    const listingKey = `${mlsid}:${address}`;
 
-        // Cleanup session storage
-        sessionStorage.removeItem('lead-save-clicked');
-        sessionStorage.removeItem('lead-mlsid');
-        sessionStorage.removeItem('lead-address');
+    saveListingAfterLogin(listingKey);
 
-        // Close modal
-        const modal = document.getElementById("lead-form-modal");
-        if (modal) {
-          modal.style.display = "none";
-          modal.querySelector('h2').textContent = 'Log In to View Property Details';
-        }
-
-      } else {
-        // Normal flow: redirect to last viewed property
-        const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
-        const lastViewed = viewed[viewed.length - 1];
-        if (lastViewed) {
-          window.location.href = lastViewed;
-        } else {
-          window.location.reload();
-        }
-      }      
+    // Mark button as saved
+    const allSaveBtns = document.querySelectorAll(`.custom-save-btn[data-mlsid="${mlsid}"]`);
+    allSaveBtns.forEach(btn => {
+      btn.innerHTML = '<i class="fa fa-check"></i><span>Saved</span>';
     });
+
+    // Clear intent flags
+    sessionStorage.removeItem('lead-save-clicked');
+    sessionStorage.removeItem('lead-mlsid');
+    sessionStorage.removeItem('lead-address');
+
+    return; // ✅ Stop here — no redirect!
+  }
+
+  // ✅ Fallback: redirect to last viewed property
+  const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
+  const lastViewed = viewed[viewed.length - 1];
+  if (lastViewed) {
+    window.location.href = lastViewed;
+  } else {
+    window.location.reload();
+  }
+});
   }, 500);
 
   // Reattach signup button logic
