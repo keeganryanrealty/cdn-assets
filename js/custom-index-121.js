@@ -814,15 +814,22 @@ function isListingPage() {
   return path.includes('/property/') || path.includes('/details.php');
 }
 
+let hasInjectedSaveBtn = false; // ✅ Top-level flag
+
 async function injectSaveButtonOnDetailPage() {
-  if (!isListingPage()) return;
+  if (!isListingPage() || hasInjectedSaveBtn) return;
 
-  // 🕒 Delay to ensure nav is fully rendered
   await new Promise(res => setTimeout(res, 500));
-
   const navList = await waitForSelector('.nav-style-primary').catch(() => null);
-  if (!navList || navList.querySelector('.custom-save-btn')) {
-    console.log('❌ Could not find nav list or button already injected');
+
+  if (!navList) {
+    console.log('❌ Could not find nav list');
+    return;
+  }
+
+  if (navList.querySelector('.custom-save-btn')) {
+    console.log('⚠️ Save button already present');
+    hasInjectedSaveBtn = true;
     return;
   }
 
@@ -830,7 +837,6 @@ async function injectSaveButtonOnDetailPage() {
 
   const li = document.createElement('li');
   li.className = 'nav-item';
-  li.style.display = 'list-item';
   li.style.textAlign = 'left';
 
   const btn = document.createElement('a');
@@ -838,33 +844,12 @@ async function injectSaveButtonOnDetailPage() {
   btn.className = 'custom-save-btn nav-link';
   btn.innerHTML = `<i class="fa fa-heart"></i><span style="margin-left: 6px;">Save Listing</span>`;
   btn.style.display = 'block';
-  btn.style.color = '#fff';
 
   li.appendChild(btn);
   navList.prepend(li);
-  console.log('✅ Save button injected:', li);
+  hasInjectedSaveBtn = true;
 
-  // Fallback re-injector in case something deletes it
-  setTimeout(() => {
-    if (!document.querySelector('.custom-save-btn')) {
-      console.log("🔁 Re-inserting save button...");
-      navList.prepend(li);
-    }
-  }, 1000);
-}
-
-// Mutation observer to detect page changes
-if (isListingPage()) {
-  const detailObserver = new MutationObserver(() => {
-    injectSaveButtonOnDetailPage();
-  });
-
-  detailObserver.observe(document.body, {
-    childList: true,
-    subtree: true,
-  });
-
-  injectSaveButtonOnDetailPage();
+  console.log('✅ Save button injected');
 }
 
 
