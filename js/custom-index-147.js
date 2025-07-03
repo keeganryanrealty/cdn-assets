@@ -1021,7 +1021,7 @@ if (isListingPage()) {
       newLink.removeAttribute('onclick');
       newLink.addEventListener('click', e => {
         e.preventDefault();
-        window.location.href = '/pages/contact';
+        window.open(newLink.href, '_blank');
       });
       askLink.replaceWith(newLink);
     }
