@@ -768,6 +768,7 @@ if (document.readyState === 'loading') {
 // ==========================
 // 6. Inject Save Buttons on Listing Pages
 // ==========================
+// Utility to wait for selector
 function waitForSelector(selector, timeout = 5000) {
   return new Promise((resolve, reject) => {
     const interval = 100;
@@ -778,7 +779,7 @@ function waitForSelector(selector, timeout = 5000) {
       const el = document.querySelector(selector);
       if (el) return resolve(el);
       attempts++;
-      if (attempts * interval >= timeout) return reject(`⏰ Timeout: ${selector} not found`);
+      if (attempts * interval >= timeout) return reject(null);
       setTimeout(check, interval);
     };
 
@@ -786,19 +787,25 @@ function waitForSelector(selector, timeout = 5000) {
   });
 }
 
-// Inject Save Button on Detail Page
-async function injectSaveButtonOnDetailPage() {
-  let navList;
-  try {
-    navList = await waitForSelector('.nav-style-primary');
-  } catch (err) {
-    console.warn("⏰ Save button not injected — nav list not found in time");
-    return;
-  }
+// Utility to detect listing detail page
+function isListingPage() {
+  const path = window.location.pathname;
+  return path.includes('/property/') || path.includes('/details.php');
+}
 
+async function injectSaveButtonOnDetailPage() {
+  if (!isListingPage()) return;
+
+  // 🕒 Delay slightly to avoid race with built-in render
+  await new Promise(res => setTimeout(res, 300));
+
+  const navList = await waitForSelector('.nav-style-primary');
   if (!navList || navList.querySelector('.custom-save-btn')) return;
 
-  // Get MLS & MLS ID from URL
+  // 🚫 Remove default save buttons if any (they might overwrite ours)
+  document.querySelectorAll('.saveListing').forEach(el => el.remove());
+
+  // Extract MLS + MLSID
   const path = window.location.pathname;
   const params = new URLSearchParams(window.location.search);
   let mls = '';
@@ -825,7 +832,7 @@ async function injectSaveButtonOnDetailPage() {
     address = extractAddressFromSlug(slug);
   }
 
-  // Create button
+  // Build button
   const li = document.createElement('li');
   li.className = 'nav-item';
 
@@ -840,10 +847,9 @@ async function injectSaveButtonOnDetailPage() {
   navList.prepend(li);
 
   // Check saved state
-  window.supabase.auth.getSession().then(async ({ data: { session } }) => {
-    const userId = session?.user?.id;
-    if (!userId) return;
-
+  const { data: { session } } = await window.supabase.auth.getSession();
+  const userId = session?.user?.id;
+  if (userId) {
     const { data: saved } = await window.supabase
       .from('saved_listings')
       .select('id')
@@ -853,12 +859,11 @@ async function injectSaveButtonOnDetailPage() {
       .maybeSingle();
 
     if (saved) markButtonAsSaved(btn);
-  });
+  }
 
-  // Click handler
+  // Add click handler
   btn.addEventListener('click', async (e) => {
     e.preventDefault();
-
     const { data: { session } } = await window.supabase.auth.getSession();
 
     if (!session) {
@@ -885,19 +890,19 @@ async function injectSaveButtonOnDetailPage() {
   });
 }
 
-// Mutation observer to re-inject when DOM changes
-const detailObserver = new MutationObserver(() => {
+// Only activate observer on detail pages
+if (isListingPage()) {
+  const detailObserver = new MutationObserver(() => {
+    injectSaveButtonOnDetailPage();
+  });
+
+  detailObserver.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
+
   injectSaveButtonOnDetailPage();
-});
-
-detailObserver.observe(document.body, {
-  childList: true,
-  subtree: true,
-});
-
-// Run immediately once
-injectSaveButtonOnDetailPage();
-
+}
 
 
 
