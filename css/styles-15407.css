@@ -739,7 +739,7 @@ transition: all 0s ease;
   font-family: 'BodyFont', sans-serif;
   font-size: 16px;
   color: #fff;
-  background-color: #990000E6 !important;
+  background-color: rgba(179, 0, 0, 0.85) !important;
   transition: background-color 0.3s ease;
   cursor: pointer;
   text-decoration: none;
