@@ -793,95 +793,80 @@ function extractMLSFromURL() {
 
 function waitForSelector(selector, timeout = 5000) {
   return new Promise((resolve, reject) => {
-    const start = Date.now();
+    const interval = 100;
+    const maxAttempts = timeout / interval;
+    let attempts = 0;
+
     const check = () => {
       const el = document.querySelector(selector);
       if (el) return resolve(el);
-      if (Date.now() - start >= timeout) return reject(`⏰ ${selector} not found in time`);
-      requestAnimationFrame(check);
+      attempts++;
+      if (attempts * interval >= timeout) return reject(null);
+      setTimeout(check, interval);
     };
+
     check();
   });
+}
+
+function isListingPage() {
+  const path = window.location.pathname;
+  return path.includes('/property/') || path.includes('/details.php');
 }
 
 async function injectSaveButtonOnDetailPage() {
   if (!isListingPage()) return;
 
-  try {
-    const navList = await waitForSelector('.nav-style-primary');
+  // 🕒 Delay to ensure nav is fully rendered
+  await new Promise(res => setTimeout(res, 500));
 
-    // 🧹 Always remove default Save Listing button
-    navList.querySelectorAll('.saveListing')?.forEach(el => el.closest('.nav-item')?.remove());
-
-    // Avoid duplicate injection
-    if (navList.querySelector('.custom-save-btn')) return;
-
-    const { mls, mlsid } = extractMLSFromURL();
-    if (!mls || !mlsid) return;
-
-    const listingKey = `${mls}-${mlsid}`;
-    let address = document.querySelector('h1')?.textContent?.trim() || 'Unknown Address';
-
-    const li = document.createElement('li');
-    li.className = 'nav-item';
-
-    const btn = document.createElement('a');
-    btn.href = 'javascript:void(0)';
-    btn.className = 'custom-save-btn nav-link';
-    btn.dataset.mls = mls;
-    btn.dataset.mlsid = mlsid;
-    btn.innerHTML = `<i class="fa fa-heart"></i><span style="margin-left: 6px;">Save Listing</span>`;
-
-    li.appendChild(btn);
-    navList.prepend(li);
-
-    // Check saved state
-    const { data: { session } } = await window.supabase.auth.getSession();
-    const userId = session?.user?.id;
-    if (userId) {
-      const { data: saved } = await window.supabase
-        .from('saved_listings')
-        .select('id')
-        .eq('mls_id', mlsid)
-        .eq('mls', mls)
-        .eq('user_id', userId)
-        .maybeSingle();
-
-      if (saved) markButtonAsSaved(btn);
-    }
-
-    // Handle click
-    btn.addEventListener('click', async (e) => {
-      e.preventDefault();
-      const { data: { session } } = await window.supabase.auth.getSession();
-
-      if (!session) {
-        const modal = document.getElementById('lead-form-modal');
-        if (modal) {
-          modal.querySelector('h2').textContent = 'Login to Save Listing';
-          modal.style.display = 'block';
-        }
-
-        const onLogin = async () => {
-          const { data: { session: newSession } } = await window.supabase.auth.getSession();
-          if (newSession) {
-            window.removeEventListener('supabase:auth:login', onLogin);
-            await saveListingAfterLogin(listingKey, newSession.user.id, address);
-            updateSaveButtonsUI(mls, mlsid);
-          }
-        };
-
-        window.addEventListener('supabase:auth:login', onLogin);
-      } else {
-        await saveListingAfterLogin(listingKey, session.user.id, address);
-        updateSaveButtonsUI(mls, mlsid);
-      }
-    });
-
-  } catch (err) {
-    console.warn("⚠️ Could not inject custom save button:", err);
+  const navList = await waitForSelector('.nav-style-primary').catch(() => null);
+  if (!navList || navList.querySelector('.custom-save-btn')) {
+    console.log('❌ Could not find nav list or button already injected');
+    return;
   }
+
+  console.log('✅ Found nav list:', navList);
+
+  const li = document.createElement('li');
+  li.className = 'nav-item';
+  li.style.display = 'list-item';
+  li.style.textAlign = 'left';
+
+  const btn = document.createElement('a');
+  btn.href = '#';
+  btn.className = 'custom-save-btn nav-link';
+  btn.innerHTML = `<i class="fa fa-heart"></i><span style="margin-left: 6px;">Save Listing</span>`;
+  btn.style.display = 'block';
+  btn.style.color = '#fff';
+
+  li.appendChild(btn);
+  navList.prepend(li);
+  console.log('✅ Save button injected:', li);
+
+  // Fallback re-injector in case something deletes it
+  setTimeout(() => {
+    if (!document.querySelector('.custom-save-btn')) {
+      console.log("🔁 Re-inserting save button...");
+      navList.prepend(li);
+    }
+  }, 1000);
 }
+
+// Mutation observer to detect page changes
+if (isListingPage()) {
+  const detailObserver = new MutationObserver(() => {
+    injectSaveButtonOnDetailPage();
+  });
+
+  detailObserver.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
+
+  injectSaveButtonOnDetailPage();
+}
+
 
 
 
