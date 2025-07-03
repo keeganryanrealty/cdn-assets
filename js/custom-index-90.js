@@ -592,7 +592,8 @@ if (window.location.pathname.includes("/property/")) {
 // 1. Inject Save Button
 function injectCustomSaveButtons() {
   document.querySelectorAll('.listing-box').forEach(listingBox => {
-    if (listingBox.querySelector('.custom-save-btn')) return;
+    // Prevent duplicates
+    if (listingBox.querySelector('.custom-save-overlay')) return;
 
     const originalSave = listingBox.querySelector('.saveListing');
     if (!originalSave) return;
@@ -600,16 +601,25 @@ function injectCustomSaveButtons() {
     const mlsid = originalSave.dataset.mlsid;
     const mls = originalSave.dataset.mls;
 
-    const btn = document.createElement('button');
-    btn.className = 'custom-save-btn';
-    btn.dataset.mlsid = mlsid;
-    btn.dataset.mls = mls;
-    btn.innerHTML = `<i class="fa fa-heart"></i><span style="margin-left: 8px;">Save</span>`;
+    // ✅ STEP 1: Inject fake button inside the visual stack
+    const stack = listingBox.querySelector('.listing-box-image-links');
+    if (!stack) return;
 
-    // ✅ Inject it after the button stack, but inside listingBox
-    listingBox.appendChild(btn);
+    const fakeBtn = document.createElement('a');
+    fakeBtn.href = 'javascript:void(0)';
+    fakeBtn.className = 'custom-save-fake';
+    fakeBtn.innerHTML = `<i class="fa fa-heart"></i><span style="margin-left: 8px;">Save</span>`;
+    stack.appendChild(fakeBtn);
+
+    // ✅ STEP 2: Inject invisible overlay for real logic
+    const overlay = document.createElement('div');
+    overlay.className = 'custom-save-overlay';
+    overlay.dataset.mlsid = mlsid;
+    overlay.dataset.mls = mls;
+    listingBox.appendChild(overlay);
   });
 }
+
 
 
 function watchForListings() {
@@ -642,7 +652,7 @@ document.addEventListener('click', function (e) {
 
   e.preventDefault();
   e.stopPropagation();
-  e.stopImmediatePropagation(); // 🔥 Ensures KVCore doesn’t hijack this
+  e.stopImmediatePropagation();
 
   const mlsid = btn.dataset.mlsid;
   const mls = btn.dataset.mls;
@@ -651,7 +661,7 @@ document.addEventListener('click', function (e) {
   sessionStorage.setItem('lead-mlsid', mlsid);
   sessionStorage.setItem('lead-save-clicked', 'true');
 
-  // Optional: Set address
+  // Optionally set address if you want to log it
   const address = btn.closest('.listing-box')?.dataset.address || '';
   sessionStorage.setItem('lead-address', address);
 
