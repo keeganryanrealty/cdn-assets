@@ -265,7 +265,7 @@ function showLeadForm(onSubmit) {
 (function () {
   document.addEventListener("DOMContentLoaded", function () {
     // Load LOGIN form first
-    fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form-4.html")
+    fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form-5.html")
       .then(response => response.text())
       .then(html => {
         const wrapper = document.createElement("div");
@@ -382,7 +382,7 @@ function formatSupabaseSignupError(error) {
 
 // Signup swap
 function swapToSignupForm() {
-  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/create-account-5.html")
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/create-account-6.html")
     .then(response => response.text())
     .then(html => {
 
