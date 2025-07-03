@@ -274,12 +274,19 @@ function injectLoginForm() {
         footer.parentNode.insertBefore(wrapper, footer);
       } else {
         document.body.appendChild(wrapper);
-        console.warn("⚠️ Footer not found — content injected at end of body.");
+        console.warn("⚠️ Footer not found — injected at end of body.");
       }
 
-      console.log("✅ Login form modal injected");
+      const waitForModal = setInterval(() => {
+        const modal = document.getElementById("lead-form-modal");
+        if (!modal) return;
 
-      attachLoginHandlers(); // ✅ login submit + "create account" listeners
+        clearInterval(waitForModal);
+        modal.style.display = "block"; // ✅ Ensure it appears
+
+        console.log("✅ Login form modal injected and displayed");
+        attachLoginHandlers(); // 👈 must be defined globally
+      }, 200);
     })
     .catch(err => {
       console.error("❌ Failed to load login form:", err);
