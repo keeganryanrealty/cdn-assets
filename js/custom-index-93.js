@@ -667,13 +667,39 @@ document.addEventListener('click', function (e) {
         modal.style.display = 'block';
       }
     } else {
-      saveListingAfterLogin(listingKey);
+      saveListingAfterLogin(listingKey, session);
     }
   });
 }, true);
 
 
+// ✅ Save listing to Supabase
+async function saveListingAfterLogin(listingKey, session) {
+  const [mls, mlsid] = listingKey.split('-');
+  const address = sessionStorage.getItem('lead-address') || '';
+  const userId = session.user?.id;
 
+  if (!userId) {
+    console.error("❌ No user ID found.");
+    return;
+  }
+
+  const { error } = await window.supabase.from('saved_listings').insert([
+    {
+      user_id: userId,
+      mls_id: mlsid,
+      mls: mls,
+      address: address
+    }
+  ]);
+
+  if (error) {
+    console.error("❌ Failed to save listing:", error.message);
+  } else {
+    console.log("✅ Listing saved to Supabase:", listingKey);
+    // Optional: update UI to "Saved"
+  }
+}
 
 
 
