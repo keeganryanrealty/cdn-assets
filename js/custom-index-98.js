@@ -330,6 +330,7 @@ loginForm.addEventListener('submit', async function (e) {
 
   console.log("✅ Logged in as:", data.user.email);
   sessionStorage.setItem('leadCaptured', 'true');
+  window.dispatchEvent(new Event('supabase:auth:login'));
 
   const modal = document.getElementById("lead-form-modal");
   if (modal) {
