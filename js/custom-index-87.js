@@ -610,9 +610,8 @@ function injectCustomSaveButtons() {
     saveBtn.dataset.mlsid = mlsid;
     saveBtn.dataset.mls = mls;
     saveBtn.innerHTML = `<i class="fa fa-heart"></i><span>Save</span>`;
+    wrapper.appendChild(saveBtn);
 
-    container.appendChild(saveBtn);
-    wrapper.appendChild(container);
   });
 }
 
