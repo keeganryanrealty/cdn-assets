@@ -959,6 +959,10 @@ if (isListingPage()) {
 
 
 
+
+
+
+
 // Hide only .saveListing buttons inside the nav on detail pages
 function hideSystemSaveButtonsOnDetailPage() {
   const path = window.location.pathname;
@@ -985,6 +989,41 @@ const intervalId = setInterval(() => {
 // Optional: Stop checking after 30 seconds
 setTimeout(() => clearInterval(intervalId), 30000);
 
+// ==========================
+// 7. Modify Listing Page Nav Links
+// ==========================
+if (isListingPage()) {
+  const hideInterval = setInterval(() => {
+    // Hide unwanted nav links
+    document.querySelectorAll('a.nav-link').forEach(link => {
+      const text = link.textContent?.trim()?.toLowerCase();
 
+      if (
+        text.includes('property email alerts') ||
+        text.includes('print flyer') ||
+        text.includes('chat with us now')
+      ) {
+        link.closest('.nav-item')?.style.setProperty('display', 'none', 'important');
+      }
+    });
+
+    // Intercept Ask Agent and redirect to Contact page
+    const askAgent = document.querySelector('a.ask-question.nav-link');
+    if (askAgent) {
+      askAgent.href = '/pages/contact';
+      askAgent.onclick = null;
+    }
+
+    // Intercept Request Showing and redirect to Calendly
+    const requestShowing = document.querySelector('a.showing-request.nav-link');
+    if (requestShowing) {
+      requestShowing.href = 'https://calendly.com/keegan-ryan-exprealty/schedule-a-consultation';
+      requestShowing.onclick = null;
+    }
+  }, 1000); // Repeat in case nav loads late
+
+  // Stop checking after 30 seconds
+  setTimeout(() => clearInterval(hideInterval), 30000);
+}
 
 
