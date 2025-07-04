@@ -554,18 +554,15 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 // === END LOGOUT ===
 
-// LOGIN DISPLAY FOR /PROPERTY/ PAGES Wait for Supabase to initialize + login modal to inject
-if (window.location.pathname.includes("/property/")) {
-  // Wait until DOM is ready
+// LOGIN DISPLAY FOR LISTING PAGES
+if (isListingPage()) {
   document.addEventListener("DOMContentLoaded", function () {
-    // Wait until modal exists (if dynamically loaded)
     const checkExist = setInterval(() => {
       const modal = document.getElementById("lead-form-modal");
       if (!modal || window.supabase === undefined) return;
 
       clearInterval(checkExist);
 
-      // Check login status
       window.supabase.auth.getSession().then(({ data: { session } }) => {
         if (!session) {
           console.log("🔐 Not logged in — showing login modal");
