@@ -516,7 +516,7 @@ document.addEventListener("click", function (e) {
 
 // === LOGOUT ===
 document.addEventListener("click", function (e) {
-  const btn = e.target.closest("#logout-btn");
+  const btn = e.target.closest("#logout-link"); // ✅ Match the HTML ID
   if (!btn) return;
 
   e.preventDefault();
