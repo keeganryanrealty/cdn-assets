@@ -515,23 +515,25 @@ document.addEventListener("click", function (e) {
 // === END VIEW DETAILS LEAD FORM LOGIC ===
 
 // === LOGOUT ===
-document.addEventListener("DOMContentLoaded", function () {
-  const logoutLink = document.getElementById("logout-link");
+document.addEventListener("click", function (e) {
+  const btn = e.target.closest("#logout-btn");
+  if (!btn) return;
 
-  if (logoutLink) {
-    logoutLink.addEventListener("click", async function (e) {
-      e.preventDefault();
-      const { error } = await window.supabase.auth.signOut();
-      if (!error) {
-        console.log("✅ Logged out");
-        sessionStorage.removeItem("leadCaptured");
-        sessionStorage.removeItem("viewedProperties");
-        window.location.reload();
-      } else {
-        console.error("❌ Logout failed:", error.message);
-      }
-    });
-  }
+  e.preventDefault();
+  e.stopPropagation();
+
+  window.supabase.auth.signOut().then(() => {
+    console.log("✅ Logged out successfully");
+
+    // 🧹 Clear session storage manually
+    sessionStorage.clear();
+
+    // 🔁 Redirect to homepage or reload
+    window.location.href = '/';
+  }).catch(err => {
+    console.error("❌ Logout error", err);
+    alert("Failed to log out. Please try again.");
+  });
 });
 
 document.addEventListener("DOMContentLoaded", async function () {
