@@ -1040,3 +1040,13 @@ if (isListingPage()) {
   // Stop after 30 seconds
   setTimeout(() => clearInterval(navEditInterval), 30000);
 }
+
+
+// Ensure View Details buttons get intercepted
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    setupViewDetailsInterception();
+  });
+} else {
+  setupViewDetailsInterception();
+}
