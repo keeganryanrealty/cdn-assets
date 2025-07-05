@@ -930,8 +930,8 @@ async function injectSaveButtonOnDetailPage() {
   console.log('✅ Save button injected below widget-nav');
 
   // 👇 Insert duplicate Save button into mobile-only nav (row.hidden-md-up)
-const mobileRow = document.querySelector('.row.hidden-md-up');
-if (mobileRow && !mobileRow.querySelector('.custom-save-btn-mobile')) {
+  const mobileRow = document.querySelector('.row.hidden-md-up');
+  if (mobileRow && !mobileRow.querySelector('.custom-save-btn-mobile')) {
   const mobileBtn = document.createElement('a');
   mobileBtn.href = '#';
   mobileBtn.className = 'custom-save-btn custom-save-btn-mobile nav-link';
@@ -955,8 +955,13 @@ if (mobileRow && !mobileRow.querySelector('.custom-save-btn-mobile')) {
     mobileRow.appendChild(ul);
   }
 
-  mobileNav.prepend(li);
-}
+  const mobileWidgetNavLi = mobileNav.querySelector('li.widget-nav');
+    if (mobileWidgetNavLi) {
+    mobileWidgetNavLi.insertAdjacentElement('afterend', li);
+    } else {
+    mobileNav.appendChild(li); // fallback if widget-nav not found
+    }
+  }
 
 }
 
