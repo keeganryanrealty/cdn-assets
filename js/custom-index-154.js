@@ -1028,51 +1028,57 @@ setTimeout(() => clearInterval(intervalId), 30000);
 // ==========================
 if (isListingPage()) {
   const navEditInterval = setInterval(() => {
-    // ✅ Only target the VISIBLE nav-style-primary within widget.hidden-sm-down
-    const navList = document.querySelector(
-      '.col-sm-12.col-md-12.col-lg-3 .widget.hidden-sm-down .nav-style-primary'
-    );
-    if (!navList) return;
+    const navSelectors = [
+      '.col-sm-12.col-md-12.col-lg-3 .widget.hidden-sm-down .nav-style-primary', // Desktop
+      '.row.hidden-md-up .nav-style-primary' // Mobile
+    ];
 
-    // Hide unwanted nav items
-    navList.querySelectorAll('a.nav-link').forEach(link => {
-      const text = link.textContent?.trim()?.toLowerCase();
+    navSelectors.forEach(selector => {
+      const navList = document.querySelector(selector);
+      if (!navList) return;
 
-      if (
-        text.includes('property email alerts') ||
-        text.includes('print flyer') ||
-        text.includes('chat with us now')
-      ) {
-        link.closest('.nav-item')?.style.setProperty('display', 'none', 'important');
+      // Hide unwanted links
+      navList.querySelectorAll('a.nav-link').forEach(link => {
+        const text = link.textContent?.trim()?.toLowerCase();
+        if (
+          text.includes('property email alerts') ||
+          text.includes('print flyer') ||
+          text.includes('chat with us now')
+        ) {
+          link.closest('.nav-item')?.style.setProperty('display', 'none', 'important');
+        }
+      });
+
+      // Replace "Ask agent a question"
+      const askLink = navList.querySelector('a.ask-question.nav-link');
+      if (askLink && !askLink.dataset.customHandled) {
+        const newLink = askLink.cloneNode(true);
+        newLink.href = '/pages/contact';
+        newLink.removeAttribute('onclick');
+        newLink.dataset.customHandled = 'true';
+        newLink.addEventListener('click', e => {
+          e.preventDefault();
+          window.open('/pages/contact', '_blank');
+        });
+        askLink.replaceWith(newLink);
+      }
+
+      // Replace "Request Showing"
+      const showLink = navList.querySelector('a.showing-request.nav-link');
+      if (showLink && !showLink.dataset.customHandled) {
+        const newLink = showLink.cloneNode(true);
+        newLink.href = 'https://calendly.com/keegan-ryan-exprealty/schedule-a-consultation';
+        newLink.removeAttribute('onclick');
+        newLink.dataset.customHandled = 'true';
+        newLink.addEventListener('click', e => {
+          e.preventDefault();
+          window.open(newLink.href, '_blank');
+        });
+        showLink.replaceWith(newLink);
       }
     });
-
-    // Intercept "Ask agent a question"
-    const askLink = navList.querySelector('a.ask-question.nav-link');
-    if (askLink) {
-      const newLink = askLink.cloneNode(true);
-      newLink.href = '/pages/contact';
-      newLink.removeAttribute('onclick');
-      newLink.addEventListener('click', e => {
-        e.preventDefault();
-        window.open(newLink.href, '_blank');
-      });
-      askLink.replaceWith(newLink);
-    }
-
-    // Intercept "Request Showing"
-    const showLink = navList.querySelector('a.showing-request.nav-link');
-    if (showLink) {
-      const newLink = showLink.cloneNode(true);
-      newLink.href = 'https://calendly.com/keegan-ryan-exprealty/schedule-a-consultation';
-      newLink.removeAttribute('onclick');
-      newLink.addEventListener('click', e => {
-        e.preventDefault();
-        window.open(newLink.href, '_blank');
-      });
-      showLink.replaceWith(newLink);
-    }
   }, 1000);
+}
 
   // Stop after 30 seconds
   setTimeout(() => clearInterval(navEditInterval), 30000);
