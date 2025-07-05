@@ -928,6 +928,36 @@ async function injectSaveButtonOnDetailPage() {
   hasInjectedSaveBtn = true;
 
   console.log('✅ Save button injected below widget-nav');
+
+  // 👇 Insert duplicate Save button into mobile-only nav (row.hidden-md-up)
+const mobileRow = document.querySelector('.row.hidden-md-up');
+if (mobileRow && !mobileRow.querySelector('.custom-save-btn-mobile')) {
+  const mobileBtn = document.createElement('a');
+  mobileBtn.href = '#';
+  mobileBtn.className = 'custom-save-btn custom-save-btn-mobile nav-link';
+  mobileBtn.dataset.mls = mls;
+  mobileBtn.dataset.mlsid = mlsid;
+  mobileBtn.dataset.address = address;
+  mobileBtn.innerHTML = `<i class="fa fa-heart"></i> Save`;
+  mobileBtn.style.display = 'block';
+
+  const li = document.createElement('li');
+  li.className = 'nav-item';
+  li.style.textAlign = 'left';
+  li.appendChild(mobileBtn);
+
+  // Create mobile-style nav container if needed
+  let mobileNav = mobileRow.querySelector('.nav-style-primary');
+  if (!mobileNav) {
+    const ul = document.createElement('ul');
+    ul.className = 'nav nav-stacked nav-style-primary';
+    mobileNav = ul;
+    mobileRow.appendChild(ul);
+  }
+
+  mobileNav.prepend(li);
+}
+
 }
 
 // Initial injection
