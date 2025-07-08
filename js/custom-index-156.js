@@ -127,12 +127,15 @@ document.addEventListener('click', function (e) {
 }, true);
 
 // 2. View Details Submit Form Logic
+function extractCityFromAddress(address) {
+  const parts = address.split(',');
+  return parts.length >= 2 ? parts[1].trim() : '';
+}
+
 function showLeadForm(onSubmit) {
   const modal = document.getElementById('lead-form-modal');
   if (!modal) return;
-  
-  console.log("📩 Attaching form listener in showLeadForm()");
- 
+
   modal.style.display = 'block';
 
   const pollInterval = 100;
@@ -146,10 +149,8 @@ function showLeadForm(onSubmit) {
       clearInterval(waitForForm);
       form.dataset.handlerAttached = "true";
 
-      // ✅ NOW the form exists — safe to attach submit listener
       form.addEventListener('submit', async function (e) {
         e.preventDefault();
-        const modal = document.getElementById("lead-form-modal");
 
         const fullName = form.name.value.trim();
         const nameParts = fullName.split(" ");
@@ -157,34 +158,19 @@ function showLeadForm(onSubmit) {
         const lastName = nameParts.slice(1).join(" ") || '';
         const email = form.email.value;
         const phone = form.phone.value || '';
-      
-        console.log("📤 Attempting Supabase signup:", email);
-        
+        const password = form.password.value;
+
         const mlsid = sessionStorage.getItem('lead-mlsid') || '';
-        const propertyAddress = sessionStorage.getItem('lead-address') || '';
+        const address = sessionStorage.getItem('lead-address') || '';
+        const city = extractCityFromAddress(address);
 
-        console.log("📍 MLS ID (from session):", mlsid);
-        console.log("🏠 Property Address (from session):", propertyAddress);
-        const password = form.password.value; // must be included in your form
-        
-        const leadData = {
-          email,
-          merge_fields: {
-            FNAME: firstName,
-            LNAME: lastName,
-            PHONE: phone
-          },
-          tags: ["Buyer", "Browsing Lead"],
-          mlsid,
-          address: propertyAddress
-        };
-
-        // SIGN UP in Supabase
+        // 🔒 Sign up without email confirmation
         const { data, error } = await window.supabase.auth.signUp({
           email,
           password,
           options: {
-          data: { full_name: fullName }
+            emailRedirectTo: null,
+            data: { full_name: fullName }
           }
         });
 
@@ -193,75 +179,79 @@ function showLeadForm(onSubmit) {
           return;
         }
 
-        console.log("✅ Supabase user created:", data.user.email);
+        // 💾 Cache for later sync (if Save flow triggers it)
+        sessionStorage.setItem('lead-fname', firstName);
+        sessionStorage.setItem('lead-lname', lastName);
+        sessionStorage.setItem('lead-phone', phone);
 
-        // ✅ Mailchimp call
-        fetch('https://api-six-tau-53.vercel.app/api/mailchimp', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          mode: 'cors',
-          credentials: 'include',
-          body: JSON.stringify(leadData)
-        })
-        .then(async res => {
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.message || 'Mailchimp error');
-          console.log("✅ Lead sent to Mailchimp:", data);
-        })
-        .catch(error => {
-          console.error("❌ Mailchimp error:", error.message);
-        });
+        // ✅ Avoid duplicate syncs
+        if (!sessionStorage.getItem('lead-registered-synced')) {
+          sessionStorage.setItem('lead-registered-synced', 'true');
 
-        // ✅ KVCore call
-        fetch('https://api-six-tau-53.vercel.app/api/kvcore', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          mode: 'cors',
-          credentials: 'include',
-          body: JSON.stringify({
-            firstName,
-            lastName,
+          const leadData = {
             email,
-            phone,
+            merge_fields: {
+              FNAME: firstName,
+              LNAME: lastName,
+              PHONE: phone
+            },
+            tags: ["Buyer", "Browsing Lead", city],
             mlsid,
-            address: propertyAddress
-          })
-        })
-        .then(async res => {
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.message || 'KVCore error');
-          console.log("✅ Lead sent to KVCore:", data);
-        })
-        .catch(error => {
-          console.error("❌ KVCore error:", error.message);
-        });
+            address
+          };
 
+          // ✅ Mailchimp
+          fetch('https://api-six-tau-53.vercel.app/api/mailchimp', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify(leadData)
+          }).then(async res => {
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message);
+            console.log("✅ Sent to Mailchimp:", data);
+          }).catch(err => console.error("❌ Mailchimp error:", err.message));
+
+          // ✅ KVCore
+          fetch('https://api-six-tau-53.vercel.app/api/kvcore', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            body: JSON.stringify({
+              firstName,
+              lastName,
+              email,
+              phone,
+              mlsid,
+              address
+            })
+          }).then(async res => {
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.message);
+            console.log("✅ Sent to KVCore:", data);
+          }).catch(err => console.error("❌ KVCore error:", err.message));
+        }
+
+        // Close modal & clear if not a Save-based submit
         setTimeout(() => {
           modal.style.display = 'none';
           sessionStorage.removeItem('lead-mlsid');
           sessionStorage.removeItem('lead-address');
-          if (sessionStorage.getItem('lead-save-clicked')) {
-            // Let login handler take care of save action — don't call onSubmit callback
-            return;
-          }
 
-          if (typeof onSubmit === 'function') {
+          if (!sessionStorage.getItem('lead-save-clicked') && typeof onSubmit === 'function') {
             onSubmit();
           }
-
         }, 250);
       });
     }
 
     if (++attempts > maxAttempts) {
       clearInterval(waitForForm);
-      console.warn("❌ Gave up waiting for lead form to load.");
+      console.warn("❌ Lead form not found after waiting.");
     }
   }, pollInterval);
 }
