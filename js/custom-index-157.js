@@ -160,12 +160,18 @@ function showLeadForm(onSubmit) {
         const phone = form.phone.value || '';
         const password = form.password.value;
 
+        // Store for later use
+        sessionStorage.setItem('lead-fname', firstName);
+        sessionStorage.setItem('lead-lname', lastName);
+        sessionStorage.setItem('lead-phone', phone);
+        sessionStorage.setItem('lead-email', email);
+
         const mlsid = sessionStorage.getItem('lead-mlsid') || '';
         const address = sessionStorage.getItem('lead-address') || '';
-        const city = extractCityFromAddress(address);
+        sessionStorage.setItem('lead-city', extractCityFromAddress(address));
 
-        // 🔒 Sign up without email confirmation
-        const { data, error } = await window.supabase.auth.signUp({
+        // Sign up WITHOUT confirmation
+        const { error } = await window.supabase.auth.signUp({
           email,
           password,
           options: {
@@ -174,78 +180,28 @@ function showLeadForm(onSubmit) {
           }
         });
 
-        if (error) {
+       if (error) {
           alert("Signup error: " + error.message);
-          return;
+        return;
         }
 
-        // 💾 Cache for later sync (if Save flow triggers it)
-        sessionStorage.setItem('lead-fname', firstName);
-        sessionStorage.setItem('lead-lname', lastName);
-        sessionStorage.setItem('lead-phone', phone);
 
-        // ✅ Avoid duplicate syncs
-        if (!sessionStorage.getItem('lead-registered-synced')) {
-          sessionStorage.setItem('lead-registered-synced', 'true');
+        modal.style.display = 'none';
 
-          const leadData = {
-            email,
-            merge_fields: {
-              FNAME: firstName,
-              LNAME: lastName,
-              PHONE: phone
-            },
-            tags: ["Buyer", "Browsing Lead", city],
-            mlsid,
-            address
-          };
-
-          // ✅ Mailchimp
-          fetch('https://api-six-tau-53.vercel.app/api/mailchimp', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            },
-            body: JSON.stringify(leadData)
-          }).then(async res => {
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.message);
-            console.log("✅ Sent to Mailchimp:", data);
-          }).catch(err => console.error("❌ Mailchimp error:", err.message));
-
-          // ✅ KVCore
-          fetch('https://api-six-tau-53.vercel.app/api/kvcore', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-              firstName,
-              lastName,
-              email,
-              phone,
-              mlsid,
-              address
-            })
-          }).then(async res => {
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.message);
-            console.log("✅ Sent to KVCore:", data);
-          }).catch(err => console.error("❌ KVCore error:", err.message));
+        
+      // ✅ Trigger lead sync + redirect
+      window.dispatchEvent(new CustomEvent('supabase:auth:login'));
+        
+        const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
+        const lastViewed = viewed[viewed.length - 1];
+        if (lastViewed) {
+          window.location.href = lastViewed;
+        } else {
+          window.location.reload();
         }
 
-        // Close modal & clear if not a Save-based submit
-        setTimeout(() => {
-          modal.style.display = 'none';
-          sessionStorage.removeItem('lead-mlsid');
-          sessionStorage.removeItem('lead-address');
 
-          if (!sessionStorage.getItem('lead-save-clicked') && typeof onSubmit === 'function') {
-            onSubmit();
-          }
-        }, 250);
+        // Just wait — auth state change will take care of the rest
       });
     }
 
@@ -291,6 +247,7 @@ function injectLoginForm(showImmediately = false) {
       console.error("❌ Failed to load login form:", err);
     });
 }
+
 // Attach Log In Handlers
 function attachLoginHandlers() {
   const observeLoginSubmit = setInterval(() => {
@@ -379,6 +336,62 @@ if (document.readyState === 'loading') {
 } else {
   injectLoginForm(false);
 }
+
+//Supabase, KVCore, Mailchimp Callers
+window.addEventListener('supabase:auth:login', async () => {
+  // Prevent duplicate syncs
+  if (sessionStorage.getItem('lead-registered-synced')) return;
+  sessionStorage.setItem('lead-registered-synced', 'true');
+
+  const email = sessionStorage.getItem('lead-email') || '';
+  const firstName = sessionStorage.getItem('lead-fname') || '';
+  const lastName = sessionStorage.getItem('lead-lname') || '';
+  const phone = sessionStorage.getItem('lead-phone') || '';
+  const mlsid = sessionStorage.getItem('lead-mlsid') || '';
+  const address = sessionStorage.getItem('lead-address') || '';
+  const city = sessionStorage.getItem('lead-city') || '';
+
+  const leadData = {
+    email,
+    merge_fields: {
+      FNAME: firstName,
+      LNAME: lastName,
+      PHONE: phone
+    },
+    tags: ["Buyer", "Browsing Lead", city],
+    mlsid,
+    address
+  };
+
+  // ✅ Mailchimp
+  fetch('https://api-six-tau-53.vercel.app/api/mailchimp', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(leadData)
+  }).then(async res => {
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message);
+    console.log("✅ Sent to Mailchimp:", data);
+  }).catch(err => console.error("❌ Mailchimp error:", err.message));
+
+  // ✅ KVCore
+  fetch('https://api-six-tau-53.vercel.app/api/kvcore', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      firstName,
+      lastName,
+      email,
+      phone,
+      mlsid,
+      address
+    })
+  }).then(async res => {
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message);
+    console.log("✅ Sent to KVCore:", data);
+  }).catch(err => console.error("❌ KVCore error:", err.message));
+});
 
 
 // Error formatter functions should be defined OUTSIDE
@@ -477,7 +490,21 @@ const observeBackToLogin = setInterval(() => {
             if (errorBox) errorBox.style.display = 'none';
 
             console.log("✅ Signup successful:", data.user.email);
-            showLeadForm(); // Optional logic after signup
+            sessionStorage.setItem('leadCaptured', 'true');
+
+            window.dispatchEvent(new CustomEvent('supabase:auth:login'));
+
+            const modal = document.getElementById("lead-form-modal");
+            if (modal) modal.style.display = 'none';
+
+            const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
+            const lastViewed = viewed[viewed.length - 1];
+            if (lastViewed) {
+              window.location.href = lastViewed;
+            } else {
+              window.location.reload();
+            }
+
           });
         }
       }, 300);
