@@ -434,7 +434,6 @@ function swapToSignupForm() {
   fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/create-account-6.html")
     .then(response => response.text())
     .then(html => {
-
       const modal = document.getElementById("lead-form-modal");
       if (!modal) {
         console.error("❌ Modal container not found to inject signup form");
@@ -443,25 +442,26 @@ function swapToSignupForm() {
 
       modal.innerHTML = html;
 
-// Back to login form logic
-const observeBackToLogin = setInterval(() => {
-  const backBtn = document.getElementById("back-to-login-btn");
-  if (!backBtn) return;
+      // Back to login form logic
+      const observeBackToLogin = setInterval(() => {
+        const backBtn = document.getElementById("back-to-login-btn");
+        if (!backBtn) return;
 
-  clearInterval(observeBackToLogin);
+        clearInterval(observeBackToLogin);
 
-  backBtn.addEventListener("click", () => {
-    console.log("🔁 Switching back to login form...");
-    
-    // Completely remove the modal so injectLoginForm() re-adds it from scratch
-    const modal = document.getElementById("lead-form-modal");
-    if (modal) modal.remove();
+        backBtn.addEventListener("click", () => {
+          console.log("🔁 Switching back to login form...");
 
-    // Re-inject the login form
-    injectLoginForm(true); // ⬅️ Calls your main function that loads the login HTML + listeners
-  });
-}, 300);
+          // Completely remove the modal so injectLoginForm() re-adds it
+          const modal = document.getElementById("lead-form-modal");
+          if (modal) modal.remove();
 
+          // Re-inject the login form
+          injectLoginForm(true);
+        });
+      }, 300);
+
+      // Handle new account creation
       const recheck = setInterval(() => {
         const form = document.getElementById("lead-form");
         if (!form) return;
@@ -473,12 +473,34 @@ const observeBackToLogin = setInterval(() => {
           form.addEventListener('submit', async function (e) {
             e.preventDefault();
 
+            const fullName = form.name.value.trim();
+            const nameParts = fullName.split(" ");
+            const firstName = nameParts[0] || '';
+            const lastName = nameParts.slice(1).join(" ") || '';
             const email = form.email.value.trim();
             const password = form.password.value;
+            const phone = form.phone.value || '';
 
-            const { data, error } = await window.supabase.auth.signUp({ email, password });
+            // Save data to sessionStorage for sync later
+            sessionStorage.setItem('lead-fname', firstName);
+            sessionStorage.setItem('lead-lname', lastName);
+            sessionStorage.setItem('lead-email', email);
+            sessionStorage.setItem('lead-phone', phone);
+
+            const mlsid = sessionStorage.getItem('lead-mlsid') || '';
+            const address = sessionStorage.getItem('lead-address') || '';
+            sessionStorage.setItem('lead-city', extractCityFromAddress(address));
+
+            const { data, error } = await window.supabase.auth.signUp({
+              email,
+              password,
+              options: {
+                emailRedirectTo: null,
+                data: { full_name: fullName }
+              }
+            });
+
             const errorBox = document.getElementById('signup-error-message');
-
             if (error) {
               if (errorBox) {
                 errorBox.textContent = formatSupabaseSignupError(error);
@@ -491,12 +513,10 @@ const observeBackToLogin = setInterval(() => {
 
             console.log("✅ Signup successful:", data.user.email);
             sessionStorage.setItem('leadCaptured', 'true');
-
             window.dispatchEvent(new CustomEvent('supabase:auth:login'));
 
-            const modal = document.getElementById("lead-form-modal");
-            if (modal) modal.style.display = 'none';
-
+            // ✅ Close modal and redirect
+            modal.style.display = 'none';
             const viewed = JSON.parse(sessionStorage.getItem('viewedProperties') || '[]');
             const lastViewed = viewed[viewed.length - 1];
             if (lastViewed) {
@@ -504,7 +524,6 @@ const observeBackToLogin = setInterval(() => {
             } else {
               window.location.reload();
             }
-
           });
         }
       }, 300);
@@ -513,6 +532,7 @@ const observeBackToLogin = setInterval(() => {
       console.error("❌ Failed to load signup form:", err);
     });
 }
+
 // Close Button Handler
 document.addEventListener("click", function (e) {
   if (e.target.matches(".modal-close-btn")) {
