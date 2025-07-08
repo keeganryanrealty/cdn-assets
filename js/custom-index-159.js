@@ -337,61 +337,76 @@ if (document.readyState === 'loading') {
   injectLoginForm(false);
 }
 
-//Supabase, KVCore, Mailchimp Callers
+// Supabase, Mailchimp, KVCore Callers
 window.addEventListener('supabase:auth:login', async () => {
   // Prevent duplicate syncs
   if (sessionStorage.getItem('lead-registered-synced')) return;
   sessionStorage.setItem('lead-registered-synced', 'true');
 
-  const email = sessionStorage.getItem('lead-email') || '';
-  const firstName = sessionStorage.getItem('lead-fname') || '';
-  const lastName = sessionStorage.getItem('lead-lname') || '';
-  const phone = sessionStorage.getItem('lead-phone') || '';
-  const mlsid = sessionStorage.getItem('lead-mlsid') || '';
-  const address = sessionStorage.getItem('lead-address') || '';
-  const city = sessionStorage.getItem('lead-city') || '';
+  // Wait ~250ms to allow sessionStorage to populate fully
+  setTimeout(async () => {
+    const email = sessionStorage.getItem('lead-email') || '';
+    const firstName = sessionStorage.getItem('lead-fname') || '';
+    const lastName = sessionStorage.getItem('lead-lname') || '';
+    const phone = sessionStorage.getItem('lead-phone') || '';
+    const mlsid = sessionStorage.getItem('lead-mlsid') || '';
+    const address = sessionStorage.getItem('lead-address') || '';
+    const city = sessionStorage.getItem('lead-city') || '';
 
-  const leadData = {
-    email,
-    merge_fields: {
-      FNAME: firstName,
-      LNAME: lastName,
-      PHONE: phone
-    },
-    tags: ["Buyer", "Browsing Lead", city],
-    mlsid,
-    address
-  };
+    console.log("📦 Syncing to KVCore/Mailchimp with:", {
+      email, firstName, lastName, phone, mlsid, address, city
+    });
 
-  // ✅ Mailchimp
-  fetch('https://api-six-tau-53.vercel.app/api/mailchimp', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(leadData)
-  }).then(async res => {
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.message);
-    console.log("✅ Sent to Mailchimp:", data);
-  }).catch(err => console.error("❌ Mailchimp error:", err.message));
-
-  // ✅ KVCore
-  fetch('https://api-six-tau-53.vercel.app/api/kvcore', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      firstName,
-      lastName,
+    const leadData = {
       email,
-      phone,
+      merge_fields: {
+        FNAME: firstName,
+        LNAME: lastName,
+        PHONE: phone
+      },
+      tags: ["Buyer", "Browsing Lead", city],
       mlsid,
       address
-    })
-  }).then(async res => {
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.message);
-    console.log("✅ Sent to KVCore:", data);
-  }).catch(err => console.error("❌ KVCore error:", err.message));
+    };
+
+    // ✅ Mailchimp
+    fetch('https://api-six-tau-53.vercel.app/api/mailchimp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(leadData)
+    }).then(async res => {
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+      console.log("✅ Sent to Mailchimp:", data);
+    }).catch(err => console.error("❌ Mailchimp error:", err.message));
+
+    // ✅ KVCore
+    fetch('https://api-six-tau-53.vercel.app/api/kvcore', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        firstName,
+        lastName,
+        email,
+        phone,
+        mlsid,
+        address
+      })
+    }).then(async res => {
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message);
+      console.log("✅ Sent to KVCore:", data);
+    }).catch(err => console.error("❌ KVCore error:", err.message));
+
+    // Optional: Delay cleanup to avoid conflicts
+    setTimeout(() => {
+      sessionStorage.removeItem('lead-save-clicked');
+      sessionStorage.removeItem('lead-mlsid');
+      sessionStorage.removeItem('lead-address');
+    }, 3000);
+  }, 250); // Delay to allow storage to fill from Save flow
 });
+
 
 
 // Error formatter functions should be defined OUTSIDE
