@@ -339,12 +339,11 @@ if (document.readyState === 'loading') {
 
 // Supabase, Mailchimp, KVCore Callers
 window.addEventListener('supabase:auth:login', async () => {
-  // Prevent duplicate syncs
-  if (sessionStorage.getItem('lead-registered-synced')) return;
-  sessionStorage.setItem('lead-registered-synced', 'true');
-
-  // Wait ~250ms to allow sessionStorage to populate fully
+  // Wait a moment to ensure session and sessionStorage are ready
   setTimeout(async () => {
+    if (sessionStorage.getItem('lead-registered-synced')) return;
+    sessionStorage.setItem('lead-registered-synced', 'true');
+
     const email = sessionStorage.getItem('lead-email') || '';
     const firstName = sessionStorage.getItem('lead-fname') || '';
     const lastName = sessionStorage.getItem('lead-lname') || '';
@@ -352,10 +351,6 @@ window.addEventListener('supabase:auth:login', async () => {
     const mlsid = sessionStorage.getItem('lead-mlsid') || '';
     const address = sessionStorage.getItem('lead-address') || '';
     const city = sessionStorage.getItem('lead-city') || '';
-
-    console.log("📦 Syncing to KVCore/Mailchimp with:", {
-      email, firstName, lastName, phone, mlsid, address, city
-    });
 
     const leadData = {
       email,
@@ -368,6 +363,8 @@ window.addEventListener('supabase:auth:login', async () => {
       mlsid,
       address
     };
+
+    console.log("📦 Syncing to KVCore/Mailchimp with:", leadData);
 
     // ✅ Mailchimp
     fetch('https://api-six-tau-53.vercel.app/api/mailchimp', {
@@ -397,14 +394,7 @@ window.addEventListener('supabase:auth:login', async () => {
       if (!res.ok) throw new Error(data.message);
       console.log("✅ Sent to KVCore:", data);
     }).catch(err => console.error("❌ KVCore error:", err.message));
-
-    // Optional: Delay cleanup to avoid conflicts
-    setTimeout(() => {
-      sessionStorage.removeItem('lead-save-clicked');
-      sessionStorage.removeItem('lead-mlsid');
-      sessionStorage.removeItem('lead-address');
-    }, 3000);
-  }, 250); // Delay to allow storage to fill from Save flow
+  }, 300); // <-- 💡 Wait 300ms for auth and storage to finalize
 });
 
 
