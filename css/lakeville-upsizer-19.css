@@ -5,7 +5,7 @@ iframe, iframe * {
 }
 
 /* Hide header and footer when body has the no-header-footer class */
-body.no-header-footer #custom-header-placeholder,
+body.no-header-footer #custom-header-placeholder
 /* body.no-header-footer #custom-footer */ {
   display: none !important;
 }
