@@ -1046,7 +1046,7 @@ async function injectSaveButtonOnDetailPage() {
 
 // Initial injection
 injectSaveButtonOnDetailPage();
-highlightSavedListings();
+highlightSavedListingsWithRetry();
 
 // Also observe DOM changes in case content loads after delay
 if (isListingPage()) {
@@ -1055,7 +1055,7 @@ if (isListingPage()) {
     if (!window.__lastSaveBtnRun || now - window.__lastSaveBtnRun > 1000) {
       window.__lastSaveBtnRun = now;
       injectSaveButtonOnDetailPage();
-      highlightSavedListings();
+      highlightSavedListingsWithRetry();
     }
   });
 
