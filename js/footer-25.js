@@ -1,4 +1,9 @@
 (async function () {
+  const path = window.location.pathname + window.location.search;
+
+  // Skip injecting if URL starts with /index.php?advanced
+  if (path.startsWith("/index.php?advanced")) return;
+
   const footerAlreadyLoaded = document.querySelector('#custom-footer');
   if (footerAlreadyLoaded) return;
 
