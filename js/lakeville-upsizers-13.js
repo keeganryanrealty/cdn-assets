@@ -1,39 +1,36 @@
 (function () {
-  if (window.location.pathname === "/pages/4-bed-homes-lakeville-mn") {
+  if (window.location.pathname.startsWith("/pages/4-bed-homes-lakeville-mn")) {
     document.addEventListener("DOMContentLoaded", function () {
-          console.log("Running iframe injector script...");
+      console.log("Path matched — injecting iframe...");
+
       fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/lakeville-upsizers-9.html")
         .then(response => response.text())
         .then(html => {
+          console.log("HTML fetched successfully");
           const wrapper = document.createElement("div");
           wrapper.innerHTML = html;
 
           const main = document.querySelector("main");
-          const footer = document.getElementById("footer");
-
           if (main) {
-            main.appendChild(wrapper);  // Inject into the main content area
-            console.log("Injected into <main>.");
-          } else if (footer && footer.parentNode) {
-            footer.parentNode.insertBefore(wrapper, footer);  // Fallback
-            console.warn("Main not found — injected before footer.");
+            main.appendChild(wrapper);
+            console.log("Injected into <main>");
           } else {
-            document.body.appendChild(wrapper);  // Final fallback
-            console.warn("Main/footer not found — injected at end of body.");
+            document.body.appendChild(wrapper);
+            console.warn("Main not found — fallback to body");
           }
         })
         .catch(err => {
           console.error("Failed to load injected content:", err);
         });
 
-      // Inject your stylesheet
       const link = document.createElement("link");
       link.rel = "stylesheet";
-      link.href = "https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/css/index-lakeville-6.css.css";
+      link.href = "https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/css/lakeville-upsizer.css";
       document.head.appendChild(link);
     });
   }
 })();
+
 
 // Optional: hide editor bar
 const hideBeeRow = () => {
