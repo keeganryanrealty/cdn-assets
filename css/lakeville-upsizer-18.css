@@ -10,12 +10,12 @@ body.no-header-footer #custom-header-placeholder,
   display: none !important;
 }
 
-/* Optional: remove any body margin/padding that could offset layout
+Optional: remove any body margin/padding that could offset layout
 body.no-header-footer {
   margin: 0 !important;
   padding: 0 !important;
   overflow-x: hidden;
-} */
+} 
 
 /* Ensure main content fills screen if needed */
 body.no-header-footer main {
