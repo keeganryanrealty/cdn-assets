@@ -10,18 +10,18 @@
           const wrapper = document.createElement("div");
           wrapper.innerHTML = html;
 
-          const main = document.querySelector("main");
-          if (main) {
-            main.appendChild(wrapper);
-            console.log("Injected into <main>");
-          } else {
-            document.body.appendChild(wrapper);
-            console.warn("Main not found — fallback to body");
-          }
-        })
-        .catch(err => {
-          console.error("Failed to load injected content:", err);
-        });
+        const footer = document.getElementById("footer");
+        if (footer && footer.parentNode) {
+          footer.parentNode.insertBefore(wrapper, footer);
+          console.log("Injected before footer");
+        } else if (main) {
+          main.appendChild(wrapper);
+          console.warn("Footer not found — injected into <main>");
+        } else {
+          document.body.appendChild(wrapper);
+          console.warn("Main/footer not found — fallback to body");
+        }
+
 
       const link = document.createElement("link");
       link.rel = "stylesheet";
