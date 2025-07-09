@@ -2,8 +2,9 @@
   if (window.location.pathname.startsWith("/pages/4-bed-homes-lakeville-mn")) {
     document.addEventListener("DOMContentLoaded", function () {
       console.log("Path matched — injecting iframe...");
+      document.body.classList.add("no-header-footer");
 
-      fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/lakeville-upsizers-9.html")
+      fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/lakeville-upsizers-16.html")
         .then(response => response.text())
         .then(html => {
           console.log("HTML fetched successfully");
@@ -32,7 +33,7 @@
       // ✅ This stylesheet injection should be outside the fetch block
       const link = document.createElement("link");
       link.rel = "stylesheet";
-      link.href = "https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/css/lakeville-upsizer.css";
+      link.href = "https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/css/lakeville-upsizer-16.css";
       document.head.appendChild(link);
     });
   }
