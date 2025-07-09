@@ -33,7 +33,7 @@
       // ✅ This stylesheet injection should be outside the fetch block
       const link = document.createElement("link");
       link.rel = "stylesheet";
-      link.href = "https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/css/lakeville-upsizer-18.css";
+      link.href = "https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/css/lakeville-upsizer-19.css";
       document.head.appendChild(link);
     });
   }
