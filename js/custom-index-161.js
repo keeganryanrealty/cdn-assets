@@ -632,13 +632,12 @@ if (isListingPage()) {
 // 1. Inject Custom Save Button
 // ==========================
 function injectCustomSaveButtons() {
+  // First: process traditional listing-box structure
   document.querySelectorAll('.listing-box').forEach(listingBox => {
     if (listingBox.querySelector('.custom-save-btn')) return;
 
-    listingBox.removeAttribute('data-link');
     const originalSave = listingBox.querySelector('.saveListing');
     if (!originalSave) return;
-
 
     const mlsid = originalSave.dataset.mlsid;
     const mls = originalSave.dataset.mls;
@@ -654,7 +653,26 @@ function injectCustomSaveButtons() {
 
     stack.appendChild(btn);
   });
+
+  // Second: handle index.php listings where .listing-box may not be present
+  document.querySelectorAll('.saveListing').forEach(saveBtn => {
+    const parent = saveBtn.closest('.card-actions');
+    if (!parent || parent.querySelector('.custom-save-btn')) return;
+
+    const mlsid = saveBtn.dataset.mlsid;
+    const mls = saveBtn.dataset.mls;
+
+    const btn = document.createElement('a');
+    btn.href = 'javascript:void(0)';
+    btn.className = 'custom-save-btn';
+    btn.dataset.mlsid = mlsid;
+    btn.dataset.mls = mls;
+    btn.innerHTML = `<i class="fa fa-heart"></i><span style="margin-left: 8px;">Save</span>`;
+
+    parent.appendChild(btn);
+  });
 }
+
 
 function watchForListings() {
   const observer = new MutationObserver(injectCustomSaveButtons);
