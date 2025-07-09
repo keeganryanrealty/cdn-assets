@@ -7,14 +7,18 @@
           const wrapper = document.createElement("div");
           wrapper.innerHTML = html;
 
+          const main = document.querySelector("main");
           const footer = document.getElementById("footer");
 
-          if (footer && footer.parentNode) {
-            footer.parentNode.insertBefore(wrapper, footer);
+          if (main) {
+            main.appendChild(wrapper);  // Inject into the main content area
+            console.log("Injected into <main>.");
+          } else if (footer && footer.parentNode) {
+            footer.parentNode.insertBefore(wrapper, footer);  // Fallback
+            console.warn("Main not found — injected before footer.");
           } else {
-            // Fallback if footer not found
-            document.body.appendChild(wrapper);
-            console.warn("Footer not found — content injected at end of body.");
+            document.body.appendChild(wrapper);  // Final fallback
+            console.warn("Main/footer not found — injected at end of body.");
           }
         })
         .catch(err => {
@@ -30,11 +34,11 @@
   }
 })();
 
-
-const hideBeeRow= () => {
-  const header = document.querySelector('.bee-editor-container');
+// Optional: hide editor bar
+const hideBeeRow = () => {
+  const header = document.querySelector(".bee-editor-container");
   if (header) {
-    header.style.setProperty('display', 'none', 'important');
+    header.style.setProperty("display", "none", "important");
   } else {
     setTimeout(hideBeeRow, 200); // retry after 200ms
   }
