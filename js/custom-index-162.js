@@ -799,7 +799,7 @@ function markButtonAsSaved(btn) {
 // ==========================
 // 4. Persist Saved Buttons on Load
 // ==========================
-async function highlightSavedListings() {
+async function highlightSavedListingsWithRetry(retries = 10, delay = 1000) {
   const { data: { session } } = await window.supabase.auth.getSession();
   const userId = session?.user?.id;
   if (!userId) return;
@@ -816,10 +816,29 @@ async function highlightSavedListings() {
 
   const savedKeys = new Set(savedListings.map(row => `${row.mls}-${row.mls_id}`));
 
-  document.querySelectorAll('.custom-save-btn').forEach(btn => {
-    const key = `${btn.dataset.mls}-${btn.dataset.mlsid}`;
-    if (savedKeys.has(key)) markButtonAsSaved(btn);
-  });
+  const tryMarking = () => {
+    const buttons = document.querySelectorAll('.custom-save-btn');
+    let found = 0;
+
+    buttons.forEach(btn => {
+      const key = `${btn.dataset.mls}-${btn.dataset.mlsid}`;
+      if (savedKeys.has(key)) {
+        markButtonAsSaved(btn);
+        found++;
+      }
+    });
+
+    return found > 0;
+  };
+
+  let attempt = 0;
+  const intervalId = setInterval(() => {
+    attempt++;
+    const success = tryMarking();
+    if (success || attempt >= retries) {
+      clearInterval(intervalId);
+    }
+  }, delay);
 }
 
 // ==========================
@@ -828,11 +847,11 @@ async function highlightSavedListings() {
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
     watchForListings();
-    highlightSavedListings();
+    highlightSavedListingsWithRetry();
   });
 } else {
   watchForListings();
-  highlightSavedListings();
+  highlightSavedListingsWithRetry();
 }
 // Top Spacer for Listing/Detail Pages
 function isListingPage() {
