@@ -1,7 +1,7 @@
 (function () {
   if (window.location.pathname === "/pages/4-bed-homes-lakeville-mn") {
     document.addEventListener("DOMContentLoaded", function () {
-      fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/lakeville-upsizers-8.html")
+      fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/lakeville-upsizers-9.html")
         .then(response => response.text())
         .then(html => {
           const wrapper = document.createElement("div");
