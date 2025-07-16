@@ -12,35 +12,35 @@
     .then(html => {
       container.innerHTML = html;
 
-      // Insert before footer (instead of append to body)
-      const footer = document.querySelector('footer');
+      // Insert before footer (if found), or fallback to end of body
+      const footer = document.querySelector('footer, #custom-footer, .footer-section');
       if (footer && footer.parentNode) {
         footer.parentNode.insertBefore(container, footer);
       } else {
+        console.warn("⚠️ Footer not found — injecting at end of body.");
         document.body.appendChild(container);
       }
 
-      // TEMPORARILY HIDE OTHER PAGE ELEMENTS
+      // TEMP HIDE NON-QUIZ SECTIONS
       const header = document.querySelector('header');
       const wrapper = document.querySelector('.page-wrapper');
+      const aboutMe = document.querySelector('#about-me-placeholder');
+      const customHero = document.querySelector('#custom-hero-placeholder');
+
       if (header) header.style.display = "none";
-      if (footer) footer.style.display = "none";
       if (wrapper) wrapper.style.display = "none";
-      const aboutMe = document.querySelector('.about-me-placeholder');
-      const customHero = document.querySelector('.custom-hero-placeholder');
+      if (footer) footer.style.display = "none";
       if (aboutMe) aboutMe.style.display = "none";
       if (customHero) customHero.style.display = "none";
 
-      initQuizApp(); // <-- Now correctly called here
+      initQuizApp(); // Call quiz logic
     })
-    .catch(err => console.error("Quiz load error:", err)); // <-- Now outside of .then()
+    .catch(err => console.error("Quiz load error:", err));
 
-  // Define it outside
   function initQuizApp() {
-    console.log("Quiz initialized.");
+    console.log("✅ Quiz initialized");
   }
 })();
-
 
 
 
