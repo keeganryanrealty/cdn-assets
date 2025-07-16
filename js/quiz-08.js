@@ -13,13 +13,9 @@
       container.innerHTML = html;
 
       // Insert before footer (if found), or fallback to end of body
-      const footer = document.querySelector('footer, #custom-footer, .footer-section');
-      if (footer && footer.parentNode) {
-        footer.parentNode.insertBefore(container, footer);
-      } else {
-        console.warn("⚠️ Footer not found — injecting at end of body.");
-        document.body.appendChild(container);
-      }
+      const updatedFooter = document.querySelector('footer, #custom-footer, .footer-section');
+      if (updatedFooter) updatedFooter.style.display = "none";
+
 
       // TEMP HIDE NON-QUIZ SECTIONS
       const header = document.querySelector('header');
