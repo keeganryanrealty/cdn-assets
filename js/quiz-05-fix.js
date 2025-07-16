@@ -7,32 +7,36 @@
   container.id = "quiz-container";
 
   // Fetch and insert quiz HTML
-fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-05.html")
-  .then(res => res.text())
-  .then(html => {
-    container.innerHTML = html;
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-05.html")
+    .then(res => res.text())
+    .then(html => {
+      container.innerHTML = html;
 
-    // Insert before footer (instead of append to body)
-    const footer = document.querySelector('footer');
-    if (footer && footer.parentNode) {
-      footer.parentNode.insertBefore(container, footer);
-    } else {
-      document.body.appendChild(container);
-    }
+      // Insert before footer (instead of append to body)
+      const footer = document.querySelector('footer');
+      if (footer && footer.parentNode) {
+        footer.parentNode.insertBefore(container, footer);
+      } else {
+        document.body.appendChild(container);
+      }
 
-    // TEMPORARILY HIDE OTHER PAGE ELEMENTS
-    const header = document.querySelector('header');
-    const wrapper = document.querySelector('.page-wrapper');
-    if (header) header.style.display = "none";
-    if (footer) footer.style.display = "none";
-    if (wrapper) wrapper.style.display = "none";
+      // TEMPORARILY HIDE OTHER PAGE ELEMENTS
+      const header = document.querySelector('header');
+      const wrapper = document.querySelector('.page-wrapper');
+      if (header) header.style.display = "none";
+      if (footer) footer.style.display = "none";
+      if (wrapper) wrapper.style.display = "none";
 
+      initQuizApp(); // <-- Now correctly called here
+    })
+    .catch(err => console.error("Quiz load error:", err)); // <-- Now outside of .then()
+
+  // Define it outside
   function initQuizApp() {
     console.log("Quiz initialized.");
   }
-
-  .catch(err => console.error("Quiz load error:", err));
 })();
+
 
 
 
