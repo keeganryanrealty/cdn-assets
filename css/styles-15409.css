@@ -752,3 +752,139 @@ transition: all 0s ease;
 .custom-save-btn i {
   margin-right: 8px;
 }
+
+
+/* ======== QUIZ ========= */
+#quiz-app {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 24px;
+  font-family: 'BodyFont', sans-serif;
+  color: #100f0d;
+  background-color: #f9f8f7; /* or your site bg */
+}
+
+#quiz-progress {
+  height: 4px;
+  background: #e0dedb;
+  margin-bottom: 24px;
+  position: relative;
+  border-radius: 2px;
+  overflow: hidden;
+}
+#quiz-progress::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--quiz-progress-percent, 0%);
+  height: 100%;
+  background: #100f0d;
+  transition: width 0.3s ease;
+}
+
+.quiz-question {
+  font-size: 1.25rem;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+.quiz-subtext {
+  font-size: 0.95rem;
+  color: #777;
+  margin-bottom: 32px;
+}
+
+.quiz-option {
+  display: block;
+  padding: 14px 20px;
+  margin-bottom: 16px;
+  border: 2px solid #d6d4d2;
+  border-radius: 30px;
+  font-family: 'BodyFont', sans-serif;
+  color: #100f0d;
+  background: white;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.3s ease, border 0.3s ease;
+}
+
+.quiz-option:hover {
+  background: #f1efec;
+  border-color: #100f0d;
+}
+
+.quiz-option.selected {
+  background: #100f0d;
+  color: white;
+  border-color: #100f0d;
+}
+
+#quiz-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+#quiz-back,
+#quiz-next {
+  padding: 12px 20px;
+  border-radius: 30px;
+  font-family: 'BodyFont', sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+#quiz-back {
+  border: 2px solid #d6d4d2;
+  background: none;
+  color: #100f0d;
+}
+
+#quiz-next {
+  border: 2px solid #100f0d;
+  background: #100f0d;
+  color: white;
+}
+
+#quiz-exit {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #100f0d;
+}
+
+#quiz-exit-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+#quiz-exit-modal .modal-content {
+  background: white;
+  padding: 32px;
+  border-radius: 12px;
+  max-width: 400px;
+  text-align: center;
+}
+
+.quiz-cta {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.quiz-cta .btn-primary {
+  background: #100f0d;
+  color: white;
+  border: 2px solid #100f0d;
+  text-align: center;
+}
