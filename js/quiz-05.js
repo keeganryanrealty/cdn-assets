@@ -7,7 +7,7 @@
   container.id = "quiz-container";
 
   // Fetch and insert quiz HTML
-fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-04.html")
+fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-05.html")
   .then(res => res.text())
   .then(html => {
     container.innerHTML = html;
@@ -27,8 +27,10 @@ fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-04
     if (footer) footer.style.display = "none";
     if (wrapper) wrapper.style.display = "none";
 
-    initQuizApp();
-  })
+  function initQuizApp() {
+    console.log("Quiz initialized.");
+  }
+
   .catch(err => console.error("Quiz load error:", err));
 })();
 
