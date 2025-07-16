@@ -7,7 +7,7 @@
   container.id = "quiz-container";
 
   // Fetch and insert quiz HTML
-  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/HTML/quiz-01.html")
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-02.html")
     .then(res => res.text())
     .then(html => {
       container.innerHTML = html;
