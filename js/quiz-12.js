@@ -6,22 +6,23 @@
   const container = document.createElement("div");
   container.id = "quiz-container";
 
-  // Fetch and insert quiz HTML
   fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-05.html")
     .then(res => res.text())
-    .then(html => {
+    .then(async html => {
       container.innerHTML = html;
 
-      // Locate and remove footer
-      const footer = document.querySelector('#custom-footer');
-      if (footer && footer.parentNode) {
+      // Wait for the footer to load
+      let footer;
+      try {
+        footer = await waitForElement('#custom-footer');
         footer.parentNode.insertBefore(container, footer);
-        footer.remove(); // completely remove from DOM
-      } else {
+        footer.remove(); // fully remove
+      } catch (err) {
+        console.warn("⚠️ Footer not found — injected at end of body.");
         document.body.appendChild(container);
       }
 
-      // TEMP HIDE NON-QUIZ SECTIONS
+      // TEMP HIDE OTHER SECTIONS
       const header = document.querySelector('header');
       const wrapper = document.querySelector('.page-wrapper');
       const aboutMe = document.querySelector('#about-me-placeholder');
@@ -32,14 +33,32 @@
       if (aboutMe) aboutMe.style.display = "none";
       if (customHero) customHero.style.display = "none";
 
-      initQuizApp(); // Call quiz logic
+      initQuizApp();
     })
     .catch(err => console.error("Quiz load error:", err));
 
   function initQuizApp() {
     console.log("✅ Quiz initialized");
   }
+
+  function waitForElement(selector, timeout = 3000) {
+    return new Promise((resolve, reject) => {
+      const startTime = Date.now();
+
+      const interval = setInterval(() => {
+        const element = document.querySelector(selector);
+        if (element) {
+          clearInterval(interval);
+          resolve(element);
+        } else if (Date.now() - startTime > timeout) {
+          clearInterval(interval);
+          reject(`❌ Timeout: ${selector} not found`);
+        }
+      }, 100);
+    });
+  }
 })();
+
 
 
 
