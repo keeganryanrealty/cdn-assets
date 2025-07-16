@@ -7,24 +7,32 @@
   container.id = "quiz-container";
 
   // Fetch and insert quiz HTML
-  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-03.html")
-    .then(res => res.text())
-    .then(html => {
-      container.innerHTML = html;
+fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-04.html")
+  .then(res => res.text())
+  .then(html => {
+    container.innerHTML = html;
 
-      // Insert before footer (instead of append to body)
-      const footer = document.querySelector('footer');
-      if (footer && footer.parentNode) {
-        footer.parentNode.insertBefore(container, footer);
-      } else {
-        // fallback if footer isn't present
-        document.body.appendChild(container);
-      }
+    // Insert before footer (instead of append to body)
+    const footer = document.querySelector('footer');
+    if (footer && footer.parentNode) {
+      footer.parentNode.insertBefore(container, footer);
+    } else {
+      document.body.appendChild(container);
+    }
 
-      initQuizApp(); // start your quiz logic
-    })
-    .catch(err => console.error("Quiz load error:", err));
+    // TEMPORARILY HIDE OTHER PAGE ELEMENTS
+    const header = document.querySelector('header');
+    const wrapper = document.querySelector('.page-wrapper');
+    if (header) header.style.display = "none";
+    if (footer) footer.style.display = "none";
+    if (wrapper) wrapper.style.display = "none";
+
+    initQuizApp();
+  })
+  .catch(err => console.error("Quiz load error:", err));
 })();
+
+
 
 
 // MULTISELECT LOGIC
@@ -52,3 +60,4 @@ document.addEventListener("click", function (e) {
     if (nextBtn) nextBtn.disabled = !hasSelection;
   }
 });
+
