@@ -13,8 +13,11 @@
       container.innerHTML = html;
 
       // Insert before footer (if found), or fallback to end of body
-      const updatedFooter = document.querySelector('footer, #custom-footer, .footer-section');
-      if (updatedFooter) updatedFooter.style.display = "none";
+      // Inside your .then(html => { ... }) block AFTER insertion
+      if (footer && footer.id === "custom-footer") {
+        footer.style.display = "none";
+      }
+
 
 
       // TEMP HIDE NON-QUIZ SECTIONS
