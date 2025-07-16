@@ -12,13 +12,11 @@
     .then(html => {
       container.innerHTML = html;
 
-      // 🔥 FIXED: Define footer before using it
+      // Locate and remove footer
       const footer = document.querySelector('#custom-footer');
-
-      // Insert before footer (or fallback to end of body)
       if (footer && footer.parentNode) {
         footer.parentNode.insertBefore(container, footer);
-        footer.style.display = "none"; // hide after inserting above
+        footer.remove(); // completely remove from DOM
       } else {
         document.body.appendChild(container);
       }
@@ -42,6 +40,7 @@
     console.log("✅ Quiz initialized");
   }
 })();
+
 
 
 
