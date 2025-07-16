@@ -12,13 +12,16 @@
     .then(html => {
       container.innerHTML = html;
 
-      // Insert before footer (if found), or fallback to end of body
-      // Inside your .then(html => { ... }) block AFTER insertion
-      if (footer && footer.id === "custom-footer") {
-        footer.style.display = "none";
+      // 🔥 FIXED: Define footer before using it
+      const footer = document.querySelector('#custom-footer');
+
+      // Insert before footer (or fallback to end of body)
+      if (footer && footer.parentNode) {
+        footer.parentNode.insertBefore(container, footer);
+        footer.style.display = "none"; // hide after inserting above
+      } else {
+        document.body.appendChild(container);
       }
-
-
 
       // TEMP HIDE NON-QUIZ SECTIONS
       const header = document.querySelector('header');
@@ -28,7 +31,6 @@
 
       if (header) header.style.display = "none";
       if (wrapper) wrapper.style.display = "none";
-      if (footer) footer.style.display = "none";
       if (aboutMe) aboutMe.style.display = "none";
       if (customHero) customHero.style.display = "none";
 
