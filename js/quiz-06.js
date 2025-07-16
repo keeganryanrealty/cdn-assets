@@ -26,6 +26,10 @@
       if (header) header.style.display = "none";
       if (footer) footer.style.display = "none";
       if (wrapper) wrapper.style.display = "none";
+      const aboutMe = document.querySelector('.about-me-placeholder');
+      const customHero = document.querySelector('.custom-hero-placeholder');
+      if (aboutMe) aboutMe.style.display = "none";
+      if (customHero) customHero.style.display = "none";
 
       initQuizApp(); // <-- Now correctly called here
     })
