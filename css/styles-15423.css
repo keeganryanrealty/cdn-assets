@@ -792,22 +792,38 @@ transition: all 0s ease;
   cursor: pointer;
 }
 
-/* FULL WIDTH PROGRESS BAR */
+/* ======== PROGRESS BAR ========== */
+
 #quiz-progress {
   width: 100%;
-  height: 50px;
-  background: #f3e6d4;
+  height: 44px;
+  background: #f3e6d4; /* beige base */
   position: relative;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #100f0d;
+  padding: 0 1.5rem;
+  box-sizing: border-box;
 }
 
 #quiz-progress::after {
   content: '';
-  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
   height: 100%;
   width: var(--quiz-progress-percent, 20%);
-  background: linear-gradient(to right, #791226, #ba3c55);
+  background-color: #ba3c55; /* light maroon */
   transition: width 0.4s ease;
+  z-index: 1;
+  border-radius: 0 8px 8px 0;
+}
+
+#quiz-progress span {
+  position: relative;
+  z-index: 2;
 }
 
 /* MAIN QUIZ CARD */
