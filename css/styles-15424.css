@@ -826,6 +826,16 @@ transition: all 0s ease;
   z-index: 2;
 }
 
+/* Text inside progress bar stays visible */
+#quiz-progress .quiz-step-counter {
+  position: relative;
+  z-index: 2;
+  color: #100f0d;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+   mix-blend-mode: difference;
+}
+
 /* MAIN QUIZ CARD */
 #quiz-wrapper {
   background: white;
