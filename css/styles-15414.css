@@ -904,14 +904,25 @@ transition: all 0s ease;
   text-align: center;
 }
 
+html, body, #quiz-container {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #f3ead4; /* soft beige or background from Prose */
+}
+
 #quiz-container {
-  max-width: 100%;
   display: flex;
   justify-content: center;
-  padding: 48px 16px;
+  align-items: center;
+  flex-direction: column;
+  padding: 2rem 1rem;
+  box-sizing: border-box;
   background: #f9f8f7;
   z-index: 999;
   position: relative;
+  width: 100%;
+  min-height: 100vh;
 }
 
 .quiz-step {
@@ -951,9 +962,12 @@ transition: all 0s ease;
 
 /* === Quiz Wrapper Layout === */
 #quiz-wrapper {
-  background: #f3e6d4;
-  padding: 64px 16px 120px;
-  min-height: 100vh;
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 100%;
+  padding: 2rem;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
