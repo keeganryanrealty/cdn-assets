@@ -795,7 +795,7 @@ transition: all 0s ease;
 /* FULL WIDTH PROGRESS BAR */
 #quiz-progress {
   width: 100%;
-  height: 10px;
+  height: 50px;
   background: #f3e6d4;
   position: relative;
   overflow: hidden;
@@ -860,7 +860,6 @@ transition: all 0s ease;
   border: 2px solid #100f0d;
   background: #fff;
   font-weight: 600;
-  box-shadow: inset 0 0 0 2px #f3e6d4;
   color: #100f0d;
 }
 
@@ -907,7 +906,7 @@ transition: all 0s ease;
 }
 
 #quiz-next:hover {
-  background: #291e1c;
+  background: #272424;
 }
 
 /* ANIMATIONS */
