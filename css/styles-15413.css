@@ -799,14 +799,14 @@ transition: all 0s ease;
 }
 
 .quiz-question {
-  font-size: 1.25rem;
-  margin-bottom: 16px;
-  font-weight: 500;
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+  font-weight: 600;
 }
 .quiz-subtext {
-  font-size: 0.95rem;
-  color: #777;
-  margin-bottom: 32px;
+  font-size: 1rem;
+  color: #5c5c5c;
+  margin-bottom: 28px;
 }
 
 .quiz-option {
@@ -915,6 +915,7 @@ transition: all 0s ease;
 }
 
 .quiz-step {
+  padding: 0 8px;
   width: 100%;
   max-width: 600px;
   animation: fadeIn 0.3s ease;
@@ -951,46 +952,39 @@ transition: all 0s ease;
 /* === Quiz Wrapper Layout === */
 #quiz-wrapper {
   background: #f3e6d4;
-  padding: 32px 16px 100px;
-  position: relative;
+  padding: 64px 16px 120px;
   min-height: 100vh;
   box-sizing: border-box;
   display: flex;
-  justify-content: center;
-}
-
-.quiz-step {
-  width: 100%;
-  max-width: 600px;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* === Header === */
 #quiz-header {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: relative;
+  width: 100%;
+  max-width: 600px;
   margin-bottom: 24px;
-  flex-direction: column;
-  gap: 8px;
 }
 
 #quiz-logo {
-  max-width: 160px;
+  display: block;
+  margin: 0 auto;
+  max-width: 180px;
   width: 100%;
   height: auto;
 }
 
 #quiz-exit {
   position: absolute;
-  right: 0;
   top: 0;
+  right: 0;
   background: none;
   border: none;
   font-size: 1.8rem;
   cursor: pointer;
   color: #100f0d;
-  padding: 0;
 }
 
 /* === Fixed Bottom Navigation (Footer Style) === */
