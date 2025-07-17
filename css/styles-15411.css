@@ -765,13 +765,20 @@ transition: all 0s ease;
 }
 
 #quiz-progress {
-  height: 4px;
+  height: 28px;
   background: #e0dedb;
   margin-bottom: 24px;
   position: relative;
-  border-radius: 2px;
+  border-radius: 14px;
   overflow: hidden;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #100f0d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 #quiz-progress::after {
   content: '';
   position: absolute;
@@ -780,7 +787,15 @@ transition: all 0s ease;
   width: var(--quiz-progress-percent, 0%);
   height: 100%;
   background: #100f0d;
+  z-index: 0;
   transition: width 0.3s ease;
+  border-radius: 14px;
+}
+
+#quiz-progress::before {
+  content: attr(data-label);
+  position: relative;
+  z-index: 1;
 }
 
 .quiz-question {
