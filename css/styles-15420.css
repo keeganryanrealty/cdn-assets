@@ -795,7 +795,7 @@ transition: all 0s ease;
 /* FULL WIDTH PROGRESS BAR */
 #quiz-progress {
   width: 100%;
-  height: 6px;
+  height: 10px;
   background: #f3e6d4;
   position: relative;
   overflow: hidden;
@@ -859,8 +859,9 @@ transition: all 0s ease;
 .quiz-option.selected {
   border: 2px solid #100f0d;
   background: #fff;
-  color: #100f0d;
   font-weight: 600;
+  box-shadow: inset 0 0 0 2px #f3e6d4;
+  color: #100f0d;
 }
 
 /* NAV BUTTONS */
@@ -870,7 +871,7 @@ transition: all 0s ease;
   bottom: 0;
   left: 0;
   width: 100%;
-  background: #f3e6d4; /* beige footer */
+  background: #f3e6d4; /* beige background */
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
@@ -884,15 +885,20 @@ transition: all 0s ease;
   font-size: 1rem;
   font-weight: 600;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 0; /* square corners */
   min-width: 120px;
   transition: all 0.2s ease;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  cursor: pointer;
 }
 
 #quiz-back {
   background: white;
   color: #100f0d;
-  border: 2px solid #ccc;
+}
+
+#quiz-back:hover {
+  background: #f0f0f0;
 }
 
 #quiz-next {
@@ -900,15 +906,8 @@ transition: all 0s ease;
   color: white;
 }
 
-#quiz-nav .btn-outline {
-  background: transparent;
-  border: 2px solid #ccc;
-  color: #333;
-}
-
-#quiz-nav .btn-primary {
-  background: #000;
-  color: white;
+#quiz-next:hover {
+  background: #291e1c;
 }
 
 /* ANIMATIONS */
