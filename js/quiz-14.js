@@ -6,7 +6,7 @@
   const container = document.createElement("div");
   container.id = "quiz-container";
 
-  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-06.html")
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-14.html")
     .then(res => res.text())
     .then(async html => {
       container.innerHTML = html;
