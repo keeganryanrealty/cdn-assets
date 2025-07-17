@@ -63,6 +63,35 @@
 
 
 
+const steps = [
+  {
+    question: "What’s most important in your next home?",
+    subtext: "Pick up to 2 things that matter most.",
+    type: "multiselect",
+    options: [
+      { label: "Location", icon: "🏙️", value: "location" },
+      { label: "Square Footage", icon: "📐", value: "space" },
+      { label: "Outdoor Space", icon: "🌳", value: "outdoor" },
+      { label: "Modern Finishes", icon: "🛋️", value: "modern" },
+      { label: "Affordability", icon: "💰", value: "affordability" }
+    ]
+  },
+  // more steps...
+];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // MULTISELECT LOGIC
 document.addEventListener("click", function (e) {
