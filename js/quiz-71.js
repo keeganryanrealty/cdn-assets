@@ -91,46 +91,45 @@ function injectQuizLoginForm() {
   fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form-5.html")
     .then(res => res.text())
     .then(html => {
-      // Wrap in quiz-exit-modal
-      const wrapper = document.createElement("div");
-      wrapper.id = "quiz-exit-modal";
-      wrapper.innerHTML = html;
-      document.body.appendChild(wrapper); // ✅ Append FIRST
+      // Manually create the modal wrapper
+      const modalWrapper = document.createElement("div");
+      modalWrapper.id = "quiz-exit-modal";
 
-      // Defer logic until DOM reflow
-      requestAnimationFrame(() => {
-        const modal = document.getElementById("quiz-exit-modal");
-        if (!modal) return console.error("Quiz modal still not found");
-
-        Object.assign(modal.style, {
-          display: "flex",
-          visibility: "visible",
-          opacity: "1",
-          zIndex: "999999",
-          position: "fixed",
-          inset: "0",
-          backgroundColor: "rgba(0, 0, 0, 0.8)",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          width: "100vw"
-        });
-
-        modal.addEventListener("click", e => {
-          if (
-            e.target.id === "quiz-exit-modal" ||
-            e.target.classList.contains("modal-close-btn")
-          ) {
-            modal.remove();
-            document.body.style.overflow = "";
-          }
-        });
-
-        // 👇 TODO: Attach Supabase login form submission here if needed
+      // Add modal styles
+      Object.assign(modalWrapper.style, {
+        display: "flex",
+        visibility: "visible",
+        opacity: "1",
+        zIndex: "999999",
+        position: "fixed",
+        inset: "0",
+        backgroundColor: "rgba(0, 0, 0, 0.8)",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        width: "100vw"
       });
+
+      // Insert the login HTML into the wrapper
+      modalWrapper.innerHTML = html;
+
+      // Add close logic
+      modalWrapper.addEventListener("click", e => {
+        if (
+          e.target.id === "quiz-exit-modal" ||
+          e.target.classList.contains("modal-close-btn")
+        ) {
+          modalWrapper.remove();
+          document.body.style.overflow = "";
+        }
+      });
+
+      // Append to the page
+      document.body.appendChild(modalWrapper);
     })
     .catch(err => console.error("Error loading login form:", err));
 }
+
 
 
 
