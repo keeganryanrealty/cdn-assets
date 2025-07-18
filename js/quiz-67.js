@@ -88,12 +88,13 @@ function showQuizExitModal() {
 
 
 function injectQuizLoginForm() {
-  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form-5.html")
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form-6.html")
     .then(res => res.text())
     .then(html => {
       const wrapper = document.createElement("div");
       wrapper.innerHTML = html;
 
+      // 🚨 Append the new modal to the DOM before querying it
       while (wrapper.firstChild) {
         document.body.appendChild(wrapper.firstChild);
       }
@@ -125,7 +126,7 @@ function injectQuizLoginForm() {
         }
       });
 
-      // 🔐 TODO: Add Supabase login logic here if needed
+      // TODO: Add Supabase login logic if needed
     })
     .catch(err => console.error("Error loading login form:", err));
 }
