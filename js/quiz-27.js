@@ -11,25 +11,30 @@
     .then(async html => {
       container.innerHTML = html;
 
-      // TEMP HIDE OTHER SECTIONS
-      const header = document.querySelector("header");
-      const wrapper = document.querySelector(".page-wrapper");
-      const aboutMe = document.querySelector("#about-me-placeholder");
-      const customHero = document.querySelector("#custom-hero-placeholder");
-
-      if (header) header.style.display = "none";
-      if (wrapper) wrapper.style.display = "none";
-      if (aboutMe) aboutMe.style.display = "none";
-      if (customHero) customHero.style.display = "none";
-
-      // Inject quiz container before footer
+      // Wait for elements before hiding them
       try {
-        const footer = await waitForElement("#custom-footer");
+        await Promise.all([
+          waitForElement("header"),
+          waitForElement(".page-wrapper"),
+          waitForElement("#custom-footer")
+        ]);
+
+        const header = document.querySelector("header");
+        const wrapper = document.querySelector(".page-wrapper");
+        const aboutMe = document.querySelector("#about-me-placeholder");
+        const customHero = document.querySelector("#custom-hero-placeholder");
+
+        if (header) header.style.display = "none";
+        if (wrapper) wrapper.style.display = "none";
+        if (aboutMe) aboutMe.style.display = "none";
+        if (customHero) customHero.style.display = "none";
+
+        const footer = document.querySelector("#custom-footer");
         footer.parentNode.insertBefore(container, footer);
-        footer.remove(); // remove existing footer
+        footer.remove(); // clean remove
       } catch (err) {
-        console.warn("⚠️ Footer not found — injecting at end of body.");
-        document.body.appendChild(container);
+        console.warn("⚠️ Some elements not found:", err);
+        document.body.appendChild(container); // fallback
       }
 
       initQuizApp();
