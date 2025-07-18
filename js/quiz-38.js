@@ -60,8 +60,10 @@ function updateQuizProgressPercent(percent) {
 
 // EXIT Button Logic
 function showQuizExitModal() {
+  // Check if already open
   if (document.querySelector("#lead-form-overlay")) return;
 
+  // Create overlay container
   const modalOverlay = document.createElement("div");
   modalOverlay.id = "lead-form-overlay";
   modalOverlay.style.position = "fixed";
@@ -70,43 +72,50 @@ function showQuizExitModal() {
   modalOverlay.style.width = "100%";
   modalOverlay.style.height = "100%";
   modalOverlay.style.background = "rgba(0, 0, 0, 0.6)";
-  modalOverlay.style.zIndex = 999999; // Make sure this is super high
+  modalOverlay.style.zIndex = 9999;
   modalOverlay.style.display = "flex";
   modalOverlay.style.justifyContent = "center";
   modalOverlay.style.alignItems = "center";
 
+  // Lock scroll
   document.body.style.overflow = "hidden";
 
+  // Fetch your existing modal HTML
   fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/create-account-6.html")
     .then(res => res.text())
     .then(html => {
       const contentWrapper = document.createElement("div");
       contentWrapper.innerHTML = html;
-      contentWrapper.style.zIndex = 9999999;
-      contentWrapper.style.background = "#fff"; // Force background
+
+      // Optional styling
+      contentWrapper.style.background = "#fff";
       contentWrapper.style.padding = "2rem";
       contentWrapper.style.borderRadius = "8px";
+      contentWrapper.style.maxWidth = "500px";
+      contentWrapper.style.width = "90%";
+
       modalOverlay.appendChild(contentWrapper);
 
-      // Inject into DOM
-      document.body.appendChild(modalOverlay);
-      console.log("✅ Modal inserted");
-
+      // Add source identifier
       const form = modalOverlay.querySelector("#lead-form");
       if (form) form.setAttribute("data-source", "quiz-exit");
 
-      // Close logic
-      modalOverlay.addEventListener("click", e => {
-        if (e.target === modalOverlay || e.target.classList.contains("modal-close-btn")) {
+      // Close behavior
+      modalOverlay.addEventListener("click", (e) => {
+        if (
+          e.target === modalOverlay ||
+          e.target.classList.contains("modal-close-btn")
+        ) {
           modalOverlay.remove();
-          document.body.style.overflow = "";
+          document.body.style.overflow = ""; // Unlock scroll
         }
       });
+
+      // Add to DOM LAST
+      document.body.appendChild(modalOverlay);
     })
-    .catch(err => console.error("❌ Modal load error:", err));
+    .catch((err) => console.error("Modal fetch failed:", err));
 }
-
-
 
 // MULTISELECT LOGIC
 document.addEventListener("click", function (e) {
