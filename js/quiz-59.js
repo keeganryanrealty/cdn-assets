@@ -29,7 +29,7 @@ function showQuizExitModal() {
   if (document.getElementById("quiz-exit-modal")) return; // Don't duplicate
   document.body.style.overflow = "hidden";
 
-  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-exit-modal-01.html?v=3")
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-exit-modal-02.html")
     .then(res => res.text())
     .then(html => {
       const wrapper = document.createElement("div");
