@@ -1,0 +1,40 @@
+<div id="quiz-overlay">
+  <!-- Header -->
+  <div id="quiz-header">
+    <a href="https://keeganryan.exprealty.com/" target="_blank">
+      <img src="https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/images/logo_black.png" alt="Keegan Ryan Realty Logo" id="quiz-logo" />
+    </a>
+    <button id="quiz-exit" class="quiz-exit">&times;</button>
+  </div>
+
+  <!-- Progress Bar -->
+  <div id="quiz-progress" style="--quiz-progress-percent: 20%;">
+    <div class="quiz-progress-fill"></div>
+    <div class="quiz-progress-section" data-start="0" data-end="33">Motivation</div>
+    <div class="quiz-progress-section" data-start="34" data-end="66">Timeline</div>
+    <div class="quiz-progress-section" data-start="67" data-end="100">Preferences</div>
+  </div>
+
+  <!-- Main Quiz Area -->
+  <div id="quiz-container">
+    <div id="quiz-wrapper">
+      <div class="quiz-step active" id="quiz-step-content">
+        <h2 class="quiz-question">What’s most important in your next home?</h2>
+        <p class="quiz-subtext">Pick up to 2 things that matter most.</p>
+        <div class="quiz-options multiselect">
+          <div class="quiz-option" data-value="location">Location</div>
+          <div class="quiz-option" data-value="space">Square Footage</div>
+          <div class="quiz-option" data-value="outdoor">Outdoor Space</div>
+          <div class="quiz-option" data-value="modern">Modern Finishes</div>
+          <div class="quiz-option" data-value="affordability">Affordability</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fixed Navigation -->
+  <div id="quiz-nav">
+    <button id="quiz-back" class="btn-outline">Back</button>
+    <button id="quiz-next" class="btn-primary" disabled>Next</button>
+  </div>
+</div>
