@@ -1,65 +1,13 @@
-(function () {
-  const currentPath = window.location.pathname;
-  if (!currentPath.includes("/pages/get-started")) return;
-
-  const container = document.createElement("div");
-  container.id = "quiz-container";
-
-  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-22.html")
+if (window.location.pathname.includes("/pages/get-started")) {
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-23.html")
     .then(res => res.text())
-    .then(async html => {
-      container.innerHTML = html;
-
-      // Wait for all the page elements before hiding them
-      try {
-        const [header, wrapper, aboutMe, customHero, footer] = await Promise.all([
-          waitForElement("header"),
-          waitForElement(".page-wrapper"),
-          waitForElement("#about-me-placeholder", 2000),
-          waitForElement("#custom-hero-placeholder", 2000),
-          waitForElement("#custom-footer")
-        ]);
-
-        if (header) header.style.display = "none";
-        if (wrapper) wrapper.style.display = "none";
-        if (aboutMe) aboutMe.style.display = "none";
-        if (customHero) customHero.style.display = "none";
-
-        footer.parentNode.insertBefore(container, footer);
-        footer.remove(); // Replace with quiz
-      } catch (err) {
-        console.warn("⚠️ Some elements not found:", err);
-        document.body.appendChild(container); // fallback
-      }
-
-      // Force quiz container to overlay everything if needed
-      Object.assign(container.style, {
-        position: "relative",
-        zIndex: "9999",
-        backgroundColor: "#fff"
-      });
-
-      initQuizApp();
-    })
-    .catch(err => console.error("Quiz load error:", err));
-
-  function waitForElement(selector, timeout = 4000) {
-    return new Promise((resolve, reject) => {
-      const startTime = Date.now();
-      const check = () => {
-        const el = document.querySelector(selector);
-        if (el) return resolve(el);
-        if (Date.now() - startTime > timeout) return reject(`❌ Timeout: ${selector} not found`);
-        requestAnimationFrame(check);
-      };
-      check();
+    .then(html => {
+      const overlay = document.createElement("div");
+      overlay.innerHTML = html;
+      document.body.appendChild(overlay);
+      initQuizApp(); // your logic
     });
-  }
-
-  function initQuizApp() {
-    console.log("✅ Quiz initialized");
-  }
-})();
+}
 
 
 
