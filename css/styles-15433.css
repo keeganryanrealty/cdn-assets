@@ -755,6 +755,20 @@ transition: all 0s ease;
 
 
 /* ======== QUIZ ========= */
+/* OVERLAY MODE CONTAINER */
+#quiz-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  overflow-y: auto;
+  padding-bottom: 5rem; /* space for nav bar */
+}
+
 /* OUTER CONTAINER — full width */
 #quiz-container {
   width: 100%;
