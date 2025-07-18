@@ -62,38 +62,51 @@ function initQuizLogic() {
 
   
   // Exit modal logic
-  function showQuizExitModal() {
-    console.log("Exit button clicked");
-    if (document.querySelector("#lead-form-modal")) return;
-    document.body.style.overflow = "hidden";
+function showQuizExitModal() {
+  console.log("Exit button clicked"); // confirm click is firing
 
-    fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-exit-modal-01.html")
-      .then(res => res.text())
-      .then(html => {
-        const wrapper = document.createElement("div");
-        wrapper.innerHTML = html;
-        const modal = wrapper.querySelector("#lead-form-modal");
-        if (!modal) return console.error("Modal not found");
+  // Prevent duplicate modals
+  if (document.querySelector("#lead-form-modal")) return;
 
-        document.body.appendChild(modal);
-        console.log("Modal injected:", modal);
-        console.log("Form found:", modal.querySelector("#lead-form"));
-        const form = modal.querySelector("#lead-form");
-        if (form) form.setAttribute("data-source", "quiz-exit");
+  // Lock scroll
+  document.body.style.overflow = "hidden";
 
-        modal.addEventListener("click", e => {
-          if (e.target.id === "lead-form-modal" || e.target.classList.contains("modal-close-btn")) {
-            modal.remove();
-            document.body.style.overflow = "";
-          }
-        });
-      })
-      .catch(err => console.error("Error loading modal:", err));
-  }
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-exit-modal.html")
+    .then(res => res.text())
+    .then(html => {
+      const wrapper = document.createElement("div");
+      wrapper.innerHTML = html;
+
+      const modal = wrapper.querySelector("#lead-form-modal");
+      if (!modal) return console.error("Modal not found in injected HTML");
+
+      document.body.appendChild(modal);
+      const form = modal.querySelector("#lead-form");
+      if (form) form.setAttribute("data-source", "quiz-exit");
+
+      modal.addEventListener("click", e => {
+        if (
+          e.target.id === "lead-form-modal" ||
+          e.target.classList.contains("modal-close-btn")
+        ) {
+          modal.remove();
+          document.body.style.overflow = "";
+        }
+      });
+    })
+    .catch(err => console.error("Error loading modal:", err));
+}
+
 
   // Attach exit button listener (now guaranteed to exist)
-  const exitBtn = document.getElementById("quiz-exit");
-  if (exitBtn) {
-    exitBtn.addEventListener("click", showQuizExitModal);
-  }
-}
+    const observer = new MutationObserver(() => {
+      const exitBtn = document.getElementById("quiz-exit");
+      if (exitBtn && !exitBtn.dataset.listenerAttached) {
+        console.log("Attaching listener to #quiz-exit");
+        exitBtn.addEventListener("click", showQuizExitModal);
+        exitBtn.dataset.listenerAttached = "true";
+        observer.disconnect();
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+
