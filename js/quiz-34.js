@@ -80,7 +80,7 @@ function showQuizExitModal() {
   document.body.style.overflow = "hidden";
 
   // Fetch your existing modal HTML (the signup version)
-  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/signup.html")
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/create-account-6.html")
     .then(res => res.text())
     .then(html => {
       const contentWrapper = document.createElement("div");
