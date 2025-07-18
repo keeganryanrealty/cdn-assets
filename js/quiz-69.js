@@ -92,15 +92,12 @@ function injectQuizLoginForm() {
     .then(res => res.text())
     .then(html => {
       const wrapper = document.createElement("div");
+      wrapper.id = "quiz-exit-modal"; // ✅ Set the ID here
       wrapper.innerHTML = html;
-
-      // 🚨 Append the new modal to the DOM before querying it
-      while (wrapper.firstChild) {
-        document.body.appendChild(wrapper.firstChild);
-      }
+      document.body.appendChild(wrapper);
 
       const modal = document.getElementById("quiz-exit-modal");
-      if (!modal) return console.error("Quiz modal not found");
+      if (!modal) return console.error("Quiz modal still not found");
 
       Object.assign(modal.style, {
         display: "flex",
@@ -126,10 +123,11 @@ function injectQuizLoginForm() {
         }
       });
 
-      // TODO: Add Supabase login logic if needed
+      // TODO: Add login form submission logic here
     })
     .catch(err => console.error("Error loading login form:", err));
 }
+
 
 
 
