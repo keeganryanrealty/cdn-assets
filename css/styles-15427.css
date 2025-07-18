@@ -793,28 +793,44 @@ transition: all 0s ease;
 }
 
 /* ======== PROGRESS BAR ========== */
+#quiz-progress::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: var(--quiz-progress-percent, 0%);
+  background-color: #f3e6d4; /* beige fill */
+  z-index: 0;
+  transition: width 0.4s ease;
+}
+
 #quiz-progress {
   display: flex;
+  position: relative;
   height: 36px;
   width: 100%;
-  background: #f9f8f7; /* Off-white background */
+  background: #f9f8f7; /* Base color for inactive sections */
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
   font-size: 0.75rem;
   font-weight: 600;
   text-align: center;
   user-select: none;
+  z-index: 1;
+  overflow: hidden;
 }
 
 .quiz-progress-section {
   flex: 1;
-  background-color: #f9f8f7; /* Default unfilled color */
+  background-color: transparent;
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
-  transition: background 0.4s ease;
+  transition: background 0.4s ease, color 0.4s ease;
   color: #bbb;
+  z-index: 1; /* keep above the fill */
 }
 
 .quiz-progress-section:not(:last-child)::after {
@@ -828,8 +844,8 @@ transition: all 0s ease;
 }
 
 .quiz-progress-section.active {
-  background-color: #f3e6d4; /* Beige for active section */
-  color: #100f0d; /* Dark text when active */
+  background-color: #f9f8f7; /* Slightly brighter background */
+  color: #100f0d; /* Bold text */
 }
 
 /* MAIN QUIZ CARD */
