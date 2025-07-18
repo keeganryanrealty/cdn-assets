@@ -30,36 +30,33 @@ function showQuizExitModal() {
   document.body.style.overflow = "hidden";
 
     fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-exit-modal-01.html")
-      .then(res => {
-        console.log("Response status:", res.status);
-        return res.text();
-      })
+      .then(res => res.text())
       .then(html => {
-        console.log("Modal HTML loaded:", html.slice(0, 100)); // peek at first 100 chars
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = html;
 
-      const wrapper = document.createElement("div");
-      wrapper.innerHTML = html;
-
-      const modal = wrapper.querySelector("#lead-form-modal");
-      console.log("Modal extracted from HTML:", modal);
-      if (!modal) return console.error("Modal not found in injected HTML");
-
-      document.body.appendChild(modal);
-
-      const form = modal.querySelector("#lead-form");
-      if (form) form.setAttribute("data-source", "quiz-exit");
-
-      modal.addEventListener("click", e => {
-        if (
-          e.target.id === "lead-form-modal" ||
-          e.target.classList.contains("modal-close-btn")
-        ) {
-          modal.remove();
-          document.body.style.overflow = "";
+        // Append everything inside the wrapper (not just modal)
+        while (wrapper.firstChild) {
+          document.body.appendChild(wrapper.firstChild);
         }
-      });
-    })
-    .catch(err => console.error("Error loading modal:", err));
+
+        const modal = document.getElementById("lead-form-modal");
+        if (!modal) return console.error("Modal not found in injected HTML");
+
+        const form = modal.querySelector("#lead-form");
+        if (form) form.setAttribute("data-source", "quiz-exit");
+
+        modal.addEventListener("click", e => {
+          if (
+            e.target.id === "lead-form-modal" ||
+            e.target.classList.contains("modal-close-btn")
+          ) {
+            modal.remove();
+            document.body.style.overflow = "";
+          }
+        });
+      })
+   .catch(err => console.error("Error loading modal:", err));
 }
 
 // Main quiz logic
