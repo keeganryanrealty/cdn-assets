@@ -81,18 +81,27 @@ const steps = [
 
 
 // Quiz Progress
-function updateQuizProgress(sectionKey, percentComplete) {
-  // Set percent-based fill for the beige background
-  const progressBar = document.getElementById('quiz-progress');
-  progressBar.style.setProperty('--quiz-progress-percent', `${percentComplete}%`);
+function updateQuizProgressPercent(percent) {
+  // Clamp percent between 0 and 100
+  const clamped = Math.max(0, Math.min(100, percent));
+  
+  // Update CSS variable for fill
+  const progressBar = document.getElementById("quiz-progress");
+  progressBar.style.setProperty('--quiz-progress-percent', `${clamped}%`);
 
-  // Set active section based on sectionKey
+  // Update active section based on data-start and data-end
   document.querySelectorAll('.quiz-progress-section').forEach(section => {
-    section.classList.toggle('active', section.dataset.step === sectionKey);
+    const start = parseInt(section.dataset.start, 10);
+    const end = parseInt(section.dataset.end, 10);
+
+    const isActive = clamped >= start && clamped <= end;
+    section.classList.toggle('active', isActive);
   });
 }
 
-
+// PROGRESS QUIZ LOGIC THAT WE CAN PLUG INTO QUIZ
+// const percentComplete = Math.round((currentStep / totalSteps) * 100);
+// updateQuizProgressPercent(percentComplete); 
 
 
 
