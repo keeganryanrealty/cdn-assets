@@ -61,52 +61,50 @@ function initQuizLogic() {
     // updateQuizProgressPercent(percentComplete); 
 
   
+document.addEventListener("DOMContentLoaded", () => {
   // Exit modal logic
-function showQuizExitModal() {
-  console.log("Exit button clicked"); // confirm click is firing
+  function showQuizExitModal() {
+    console.log("Exit button clicked");
 
-  // Prevent duplicate modals
-  if (document.querySelector("#lead-form-modal")) return;
+    if (document.querySelector("#lead-form-modal")) return;
+    document.body.style.overflow = "hidden";
 
-  // Lock scroll
-  document.body.style.overflow = "hidden";
+    fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-exit-modal-01.html")
+      .then(res => res.text())
+      .then(html => {
+        const wrapper = document.createElement("div");
+        wrapper.innerHTML = html;
 
-  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-exit-modal.html")
-    .then(res => res.text())
-    .then(html => {
-      const wrapper = document.createElement("div");
-      wrapper.innerHTML = html;
+        const modal = wrapper.querySelector("#lead-form-modal");
+        if (!modal) return console.error("Modal not found in injected HTML");
 
-      const modal = wrapper.querySelector("#lead-form-modal");
-      if (!modal) return console.error("Modal not found in injected HTML");
+        document.body.appendChild(modal);
+        const form = modal.querySelector("#lead-form");
+        if (form) form.setAttribute("data-source", "quiz-exit");
 
-      document.body.appendChild(modal);
-      const form = modal.querySelector("#lead-form");
-      if (form) form.setAttribute("data-source", "quiz-exit");
+        modal.addEventListener("click", e => {
+          if (
+            e.target.id === "lead-form-modal" ||
+            e.target.classList.contains("modal-close-btn")
+          ) {
+            modal.remove();
+            document.body.style.overflow = "";
+          }
+        });
+      })
+      .catch(err => console.error("Error loading modal:", err));
+  }
 
-      modal.addEventListener("click", e => {
-        if (
-          e.target.id === "lead-form-modal" ||
-          e.target.classList.contains("modal-close-btn")
-        ) {
-          modal.remove();
-          document.body.style.overflow = "";
-        }
-      });
-    })
-    .catch(err => console.error("Error loading modal:", err));
-}
-
-
-  // Attach exit button listener (now guaranteed to exist)
-    const observer = new MutationObserver(() => {
-      const exitBtn = document.getElementById("quiz-exit");
-      if (exitBtn && !exitBtn.dataset.listenerAttached) {
-        console.log("Attaching listener to #quiz-exit");
-        exitBtn.addEventListener("click", showQuizExitModal);
-        exitBtn.dataset.listenerAttached = "true";
-        observer.disconnect();
-      }
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
+  // Observer to attach listener once #quiz-exit is available
+  const observer = new MutationObserver(() => {
+    const exitBtn = document.getElementById("quiz-exit");
+    if (exitBtn && !exitBtn.dataset.listenerAttached) {
+      console.log("Attaching listener to #quiz-exit");
+      exitBtn.addEventListener("click", showQuizExitModal);
+      exitBtn.dataset.listenerAttached = "true";
+      observer.disconnect();
+    }
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+});
 
