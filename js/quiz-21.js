@@ -81,15 +81,16 @@ const steps = [
 
 
 // Quiz Progress
-function updateQuizProgress(sectionKey) {
+function updateQuizProgress(sectionKey, percentComplete) {
+  // Set percent-based fill for the beige background
+  const progressBar = document.getElementById('quiz-progress');
+  progressBar.style.setProperty('--quiz-progress-percent', `${percentComplete}%`);
+
+  // Set active section based on sectionKey
   document.querySelectorAll('.quiz-progress-section').forEach(section => {
     section.classList.toggle('active', section.dataset.step === sectionKey);
   });
 }
-
-// Example: call this when entering a new section
-updateQuizProgress('timeline');
-
 
 
 
