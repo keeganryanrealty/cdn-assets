@@ -57,29 +57,6 @@ function updateQuizProgressPercent(percent) {
 
 
 
-//EXIT Button Logic
-if (window.location.pathname.includes("/pages/get-started")) {
-  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-23.html")
-    .then(res => res.text())
-    .then(html => {
-      const overlay = document.createElement("div");
-      overlay.innerHTML = html;
-      document.body.appendChild(overlay);
-
-      // Init quiz logic if defined
-      if (typeof initQuizApp === "function") initQuizApp();
-
-      // ✅ Attach exit button handler directly after injection
-      const exitBtn = overlay.querySelector("#quiz-exit");
-      if (exitBtn) {
-        exitBtn.addEventListener("click", showQuizExitModal);
-      } else {
-        console.warn("❗ 'quiz-exit' button not found after quiz inject");
-      }
-    });
-}
-
-
 
 // EXIT Button Logic
 function showQuizExitModal() {
