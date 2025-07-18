@@ -76,9 +76,9 @@ function showQuizExitModal() {
   modalOverlay.style.display = "flex";
   modalOverlay.style.justifyContent = "center";
   modalOverlay.style.alignItems = "center";
+
+  // Lock scroll
   document.body.style.overflow = "hidden";
-  modalOverlay.remove();
-  document.body.style.overflow = "";
 
   // Fetch your existing modal HTML (the signup version)
   fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/signup.html")
@@ -91,7 +91,7 @@ function showQuizExitModal() {
       // Inject into DOM
       document.body.appendChild(modalOverlay);
 
-      // Add source identifier so your script can handle it differently if needed
+      // Add source identifier
       const form = modalOverlay.querySelector("#lead-form");
       if (form) form.setAttribute("data-source", "quiz-exit");
 
@@ -99,15 +99,25 @@ function showQuizExitModal() {
       modalOverlay.addEventListener("click", e => {
         if (e.target === modalOverlay || e.target.classList.contains("modal-close-btn")) {
           modalOverlay.remove();
+          document.body.style.overflow = ""; // Unlock scroll
         }
       });
     });
 }
 
+// Wait for quiz-exit button to exist, especially if injected
 document.addEventListener("DOMContentLoaded", () => {
-  const exitBtn = document.getElementById("quiz-exit");
-  if (exitBtn) exitBtn.addEventListener("click", showQuizExitModal);
+  const observer = new MutationObserver(() => {
+    const exitBtn = document.getElementById("quiz-exit");
+    if (exitBtn) {
+      exitBtn.addEventListener("click", showQuizExitModal);
+      observer.disconnect(); // stop observing
+    }
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
 });
+
 
 
 
