@@ -26,45 +26,50 @@ if (window.location.pathname.includes("/pages/get-started")) {
 function showQuizExitModal() {
   console.log("Exit button clicked");
 
-  if (document.querySelector("#quiz-exit-modal")) return;
+  if (document.getElementById("quiz-exit-modal")) return; // Don't duplicate
   document.body.style.overflow = "hidden";
 
-    fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-exit-modal-02.html")
-      .then(res => res.text())
-      .then(html => {
-        const wrapper = document.createElement("div");
-        wrapper.innerHTML = html;
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-exit-modal-01.html?v=3")
+    .then(res => res.text())
+    .then(html => {
+      const wrapper = document.createElement("div");
+      wrapper.innerHTML = html;
 
-        // Append everything inside the wrapper (not just modal)
-        while (wrapper.firstChild) {
-          document.body.appendChild(wrapper.firstChild);
+      while (wrapper.firstChild) {
+        document.body.appendChild(wrapper.firstChild);
+      }
+
+      const modal = document.getElementById("quiz-exit-modal");
+      if (!modal) return console.error("Modal not found");
+
+      // ✅ Force visibility
+      Object.assign(modal.style, {
+        display: "flex",
+        visibility: "visible",
+        opacity: "1",
+        zIndex: "999999",
+        position: "fixed",
+        inset: "0",
+        backgroundColor: "rgba(0, 0, 0, 0.8)",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        width: "100vw"
+      });
+
+      modal.addEventListener("click", e => {
+        if (
+          e.target.id === "quiz-exit-modal" ||
+          e.target.classList.contains("modal-close-btn")
+        ) {
+          modal.remove();
+          document.body.style.overflow = "";
         }
-
-        const modal = document.getElementById("quiz-exit-modal");
-      if (!modal) return console.error("Modal not found in injected HTML");
-
-      const form = modal.querySelector("quiz-exit-modal");
-      if (form) form.setAttribute("data-source", "quiz-exit");
-
-      // Force visibility so it sits above the quiz overlay
-      modal.style.display = "flex";
-      modal.style.visibility = "visible";
-      modal.style.opacity = "1";
-      modal.style.zIndex = "999999"; // Higher than quiz overlay
-      document.body.style.overflow = "hidden";
-
-        modal.addEventListener("click", e => {
-          if (
-            e.target.id === "lead-form-modal" ||
-            e.target.classList.contains("modal-close-btn")
-          ) {
-            modal.remove();
-            document.body.style.overflow = "";
-          }
-        });
-      })
-   .catch(err => console.error("Error loading modal:", err));
+      });
+    })
+    .catch(err => console.error("Error loading modal:", err));
 }
+
 
 // Main quiz logic
 function initQuizLogic() {
