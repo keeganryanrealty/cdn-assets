@@ -58,8 +58,32 @@ function updateQuizProgressPercent(percent) {
 
 
 //EXIT Button Logic
+if (window.location.pathname.includes("/pages/get-started")) {
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-23.html")
+    .then(res => res.text())
+    .then(html => {
+      const overlay = document.createElement("div");
+      overlay.innerHTML = html;
+      document.body.appendChild(overlay);
+
+      // Init quiz logic if defined
+      if (typeof initQuizApp === "function") initQuizApp();
+
+      // ✅ Attach exit button handler directly after injection
+      const exitBtn = overlay.querySelector("#quiz-exit");
+      if (exitBtn) {
+        exitBtn.addEventListener("click", showQuizExitModal);
+      } else {
+        console.warn("❗ 'quiz-exit' button not found after quiz inject");
+      }
+    });
+}
+
+
+
+// EXIT Button Logic
 function showQuizExitModal() {
-  // Check if already open
+  // Prevent multiple modals
   if (document.querySelector("#lead-form-modal")) return;
 
   // Create overlay container
@@ -79,7 +103,7 @@ function showQuizExitModal() {
   // Lock scroll
   document.body.style.overflow = "hidden";
 
-  // Fetch your existing modal HTML (the signup version)
+  // Fetch the actual modal content
   fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/create-account-6.html")
     .then(res => res.text())
     .then(html => {
@@ -87,14 +111,14 @@ function showQuizExitModal() {
       contentWrapper.innerHTML = html;
       modalOverlay.appendChild(contentWrapper);
 
-      // Inject into DOM
+      // Inject modal into DOM
       document.body.appendChild(modalOverlay);
 
-      // Add source identifier
+      // Mark the source of this form
       const form = modalOverlay.querySelector("#lead-form");
       if (form) form.setAttribute("data-source", "quiz-exit");
 
-      // Allow close on overlay click or exit button
+      // Allow close on click outside or on close button
       modalOverlay.addEventListener("click", e => {
         if (e.target === modalOverlay || e.target.classList.contains("modal-close-btn")) {
           modalOverlay.remove();
@@ -103,19 +127,6 @@ function showQuizExitModal() {
       });
     });
 }
-
-// Wait for quiz-exit button to exist, especially if injected
-document.addEventListener("DOMContentLoaded", () => {
-  const observer = new MutationObserver(() => {
-    const exitBtn = document.getElementById("quiz-exit");
-    if (exitBtn) {
-      exitBtn.addEventListener("click", showQuizExitModal);
-      observer.disconnect(); // stop observing
-    }
-  });
-
-  observer.observe(document.body, { childList: true, subtree: true });
-});
 
 
 
