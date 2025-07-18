@@ -5,7 +5,6 @@ if (window.location.pathname.includes("/pages/get-started")) {
       const overlay = document.createElement("div");
       overlay.innerHTML = html;
       document.body.appendChild(overlay);
-      initQuizApp(); // your logic
     });
 }
 
@@ -143,7 +142,7 @@ document.addEventListener("click", function (e) {
     // Enable next if any option selected
     const step = e.target.closest(".quiz-step");
     const hasSelection = step.querySelector(".quiz-option.selected");
-    const nextBtn = step.querySelector("#quiz-next");
+    const nextBtn = document.getElementById("quiz-next");
     if (nextBtn) nextBtn.disabled = !hasSelection;
   }
 });
