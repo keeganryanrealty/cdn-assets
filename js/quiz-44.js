@@ -59,6 +59,7 @@ function updateQuizProgressPercent(percent) {
 
 
 // EXIT Button Logic
+// EXIT Button Logic
 function showQuizExitModal() {
   // Prevent duplicate modals
   if (document.querySelector("#lead-form-modal")) return;
@@ -96,6 +97,7 @@ function showQuizExitModal() {
     .catch(err => console.error("Error loading modal:", err));
 }
 
+// Wait for the #quiz-exit button to appear in the DOM
 const observer = new MutationObserver(() => {
   const exitBtn = document.getElementById("quiz-exit");
   if (exitBtn && !exitBtn.dataset.listenerAdded) {
