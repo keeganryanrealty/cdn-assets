@@ -1,6 +1,6 @@
 (function () {
   const currentPath = window.location.pathname;
-  if (!/\/pages\/get-started(\/|$)/.test(currentPath)) return;
+  if (!currentPath.includes("/pages/get-started")) return;
 
   // ⬇️ Only runs on /pages/get-started
   // Create quiz container
@@ -57,6 +57,7 @@
     });
   }
 })();
+
 
 
 
