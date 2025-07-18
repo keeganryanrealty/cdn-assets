@@ -29,7 +29,7 @@ function showQuizExitModal() {
   if (document.getElementById("quiz-exit-modal")) return; // Don't duplicate
   document.body.style.overflow = "hidden";
 
-  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-exit-modal-02.html")
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-exit-modal-03.html")
     .then(res => res.text())
     .then(html => {
       const wrapper = document.createElement("div");
@@ -66,6 +66,26 @@ function showQuizExitModal() {
           document.body.style.overflow = "";
         }
       });
+
+      const loginBtn = document.getElementById("back-to-login-btn");
+        if (loginBtn) {
+        loginBtn.addEventListener("click", () => {
+        console.log("🔁 Switching to login form inside quiz modal...");
+    
+        // Replace modal inner content with login form
+        fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form-6.html")
+          .then(res => res.text())
+          .then(html => {
+          const modal = document.getElementById("quiz-exit-modal");
+          if (modal) {
+          modal.innerHTML = html;
+
+          // Optionally reattach close and return logic here too
+          }
+        });
+      });
+    }
+
     })
     .catch(err => console.error("Error loading modal:", err));
 }
