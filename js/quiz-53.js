@@ -29,13 +29,19 @@ function showQuizExitModal() {
   if (document.querySelector("#lead-form-modal")) return; // Don't duplicate
   document.body.style.overflow = "hidden";
 
-  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-exit-modal-01.html")
-    .then(res => res.text())
-    .then(html => {
+    fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-exit-modal-01.html")
+      .then(res => {
+        console.log("Response status:", res.status);
+        return res.text();
+      })
+      .then(html => {
+        console.log("Modal HTML loaded:", html.slice(0, 100)); // peek at first 100 chars
+
       const wrapper = document.createElement("div");
       wrapper.innerHTML = html;
 
       const modal = wrapper.querySelector("#lead-form-modal");
+      console.log("Modal extracted from HTML:", modal);
       if (!modal) return console.error("Modal not found in injected HTML");
 
       document.body.appendChild(modal);
