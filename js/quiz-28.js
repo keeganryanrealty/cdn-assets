@@ -2,44 +2,45 @@
   const currentPath = window.location.pathname;
   if (!currentPath.includes("/pages/get-started")) return;
 
-  // Create quiz container
-  const container = document.createElement("div");
-  container.id = "quiz-container";
+  // Run only after DOM is fully loaded
+  document.addEventListener("DOMContentLoaded", async () => {
+    // Wait until all required elements are in the DOM
+    try {
+      const [header, wrapper, footer] = await Promise.all([
+        waitForElement("header"),
+        waitForElement(".page-wrapper"),
+        waitForElement("#custom-footer")
+      ]);
 
-  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-22.html")
-    .then(res => res.text())
-    .then(async html => {
+      // ✅ Hide other sections
+      if (header) header.style.display = "none";
+      if (wrapper) wrapper.style.display = "none";
+
+      const aboutMe = document.querySelector("#about-me-placeholder");
+      const customHero = document.querySelector("#custom-hero-placeholder");
+
+      if (aboutMe) aboutMe.style.display = "none";
+      if (customHero) customHero.style.display = "none";
+
+      // ✅ Create quiz container
+      const container = document.createElement("div");
+      container.id = "quiz-container";
+
+      // ✅ Load and inject quiz HTML
+      const res = await fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-22.html");
+      const html = await res.text();
       container.innerHTML = html;
 
-      // Wait for elements before hiding them
-      try {
-        await Promise.all([
-          waitForElement("header"),
-          waitForElement(".page-wrapper"),
-          waitForElement("#custom-footer")
-        ]);
+      // ✅ Insert quiz before footer, then remove footer
+      footer.parentNode.insertBefore(container, footer);
+      footer.remove();
 
-        const header = document.querySelector("header");
-        const wrapper = document.querySelector(".page-wrapper");
-        const aboutMe = document.querySelector("#about-me-placeholder");
-        const customHero = document.querySelector("#custom-hero-placeholder");
-
-        if (header) header.style.display = "none";
-        if (wrapper) wrapper.style.display = "none";
-        if (aboutMe) aboutMe.style.display = "none";
-        if (customHero) customHero.style.display = "none";
-
-        const footer = document.querySelector("#custom-footer");
-        footer.parentNode.insertBefore(container, footer);
-        footer.remove(); // clean remove
-      } catch (err) {
-        console.warn("⚠️ Some elements not found:", err);
-        document.body.appendChild(container); // fallback
-      }
-
+      // ✅ Run quiz setup
       initQuizApp();
-    })
-    .catch(err => console.error("Quiz load error:", err));
+    } catch (err) {
+      console.warn("⚠️ Some elements not found:", err);
+    }
+  });
 
   function initQuizApp() {
     console.log("✅ Quiz initialized");
@@ -48,16 +49,15 @@
   function waitForElement(selector, timeout = 3000) {
     return new Promise((resolve, reject) => {
       const startTime = Date.now();
-      const interval = setInterval(() => {
-        const element = document.querySelector(selector);
-        if (element) {
-          clearInterval(interval);
-          resolve(element);
-        } else if (Date.now() - startTime > timeout) {
-          clearInterval(interval);
-          reject(`❌ Timeout: ${selector} not found`);
-        }
-      }, 100);
+
+      const check = () => {
+        const el = document.querySelector(selector);
+        if (el) return resolve(el);
+        if (Date.now() - startTime > timeout) return reject(`❌ Timeout: ${selector} not found`);
+        requestAnimationFrame(check);
+      };
+
+      check();
     });
   }
 })();
