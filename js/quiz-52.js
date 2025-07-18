@@ -1,0 +1,102 @@
+// Only run on the quiz page
+if (window.location.pathname.includes("/pages/get-started")) {
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-23.html")
+    .then(res => res.text())
+    .then(html => {
+      const overlay = document.createElement("div");
+      overlay.innerHTML = html;
+      document.body.appendChild(overlay);
+      initQuizLogic(); // Run logic after DOM injection
+
+      // Wait for #quiz-exit to exist, then bind click
+      const observer = new MutationObserver(() => {
+        const exitBtn = document.getElementById("quiz-exit");
+        if (exitBtn && !exitBtn.dataset.listenerAttached) {
+          console.log("Attaching listener to #quiz-exit");
+          exitBtn.addEventListener("click", showQuizExitModal);
+          exitBtn.dataset.listenerAttached = "true";
+          observer.disconnect();
+        }
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+    });
+}
+
+// Exit modal handler
+function showQuizExitModal() {
+  console.log("Exit button clicked");
+
+  if (document.querySelector("#lead-form-modal")) return; // Don't duplicate
+  document.body.style.overflow = "hidden";
+
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-exit-modal-01.html")
+    .then(res => res.text())
+    .then(html => {
+      const wrapper = document.createElement("div");
+      wrapper.innerHTML = html;
+
+      const modal = wrapper.querySelector("#lead-form-modal");
+      if (!modal) return console.error("Modal not found in injected HTML");
+
+      document.body.appendChild(modal);
+
+      const form = modal.querySelector("#lead-form");
+      if (form) form.setAttribute("data-source", "quiz-exit");
+
+      modal.addEventListener("click", e => {
+        if (
+          e.target.id === "lead-form-modal" ||
+          e.target.classList.contains("modal-close-btn")
+        ) {
+          modal.remove();
+          document.body.style.overflow = "";
+        }
+      });
+    })
+    .catch(err => console.error("Error loading modal:", err));
+}
+
+// Main quiz logic
+function initQuizLogic() {
+  // Multiselect + single select logic
+  document.addEventListener("click", function (e) {
+    if (e.target.classList.contains("quiz-option")) {
+      const parent = e.target.closest(".multiselect");
+      if (parent) {
+        const selected = parent.querySelectorAll(".quiz-option.selected");
+        const isSelected = e.target.classList.contains("selected");
+
+        if (!isSelected && selected.length >= 2) return;
+        e.target.classList.toggle("selected");
+      } else {
+        const options = e.target.parentElement.querySelectorAll(".quiz-option");
+        options.forEach(opt => opt.classList.remove("selected"));
+        e.target.classList.add("selected");
+      }
+
+      const step = e.target.closest(".quiz-step");
+      const hasSelection = step.querySelector(".quiz-option.selected");
+      const nextBtn = document.getElementById("quiz-next");
+      if (nextBtn) nextBtn.disabled = !hasSelection;
+    }
+  });
+
+  // Progress bar logic (if used)
+  function updateQuizProgressPercent(percent) {
+    const clamped = Math.max(0, Math.min(100, percent));
+    const progressBar = document.getElementById("quiz-progress");
+    if (progressBar) {
+      progressBar.style.setProperty('--quiz-progress-percent', `${clamped}%`);
+    }
+
+    document.querySelectorAll('.quiz-progress-section').forEach(section => {
+      const start = parseInt(section.dataset.start, 10);
+      const end = parseInt(section.dataset.end, 10);
+      section.classList.toggle('active', clamped >= start && clamped <= end);
+    });
+  }
+
+  // Example usage: 
+  // const percentComplete = Math.round((currentStep / totalSteps) * 100);
+  // updateQuizProgressPercent(percentComplete);
+}
