@@ -41,10 +41,17 @@ function showQuizExitModal() {
         }
 
         const modal = document.getElementById("lead-form-modal");
-        if (!modal) return console.error("Modal not found in injected HTML");
+      if (!modal) return console.error("Modal not found in injected HTML");
 
-        const form = modal.querySelector("#lead-form");
-        if (form) form.setAttribute("data-source", "quiz-exit");
+      const form = modal.querySelector("#lead-form");
+      if (form) form.setAttribute("data-source", "quiz-exit");
+
+      // Force visibility so it sits above the quiz overlay
+      modal.style.display = "flex";
+      modal.style.visibility = "visible";
+      modal.style.opacity = "1";
+      modal.style.zIndex = "999999"; // Higher than quiz overlay
+      document.body.style.overflow = "hidden";
 
         modal.addEventListener("click", e => {
           if (
