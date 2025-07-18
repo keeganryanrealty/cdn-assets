@@ -6,7 +6,7 @@
   const container = document.createElement("div");
   container.id = "quiz-container";
 
-  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-17.html")
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-18.html")
     .then(res => res.text())
     .then(async html => {
       container.innerHTML = html;
@@ -80,7 +80,15 @@ const steps = [
 ];
 
 
+// Quiz Progress
+function updateQuizProgress(sectionKey) {
+  document.querySelectorAll('.quiz-progress-section').forEach(section => {
+    section.classList.toggle('active', section.dataset.step === sectionKey);
+  });
+}
 
+// Example: call this when entering a new section
+updateQuizProgress('timeline');
 
 
 
