@@ -58,6 +58,56 @@ function updateQuizProgressPercent(percent) {
 
 
 
+//EXIT Button Logic
+function showQuizExitModal() {
+  // Check if already open
+  if (document.querySelector("#lead-form-modal")) return;
+
+  // Create overlay container
+  const modalOverlay = document.createElement("div");
+  modalOverlay.id = "lead-form-overlay";
+  modalOverlay.style.position = "fixed";
+  modalOverlay.style.top = 0;
+  modalOverlay.style.left = 0;
+  modalOverlay.style.width = "100%";
+  modalOverlay.style.height = "100%";
+  modalOverlay.style.background = "rgba(0, 0, 0, 0.6)";
+  modalOverlay.style.zIndex = 9999;
+  modalOverlay.style.display = "flex";
+  modalOverlay.style.justifyContent = "center";
+  modalOverlay.style.alignItems = "center";
+  document.body.style.overflow = "hidden";
+  modalOverlay.remove();
+  document.body.style.overflow = "";
+
+  // Fetch your existing modal HTML (the signup version)
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/signup.html")
+    .then(res => res.text())
+    .then(html => {
+      const contentWrapper = document.createElement("div");
+      contentWrapper.innerHTML = html;
+      modalOverlay.appendChild(contentWrapper);
+
+      // Inject into DOM
+      document.body.appendChild(modalOverlay);
+
+      // Add source identifier so your script can handle it differently if needed
+      const form = modalOverlay.querySelector("#lead-form");
+      if (form) form.setAttribute("data-source", "quiz-exit");
+
+      // Allow close on overlay click or exit button
+      modalOverlay.addEventListener("click", e => {
+        if (e.target === modalOverlay || e.target.classList.contains("modal-close-btn")) {
+          modalOverlay.remove();
+        }
+      });
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const exitBtn = document.getElementById("quiz-exit");
+  if (exitBtn) exitBtn.addEventListener("click", showQuizExitModal);
+});
 
 
 
