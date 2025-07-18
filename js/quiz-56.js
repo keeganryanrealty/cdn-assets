@@ -26,7 +26,7 @@ if (window.location.pathname.includes("/pages/get-started")) {
 function showQuizExitModal() {
   console.log("Exit button clicked");
 
-  if (document.querySelector("#lead-form-modal")) return; // Don't duplicate
+  if (document.querySelector("#quiz-exit-modal")) return;
   document.body.style.overflow = "hidden";
 
     fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-exit-modal-01.html")
@@ -40,10 +40,10 @@ function showQuizExitModal() {
           document.body.appendChild(wrapper.firstChild);
         }
 
-        const modal = document.getElementById("lead-form-modal");
+        const modal = document.getElementById("quiz-exit-modal");
       if (!modal) return console.error("Modal not found in injected HTML");
 
-      const form = modal.querySelector("#lead-form");
+      const form = modal.querySelector("quiz-exit-modal");
       if (form) form.setAttribute("data-source", "quiz-exit");
 
       // Force visibility so it sits above the quiz overlay
