@@ -60,59 +60,52 @@ function updateQuizProgressPercent(percent) {
 
 // EXIT Button Logic
 function showQuizExitModal() {
-  // Don’t double load
+  // Prevent duplicate modals
   if (document.querySelector("#lead-form-modal")) return;
 
-  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-exit-modal-01.html")
+  // Lock scroll
+  document.body.style.overflow = "hidden";
+
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-exit-modal.html")
     .then(res => res.text())
     .then(html => {
       const wrapper = document.createElement("div");
       wrapper.innerHTML = html;
-      document.body.appendChild(wrapper);
 
-      const modal = document.querySelector("#lead-form-modal");
+      const modal = wrapper.querySelector("#lead-form-modal");
+      if (!modal) return console.error("Modal not found in injected HTML");
 
-      // Close on overlay click or X
+      // Append to DOM
+      document.body.appendChild(modal);
+
+      // Add data-source attribute
+      const form = modal.querySelector("#lead-form");
+      if (form) form.setAttribute("data-source", "quiz-exit");
+
+      // Set up close logic for both overlay click and close button
       modal.addEventListener("click", e => {
-        if (e.target === modal || e.target.classList.contains("modal-close-btn")) {
+        if (
+          e.target.id === "lead-form-modal" || 
+          e.target.classList.contains("modal-close-btn")
+        ) {
           modal.remove();
           document.body.style.overflow = "";
         }
       });
-
-      // Go Home button
-      const homeBtn = document.getElementById("quiz-exit-home");
-      if (homeBtn) {
-        homeBtn.addEventListener("click", () => {
-          window.location.href = "/";
-        });
-      }
-
-      // Log In instead
-      const loginBtn = document.getElementById("back-to-login-btn");
-      if (loginBtn) {
-        loginBtn.addEventListener("click", () => {
-          fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form-5.html")
-            .then(res => res.text())
-            .then(loginHtml => {
-              modal.innerHTML = loginHtml;
-              // You may optionally rebind modal-close-btn logic here
-            });
-        });
-      }
-    });
+    })
+    .catch(err => console.error("Error loading modal:", err));
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const observer = new MutationObserver(() => {
-    const exitBtn = document.getElementById("quiz-exit");
-    if (exitBtn) {
-      exitBtn.addEventListener("click", showQuizExitModal);
-      observer.disconnect(); // done observing
-    }
-  });
+const observer = new MutationObserver(() => {
+  const exitBtn = document.getElementById("quiz-exit");
+  if (exitBtn && !exitBtn.dataset.listenerAdded) {
+    exitBtn.addEventListener("click", showQuizExitModal);
+    exitBtn.dataset.listenerAdded = "true"; // prevent multiple bindings
+    observer.disconnect(); // stop watching once attached
+  }
+});
+observer.observe(document.body, { childList: true, subtree: true });
 
-  observer.observe(document.body, { childList: true, subtree: true });
 });
 
 
