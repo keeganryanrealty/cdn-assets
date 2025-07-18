@@ -57,6 +57,7 @@ function showQuizExitModal() {
         width: "100vw"
       });
 
+      // Modal close logic
       modal.addEventListener("click", e => {
         if (
           e.target.id === "quiz-exit-modal" ||
@@ -67,28 +68,62 @@ function showQuizExitModal() {
         }
       });
 
-      const loginBtn = document.getElementById("back-to-login-btn");
-        if (loginBtn) {
+      // 🔁 Handle login swap
+      const loginBtnCheck = setInterval(() => {
+        const loginBtn = document.getElementById("back-to-login-btn");
+        if (!loginBtn) return;
+
+        clearInterval(loginBtnCheck);
         loginBtn.addEventListener("click", () => {
-        console.log("🔁 Switching to login form inside quiz modal...");
-    
-        // Replace modal inner content with login form
-        fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form-6.html")
-          .then(res => res.text())
-          .then(html => {
-          const modal = document.getElementById("quiz-exit-modal");
-          if (modal) {
-          modal.innerHTML = html;
-
-          // Optionally reattach close and return logic here too
-          }
+          console.log("🔁 Switching to login form inside quiz modal...");
+          injectQuizLoginForm(); // ✅ Replaces modal content
         });
-      });
-    }
-
+      }, 300);
     })
     .catch(err => console.error("Error loading modal:", err));
 }
+
+
+function injectQuizLoginForm() {
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form-6.html")
+    .then(res => res.text())
+    .then(html => {
+      const modal = document.getElementById("quiz-exit-modal");
+      if (!modal) return console.error("Quiz modal not found");
+
+      modal.innerHTML = html;
+
+      // Reapply styles
+      Object.assign(modal.style, {
+        display: "flex",
+        visibility: "visible",
+        opacity: "1",
+        zIndex: "999999",
+        position: "fixed",
+        inset: "0",
+        backgroundColor: "rgba(0, 0, 0, 0.8)",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        width: "100vw"
+      });
+
+      modal.addEventListener("click", e => {
+        if (
+          e.target.id === "quiz-exit-modal" ||
+          e.target.classList.contains("modal-close-btn")
+        ) {
+          modal.remove();
+          document.body.style.overflow = "";
+        }
+      });
+
+      // 👉 Add login form submit logic here if needed
+    })
+    .catch(err => console.error("Error loading login form:", err));
+}
+
+
 
 
 // Main quiz logic
