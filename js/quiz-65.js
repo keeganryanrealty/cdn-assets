@@ -26,7 +26,7 @@ if (window.location.pathname.includes("/pages/get-started")) {
 function showQuizExitModal() {
   console.log("Exit button clicked");
 
-  if (document.getElementById("quiz-exit-modal")) return; // Don't duplicate
+  if (document.getElementById("quiz-exit-modal")) return; // Prevent duplicate
   document.body.style.overflow = "hidden";
 
   fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-exit-modal-05.html")
@@ -42,7 +42,6 @@ function showQuizExitModal() {
       const modal = document.getElementById("quiz-exit-modal");
       if (!modal) return console.error("Modal not found");
 
-      // ✅ Force visibility
       Object.assign(modal.style, {
         display: "flex",
         visibility: "visible",
@@ -57,7 +56,6 @@ function showQuizExitModal() {
         width: "100vw"
       });
 
-      // Modal close logic
       modal.addEventListener("click", e => {
         if (
           e.target.id === "quiz-exit-modal" ||
@@ -68,15 +66,20 @@ function showQuizExitModal() {
         }
       });
 
-      // 🔁 Handle login swap
+      // Attach "Back to Login" logic
       const loginBtnCheck = setInterval(() => {
         const loginBtn = document.getElementById("back-to-login-btn");
         if (!loginBtn) return;
 
         clearInterval(loginBtnCheck);
+
         loginBtn.addEventListener("click", () => {
-          console.log("🔁 Switching to login form inside quiz modal...");
-          injectQuizLoginForm(); // ✅ Replaces modal content
+          console.log("🔁 Replacing modal with login form...");
+
+          const oldModal = document.getElementById("quiz-exit-modal");
+          if (oldModal) oldModal.remove(); // 🧼 Clean it
+
+          injectQuizLoginForm(); // 💥 Fresh inject
         });
       }, 300);
     })
@@ -85,15 +88,19 @@ function showQuizExitModal() {
 
 
 function injectQuizLoginForm() {
-  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form-5.html")
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form-6.html")
     .then(res => res.text())
     .then(html => {
+      const wrapper = document.createElement("div");
+      wrapper.innerHTML = html;
+
+      while (wrapper.firstChild) {
+        document.body.appendChild(wrapper.firstChild);
+      }
+
       const modal = document.getElementById("quiz-exit-modal");
       if (!modal) return console.error("Quiz modal not found");
 
-      modal.innerHTML = html;
-
-      // Reapply styles
       Object.assign(modal.style, {
         display: "flex",
         visibility: "visible",
@@ -118,7 +125,7 @@ function injectQuizLoginForm() {
         }
       });
 
-      // 👉 Add login form submit logic here if needed
+      // 🔐 TODO: Add Supabase login logic here if needed
     })
     .catch(err => console.error("Error loading login form:", err));
 }
