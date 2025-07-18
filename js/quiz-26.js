@@ -2,7 +2,6 @@
   const currentPath = window.location.pathname;
   if (!currentPath.includes("/pages/get-started")) return;
 
-  // ⬇️ Only runs on /pages/get-started
   // Create quiz container
   const container = document.createElement("div");
   container.id = "quiz-container";
@@ -12,24 +11,24 @@
     .then(async html => {
       container.innerHTML = html;
 
-      // TEMP HIDE OTHER SECTIONS (✅ move inside the condition)
-      const header = document.querySelector('header');
-      const wrapper = document.querySelector('.page-wrapper');
-      const aboutMe = document.querySelector('#about-me-placeholder');
-      const customHero = document.querySelector('#custom-hero-placeholder');
+      // TEMP HIDE OTHER SECTIONS
+      const header = document.querySelector("header");
+      const wrapper = document.querySelector(".page-wrapper");
+      const aboutMe = document.querySelector("#about-me-placeholder");
+      const customHero = document.querySelector("#custom-hero-placeholder");
 
       if (header) header.style.display = "none";
       if (wrapper) wrapper.style.display = "none";
       if (aboutMe) aboutMe.style.display = "none";
       if (customHero) customHero.style.display = "none";
 
-      // Wait for the footer to load
+      // Inject quiz container before footer
       try {
-        const footer = await waitForElement('#custom-footer');
+        const footer = await waitForElement("#custom-footer");
         footer.parentNode.insertBefore(container, footer);
-        footer.remove();
+        footer.remove(); // remove existing footer
       } catch (err) {
-        console.warn("⚠️ Footer not found — injected at end of body.");
+        console.warn("⚠️ Footer not found — injecting at end of body.");
         document.body.appendChild(container);
       }
 
