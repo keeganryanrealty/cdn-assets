@@ -85,7 +85,7 @@ function showQuizExitModal() {
 
 
 function injectQuizLoginForm() {
-  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form-6.html")
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login-form-5.html")
     .then(res => res.text())
     .then(html => {
       const modal = document.getElementById("quiz-exit-modal");
