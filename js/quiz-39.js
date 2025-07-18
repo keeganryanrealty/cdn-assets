@@ -60,62 +60,62 @@ function updateQuizProgressPercent(percent) {
 
 // EXIT Button Logic
 function showQuizExitModal() {
-  // Check if already open
-  if (document.querySelector("#lead-form-overlay")) return;
+  // Don’t double load
+  if (document.querySelector("#lead-form-modal")) return;
 
-  // Create overlay container
-  const modalOverlay = document.createElement("div");
-  modalOverlay.id = "lead-form-overlay";
-  modalOverlay.style.position = "fixed";
-  modalOverlay.style.top = 0;
-  modalOverlay.style.left = 0;
-  modalOverlay.style.width = "100%";
-  modalOverlay.style.height = "100%";
-  modalOverlay.style.background = "rgba(0, 0, 0, 0.6)";
-  modalOverlay.style.zIndex = 9999;
-  modalOverlay.style.display = "flex";
-  modalOverlay.style.justifyContent = "center";
-  modalOverlay.style.alignItems = "center";
-
-  // Lock scroll
-  document.body.style.overflow = "hidden";
-
-  // Fetch your existing modal HTML
-  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/create-account-6.html")
+  fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/quiz-exit-modal-01.html")
     .then(res => res.text())
     .then(html => {
-      const contentWrapper = document.createElement("div");
-      contentWrapper.innerHTML = html;
+      const wrapper = document.createElement("div");
+      wrapper.innerHTML = html;
+      document.body.appendChild(wrapper);
 
-      // Optional styling
-      contentWrapper.style.background = "#fff";
-      contentWrapper.style.padding = "2rem";
-      contentWrapper.style.borderRadius = "8px";
-      contentWrapper.style.maxWidth = "500px";
-      contentWrapper.style.width = "90%";
+      const modal = document.querySelector("#lead-form-modal");
 
-      modalOverlay.appendChild(contentWrapper);
-
-      // Add source identifier
-      const form = modalOverlay.querySelector("#lead-form");
-      if (form) form.setAttribute("data-source", "quiz-exit");
-
-      // Close behavior
-      modalOverlay.addEventListener("click", (e) => {
-        if (
-          e.target === modalOverlay ||
-          e.target.classList.contains("modal-close-btn")
-        ) {
-          modalOverlay.remove();
-          document.body.style.overflow = ""; // Unlock scroll
+      // Close on overlay click or X
+      modal.addEventListener("click", e => {
+        if (e.target === modal || e.target.classList.contains("modal-close-btn")) {
+          modal.remove();
+          document.body.style.overflow = "";
         }
       });
 
-      // Add to DOM LAST
-      document.body.appendChild(modalOverlay);
-    })
-    .catch((err) => console.error("Modal fetch failed:", err));
+      // Go Home button
+      const homeBtn = document.getElementById("quiz-exit-home");
+      if (homeBtn) {
+        homeBtn.addEventListener("click", () => {
+          window.location.href = "/";
+        });
+      }
+
+      // Log In instead
+      const loginBtn = document.getElementById("back-to-login-btn");
+      if (loginBtn) {
+        loginBtn.addEventListener("click", () => {
+          fetch("https://cdn.jsdelivr.net/gh/keeganryanrealty/cdn-assets@main/html/login.html")
+            .then(res => res.text())
+            .then(loginHtml => {
+              modal.innerHTML = loginHtml;
+              // You may optionally rebind modal-close-btn logic here
+            });
+        });
+      }
+    });
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const observer = new MutationObserver(() => {
+    const exitBtn = document.getElementById("quiz-exit");
+    if (exitBtn) {
+      exitBtn.addEventListener("click", showQuizExitModal);
+      observer.disconnect(); // done observing
+    }
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
+});
+
+
 
 // MULTISELECT LOGIC
 document.addEventListener("click", function (e) {
