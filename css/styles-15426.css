@@ -794,43 +794,42 @@ transition: all 0s ease;
 
 /* ======== PROGRESS BAR ========== */
 #quiz-progress {
-  width: 100%;
-  height: 36px; /* thinner height */
-  background: #f3e6d4; /* beige base */
-  position: relative;
   display: flex;
-  align-items: center;
-  padding: 0 1.5rem;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #100f0d;
-  box-sizing: border-box;
-  overflow: hidden;
+  height: 36px;
+  width: 100%;
+  background: #f9f8f7; /* Off-white background */
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  user-select: none;
 }
 
-#quiz-progress::after {
+.quiz-progress-section {
+  flex: 1;
+  background-color: #f9f8f7; /* Default unfilled color */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  transition: background 0.4s ease;
+  color: #bbb;
+}
+
+.quiz-progress-section:not(:last-child)::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: var(--quiz-progress-percent, 20%);
-  background-color: #ffffff; /* light fill — you could also try #eee or #f0f0f0 for contrast */
-  transition: width 0.4s ease;
-  z-index: 1;
-  border-radius: 0; /* remove rounded edges */
-}
-#quiz-progress span {
-  position: relative;
-  z-index: 2;
+  right: 0;
+  height: 60%;
+  width: 1px;
+  background-color: #ddd;
+  top: 20%;
 }
 
-/* Text inside progress bar stays visible */
-#quiz-progress .quiz-step-counter {
-  position: relative;
-  z-index: 2;
-  color: #100f0d; /* always the same */
-  font-weight: 600;
+.quiz-progress-section.active {
+  background-color: #f3e6d4; /* Beige for active section */
+  color: #100f0d; /* Dark text when active */
 }
 
 /* MAIN QUIZ CARD */
