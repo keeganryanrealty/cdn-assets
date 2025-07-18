@@ -795,7 +795,6 @@ transition: all 0s ease;
 /* ======== PROGRESS BAR ========== */
 /* ======== PROGRESS BAR ========== */
 #quiz-progress {
-  position: relative;
   display: flex;
   height: 36px;
   width: 100%;
@@ -806,37 +805,19 @@ transition: all 0s ease;
   font-weight: 600;
   text-align: center;
   user-select: none;
-  z-index: 0;
-  overflow: hidden;
 }
 
-/* Beige fill that reflects progress */
-#quiz-progress::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: var(--quiz-progress-percent, 0%);
-  background-color: #f3e6d4; /* Beige fill */
-  z-index: 1;
-  transition: width 0.3s ease;
-}
-
-/* Individual section */
 .quiz-progress-section {
   flex: 1;
-  position: relative;
-  z-index: 2; /* Above beige bar */
-  background-color: transparent;
+  background-color: #f9f8f7; /* Default unfilled color */
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: background 0.3s ease, color 0.3s ease;
-  color: #bbb; /* Default grey text */
+  position: relative;
+  transition: background 0.4s ease;
+  color: #bbb;
 }
 
-/* Divider line between sections */
 .quiz-progress-section:not(:last-child)::after {
   content: '';
   position: absolute;
@@ -845,14 +826,13 @@ transition: all 0s ease;
   width: 1px;
   background-color: #ddd;
   top: 20%;
-  z-index: 3;
 }
 
-/* Active section gets darker text and light background */
 .quiz-progress-section.active {
-  color: #100f0d; /* Dark text */
-  background-color: #f2f2f2; /* Lighter grey background */
+  background-color: #f3e6d4; /* Beige for active section */
+  color: #100f0d; /* Dark text when active */
 }
+
 /* MAIN QUIZ CARD */
 #quiz-wrapper {
   background: white;
