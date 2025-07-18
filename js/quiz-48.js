@@ -10,6 +10,13 @@ if (window.location.pathname.includes("/pages/get-started")) {
 }
 
 function initQuizLogic() {
+    if (exitBtn) {
+      console.log("Exit button found, attaching listener.");
+      exitBtn.addEventListener("click", showQuizExitModal);
+    }
+
+
+  
   // Multiselect logic
   document.addEventListener("click", function (e) {
     if (e.target.classList.contains("quiz-option")) {
@@ -56,6 +63,7 @@ function initQuizLogic() {
   
   // Exit modal logic
   function showQuizExitModal() {
+    console.log("Exit button clicked");
     if (document.querySelector("#lead-form-modal")) return;
     document.body.style.overflow = "hidden";
 
@@ -68,6 +76,8 @@ function initQuizLogic() {
         if (!modal) return console.error("Modal not found");
 
         document.body.appendChild(modal);
+        console.log("Modal injected:", modal);
+        console.log("Form found:", modal.querySelector("#lead-form"));
         const form = modal.querySelector("#lead-form");
         if (form) form.setAttribute("data-source", "quiz-exit");
 
